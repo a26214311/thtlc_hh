@@ -1,0 +1,13 @@
+
+#Title[enm5_1 Plural Hard]
+#Text[邪星章5面ボス　ジャネット・アルカンジェ]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm5_2_Attack02_Hard.txt]
+ #ScriptPath[.\enm5_2_SpellCard01_Hard.txt]
+#ScriptNextStep
+
+
+#EndScriptPathData

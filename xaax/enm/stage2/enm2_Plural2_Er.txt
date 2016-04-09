@@ -1,0 +1,18 @@
+
+#Title[enm2_2 Plural ReimuN]
+#Text[邪星章2面ボス　霊夢N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm2_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack02_Easy.txt]
+ #ScriptPath[.\enm2_SpellCard02_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack03_Easy.txt]
+ #ScriptPath[.\enm2_SpellCard03_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_SpellCard04_Easy.txt]
+
+#EndScriptPathData

@@ -1,0 +1,24 @@
+
+#Title[enm5_2 Plural SakuyaN]
+#Text[邪星章5面ボス　ミシェル・サンタンジェ　咲夜N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm5_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack01_Lunatic.txt]
+ #ScriptPath[.\enm5_SpellCard01_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack02_Lunatic.txt]
+ #ScriptPath[.\enm5_SpellCard02_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack03_Lunatic.txt]
+ #ScriptPath[.\enm5_SpellCard03_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack04_Lunatic.txt]
+ #ScriptPath[.\enm5_SpellCard04_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_SpellCard05_Lunatic.txt]
+
+#EndScriptPathData

@@ -1,0 +1,203 @@
+#東方弾幕風[Player]
+#ScriptVersion[2]
+#Menu[満月のメイド長　十六夜咲夜]
+#Text[広範囲装備。
+中央に行くほどショットが強いです。
+敵の真正面に陣取ると火力が出ます。]
+#Image[.\img\咲夜_通常.png]
+#ReplayName[JA_Sakuya]
+	
+script_player_main{
+    let img1       = GetCurrentScriptDirectory~".\img\sakuya.png";
+    let img2       = GetCurrentScriptDirectory~".\img\SakuyaShot.png";
+    let img3       = GetCurrentScriptDirectory~".\eff\Circle_Sqr_S.png";
+    let img4       = GetCurrentScriptDirectory~".\eff\Onmyoudama.png";
+    let Anime      = 0;
+    let MoveAnimeL = 0;
+    let MoveAnimeR = 0;
+    let GetLR      = "NoData";
+    let imgChange  = false;
+    let shotf      = false;
+    let frame      = 0;
+    let count      = 0;
+    let timer      = 0;
+    let dista      = 0;
+    let sc         = 0;
+    let rgb        = [0,255];
+    let rgbp       = 0;
+    let se01       = ".\script\TheLastComer\player\se\shot.wav";
+    let se02       = ".\script\TheLastComer\player\se\shot2.wav";
+
+    @Initialize{
+	LoadGraphic(img1);
+	LoadGraphic(img2);
+	LoadGraphic(img3);
+	LoadGraphic(img4);
+	LoadPlayerShotData(GetCurrentScriptDirectory~".\ShotData.txt");
+	SlowEffect(255,150,255);
+	BitEffect;
+	SetSpeed(4,1.8);
+	SetAutoEffect(false);
+
+	SetRebirthFrame(8);
+	SetRebirthFrameReduction(1);
+
+	}
+		
+    @MainLoop{
+	yield;
+	let sgt		= GetCommonDataEx("sys","sys_trans");
+	if(sgt!=0){
+	SetPlayerInvincibility(120);
+	}
+
+	SetIntersectionCircle(GetPlayerX,GetPlayerY,1);
+	SetGrazeCircle(50);
+	
+	if(shotf==false){timer=0}
+	if(shotf==true){timer++}
+	if(GetKeyState(VK_SHOT)==KEY_PUSH){shotf=true}
+	if(timer>30&&GetKeyState(VK_SHOT)==KEY_FREE){shotf=false;count=0;frame=0;}
+
+	if(shotf==true&&GetKeyState(VK_SLOWMOVE)==KEY_FREE&&IsForbidBomb==false&&OnEvent==false){
+	frame++;
+	if(frame==1){
+	PlayerShot01(GetPlayerX-10,GetPlayerY-30,15,270,150,150,255,3);
+	PlayerShot01(GetPlayerX+10,GetPlayerY-30,15,270,150,150,255,3);
+	PlayerShot01(GetPlayerX,GetPlayerY-30,15,270,150,150,255,4);
+	PlayerShot01(GetPlayerX-30,GetPlayerY+20,15,270,255,150,255,2.5);
+	PlayerShot01(GetPlayerX+30,GetPlayerY+20,15,270,255,150,255,2.5);
+	PlayerShot01(GetPlayerX-30,GetPlayerY+20,15,265,255,150,255,2.5);
+	PlayerShot01(GetPlayerX+30,GetPlayerY+20,15,275,255,150,255,2.5);
+	PlayerShot01(GetPlayerX-30,GetPlayerY+20,15,260,255,100,100,5);
+	PlayerShot01(GetPlayerX+30,GetPlayerY+20,15,280,255,100,100,5);
+	PlayerShot01(GetPlayerX-30,GetPlayerY+20,15,258,255,100,100,5);
+	PlayerShot01(GetPlayerX+30,GetPlayerY+20,15,283,255,100,100,5);
+	PlayerShot01(GetPlayerX-30,GetPlayerY+20,15,265,255,100,100,7);
+	PlayerShot01(GetPlayerX+30,GetPlayerY+20,15,275,255,100,100,7);
+	frame=-4;
+	PlaySE(se01);
+	}
+	}
+
+	if(shotf==true&&GetKeyState(VK_SLOWMOVE)==KEY_HOLD&&IsForbidBomb==false&&OnEvent==false){
+	count++;
+	if(count==1){
+	PlayerShot01(GetPlayerX-10,GetPlayerY-20,20,270,255,100,100,3);
+	PlayerShot01(GetPlayerX+10,GetPlayerY-20,20,270,255,100,100,3);
+	PlayerShot01(GetPlayerX,GetPlayerY-20,20,270,255,150,150,4);
+	PlayerShot01(GetPlayerX-30,GetPlayerY-10,20,270,255,150,255,2);
+	PlayerShot01(GetPlayerX+30,GetPlayerY-10,20,270,255,150,255,2);
+	PlayerShot01(GetPlayerX-30,GetPlayerY-10,20,275,255,150,255,2);
+	PlayerShot01(GetPlayerX+30,GetPlayerY-10,20,265,255,150,255,2);
+	PlayerShot01(GetPlayerX-30,GetPlayerY-10,20,280,255,150,255,2);
+	PlayerShot01(GetPlayerX+30,GetPlayerY-10,20,260,255,150,255,2);
+	PlayerShot01(GetPlayerX-30,GetPlayerY-10,20,283,255,150,255,2);
+	PlayerShot01(GetPlayerX+30,GetPlayerY-10,20,258,255,150,255,2);
+	PlayerShot01(GetPlayerX-30,GetPlayerY-10,20,285,255,150,255,3);
+	PlayerShot01(GetPlayerX+30,GetPlayerY-10,20,255,255,150,255,3);
+	count=-4;
+	PlaySE(se02);
+	}
+	}
+
+	}
+
+    @Missed{
+	yield;
+	//if(GetPlayerLife<9){ExtendPlayer(1)}
+			//自機撃墜時に"@MainLoop"の代わりに呼ばれます
+			//MainLoopと同じでよければ
+			//@Missed{MainLoop}
+			//とかけば、@MainLoopと同じになります。
+			//ただし、撃墜時に動けたり弾が撃てると変なので
+			//OnMissed関数で撃墜中かを判断してください
+	}
+
+
+    @SpellCard{
+	let sgt		= GetCommonDataEx("sys","sys_trans");
+	if(sgt==0){UseSpellCard("TheWorld",0);}
+	else{AddBomb(1);}
+	//if(GetPlayerBomb<8){AddBomb(1)}
+			//スペルカードを発動した瞬間に呼ばれる部分です
+			//ここでGetKeyStateで移動状態を判断したりして
+			//呼び出すスペルを選びます
+	}
+		
+    @DrawLoop{
+	if(OnBomb==true){dista=3;sc++;}
+	if(OnBomb==false){dista=0}
+	Anime++;
+	if(Anime==25){Anime=0}
+	imgChange=false;
+	if(GetKeyState(VK_USER)==KEY_HOLD){imgChange=true}
+	if(GetKeyState(VK_LEFT)==KEY_HOLD){MoveAnimeL++}
+	if(GetKeyState(VK_RIGHT)==KEY_HOLD){MoveAnimeR++}
+	if(GetKeyState(VK_LEFT)==KEY_PUSH){GetLR="LEFT"}
+	if(GetKeyState(VK_RIGHT)==KEY_PUSH){GetLR="RIGHT"}
+	if(MoveAnimeL==3){MoveAnimeL=2}
+	if(MoveAnimeR==3){MoveAnimeR=2}
+	if(GetKeyState(VK_LEFT)==KEY_FREE){
+	if(MoveAnimeL>0){MoveAnimeL--}
+	}
+	if(GetKeyState(VK_RIGHT)==KEY_FREE){
+	if(MoveAnimeR>0){MoveAnimeR--}
+	}
+	if(imgChange==false){SetTexture(img1)}
+	if(imgChange==true){SetTexture(img1)}
+	if(GetLR=="LEFT"&&MoveAnimeL>0){
+	if(MoveAnimeL>=0&&MoveAnimeL<=1){SetGraphicRect(15,54,30,95);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeL>=1&&MoveAnimeL<=2){SetGraphicRect(63,54,79,94);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeL>=2&&MoveAnimeL<=3){SetGraphicRect(109,54,126,93);SetGraphicAngle(180,0,0);}
+	}
+	if(GetLR=="RIGHT"&&MoveAnimeR>0){
+	if(MoveAnimeR>=0&&MoveAnimeR<=1){SetGraphicRect(15,54,30,95);SetGraphicAngle(0,0,0);}
+	if(MoveAnimeR>=1&&MoveAnimeR<=2){SetGraphicRect(63,54,79,94);SetGraphicAngle(0,0,0);}
+	if(MoveAnimeR>=2&&MoveAnimeR<=3){SetGraphicRect(109,54,126,93);SetGraphicAngle(0,0,0);}
+	}
+	if(GetKeyState(VK_LEFT)==KEY_FREE&&GetKeyState(VK_RIGHT)==KEY_FREE&&MoveAnimeR<=0&&MoveAnimeL<=0){
+	if(Anime>=0&&Anime<=5){SetGraphicRect(17,6,32,47)}
+	if(Anime>=5&&Anime<=10){SetGraphicRect(65,6,80,47)}
+	if(Anime>=10&&Anime<=15){SetGraphicRect(112,6,128,47)}
+	if(Anime>=15&&Anime<=20){SetGraphicRect(160,6,176,47)}
+	if(Anime>=20&&Anime<=25){SetGraphicRect(208,6,223,47)}
+	}
+	if(GetTimeOfPlayerInvincibility<=0){SetColor(255,255,255)}
+	if(GetTimeOfPlayerInvincibility>0){SetColor(rgb[rgbp],rgb[rgbp],rgb[rgbp]);rgbp++;if(rgbp==2){rgbp=0}}
+	DrawGraphic(GetPlayerX+dista*sin(sc*100),GetPlayerY+dista*sin(sc*100));
+
+	}
+		
+    @Finalize{}
+#include_function".\Obj_Shot.txt"
+#include_function".\Eff_Player.txt"
+	}
+
+script_spell TheWorld{
+	let imgb1      = GetCurrentScriptDirectory~".\eff\bomb01.png";
+	let imgb2      = GetCurrentScriptDirectory~".\eff\bomb02.png";
+	let imgba      = GetCurrentScriptDirectory~".\eff\Theworld.png";
+	let sebb       = ".\script\TheLastComer\player\se\ms.wav";
+    @Initialize{
+	LoadGraphic(imgb1);
+	LoadGraphic(imgb2);
+	LoadGraphic(imgba);
+	SetPlayerInvincibility(400);
+	run;
+	}
+    @MainLoop{
+	yield;
+	}
+    @Finalize{
+	}
+
+	task run{
+	BlackOut(350);
+	TheWorldEffect;
+	PlaySE(sebb);
+	loop(400){yield}
+	End;
+	}
+#include_function".\Eff_Bomb.txt"
+	}

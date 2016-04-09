@@ -1,0 +1,270 @@
+script_enemy_main{
+	//陰陽玉
+	let csd			= GetCurrentScriptDirectory;
+	let count		= 0;
+	let frame		= trunc(rand(-120,-60));
+	let timer		= 0;
+	let angle		= 32;
+	let angle2		= 0;
+	//let imgAngle	= 0;
+	//let shotAngle	= 0;
+	let kira		= csd~".\se\shot2.wav";
+	let tan			= csd~".\se\shot1.wav";
+	let imgEnemy	= csd~".\img\Onmyoudama.png";//ココの画像を変えると変わる(日本語変
+	let shotdir		= csd~"kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenX		= GetCenterX;
+	let CenY		= GetCenterY;
+
+	// アイテムを落とす数
+	let Inam_1up	= 0;
+	let Inam_Bomb	= 0;
+	let Inam_Item	= 0;
+
+	@Initialize{
+		alternative(GetArgument)
+		case(0){
+			SetX(MinX+16);
+			SetY(MinY+angle);
+		}case(1){
+			SetX(MaxX-16);
+			SetY(MinY+angle+56);
+		}case(2){
+			SetX(MinX+16);
+			SetY(MinY+angle+112);
+		}case(3){
+			SetX(MaxX-16);
+			SetY(MinY+angle+168);
+		}case(4){
+			SetX(MinX+16);
+			SetY(MinY+angle+224);
+		}case(5){
+			SetX(MaxX-16);
+			SetY(MinY+angle+280);
+		}case(6){
+			SetX(MinX+16);
+			SetY(MinY+angle+336);
+		}case(7){
+			SetX(MaxX-16);
+			SetY(MinY+angle+392);
+		}
+		SetLife(32);
+		SetInvincibility(60);
+		LoadGraphic(imgEnemy);
+		LoadUserShotData(shotdir);
+		SetShotAutoDeleteClip(30,30,30,30);
+		Texture(1,"GREEN");
+		SetLife(GetLife+100);
+		CML(100,100,255);//敵爆発とか処理
+		/*
+		0	赤
+		1	橙
+		2	黄
+		3	緑
+		4	水
+		5	青
+		6	紫
+		7	黒
+		*/
+	}
+	
+	@MainLoop{
+		frame++;
+		count++;
+		timer++;
+		if(timer>1500){
+			alternative(GetArgument)
+			case(0,2,4,6){
+				SetMovePosition03(GetX-128,GetY-200,10,1);
+			}case(1,3,5,7){
+				SetMovePosition03(GetX+128,GetY,10,1);
+			}
+		}
+		if(count==30&&!enmfin){
+			alternative(GetArgument)
+			case(0,2,4,6){
+				SinShot(GetX,GetY,0,32,4,2,kAQUA01,10);
+			}case(1,3,5,7){
+				SinShot(GetX,GetY,180,32,-4,2,kBLUE01,10);
+			}
+			PlaySE(kira);
+			count=10;
+		}
+		if(frame==60){
+			alternative(GetArgument)
+			case(0,2,4,6){
+				CreateShotA(0,GetX,GetY,30);
+				SetShotDataA(0,0,1,0,0,0,1,kSTAR);
+				FireShot(0);
+			}case(1,3,5,7){
+				CreateShotA(0,GetX,GetY,30);
+				SetShotDataA(0,0,1,180,0,0,1,kSTAR);
+				FireShot(0);
+			}
+			PlaySE(tan);
+			frame=trunc(rand(-180,-60));
+		}
+		//画面外に出ると死ぬ
+		if(GetX<MinX-128&&!enmfin){
+			VanishEnemy;
+		}
+		if(GetX>MaxX+128&&!enmfin){
+			VanishEnemy;
+		}
+		if(GetY<MinY-128&&!enmfin){
+			VanishEnemy;
+		}
+		if(GetY>MaxY+128&&!enmfin){
+			VanishEnemy;
+		}
+		//判定
+		SetCollisionA(GetX(),GetY(),16);
+		SetCollisionB(GetX(),GetY(),16);
+		yield;
+	}
+	
+	@Finalize{
+		//DeleteEnemyShotToItem(CHILD);
+		loop(Inam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(Inam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..Inam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop{//描画
+	}
+	
+	task Texture(type,char_color){
+		//引数2
+		//type 0:演出無し 1:フェードイン
+		//char_color char型で色を指定
+		let id		= [Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT)];
+		let spin	= 0;
+		let alpha1	= 255;
+		let alphaA	= 0;
+		let sca1	= 0;
+		let scaA	= 0;
+		let rgb		= 255;
+		let rgbA	= 0;
+		let i		= 0;
+		let rect1a	= [0,32,64,96,0,32,64,96];
+		let rect2a	= [0,0,0,0,32,32,32,32];
+		let rect3a	= [32,64,96,128,32,64,96,128];
+		let rect4a	= [32,32,32,32,64,64,64,64];
+		let rect1b	= [0,32,64,96,0,32,64,96];
+		let rect2b	= [64,64,64,64,96,96,96,96];
+		let rect3b	= [32,64,96,128,32,64,96,128];
+		let rect4b	= [96,96,96,96,128,128,128,128];
+		let rect1c	= [0,32,64,96,0,32,64,96];
+		let rect2c	= [128,128,128,128,160,160,160,160];
+		let rect3c	= [32,64,96,128,32,64,96,128];
+		let rect4c	= [160,160,160,160,192,160,160,160];
+		let color;
+		
+		alternative(char_color)
+		case("RED"){color=0;}
+		case("ORANGE"){color=1;}
+		case("YELLOW"){color=2;}
+		case("GREEN"){color=3;}
+		case("AQUA"){color=4;}
+		case("BLUE"){color=5;}
+		case("PURPLE"){color=6;}
+		case("BLACK"){color=7;}
+		
+		LoadGraphic(imgEnemy);
+		
+		loop(3){
+			Obj_SetPosition(id[i],GetX,GetY);
+			ObjEffect_SetTexture(id[i],imgEnemy);
+			ObjEffect_SetRenderState(id[i],ALPHA);
+			ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+			ObjEffect_SetAngle(id[i],0,0,0);
+			ObjEffect_SetLayer(id[i],2);
+			ObjEffect_CreateVertex(id[i],4);
+			ObjEffect_SetVertexXY(id[i],0,-16,-16);
+			ObjEffect_SetVertexXY(id[i],1,-16,16);
+			ObjEffect_SetVertexXY(id[i],2,16,-16);
+			ObjEffect_SetVertexXY(id[i],3,16,16);
+			ObjEffect_SetVertexColor(id[i],0,alpha1,rgb,rgb,rgb);
+			ObjEffect_SetVertexColor(id[i],1,alpha1,rgb,rgb,rgb);
+			ObjEffect_SetVertexColor(id[i],2,alpha1,rgb,rgb,rgb);
+			ObjEffect_SetVertexColor(id[i],3,alpha1,rgb,rgb,rgb);
+			i++;
+		}i=0;
+
+		ObjEffect_SetScale(id[0],0.6,0.6);
+		ObjEffect_SetVertexUV(id[0],0,rect1a[color],rect2a[color]);
+		ObjEffect_SetVertexUV(id[0],1,rect1a[color],rect4a[color]);
+		ObjEffect_SetVertexUV(id[0],2,rect3a[color],rect2a[color]);
+		ObjEffect_SetVertexUV(id[0],3,rect3a[color],rect4a[color]);
+		ObjEffect_SetScale(id[1],1,1);
+		ObjEffect_SetVertexUV(id[1],0,rect1b[color],rect2b[color]);
+		ObjEffect_SetVertexUV(id[1],1,rect1b[color],rect4b[color]);
+		ObjEffect_SetVertexUV(id[1],2,rect3b[color],rect2b[color]);
+		ObjEffect_SetVertexUV(id[1],3,rect3b[color],rect4b[color]);
+		ObjEffect_SetRenderState(id[2],ADD);
+		ObjEffect_SetScale(id[2],1.5,1.5);
+		ObjEffect_SetVertexUV(id[2],0,rect1c[color],rect2c[color]);
+		ObjEffect_SetVertexUV(id[2],1,rect1c[color],rect4c[color]);
+		ObjEffect_SetVertexUV(id[2],2,rect3c[color],rect2c[color]);
+		ObjEffect_SetVertexUV(id[2],3,rect3c[color],rect4c[color]);
+		ObjEffect_SetVertexColor(id[2],0,alpha1/1.5,rgb,rgb,rgb);
+		ObjEffect_SetVertexColor(id[2],1,alpha1/1.5,rgb,rgb,rgb);
+		ObjEffect_SetVertexColor(id[2],2,alpha1/1.5,rgb,rgb,rgb);
+		ObjEffect_SetVertexColor(id[2],3,alpha1/1.5,rgb,rgb,rgb);
+		
+		while(GetLife>0){
+			if(type==1){
+				if(sca1<1){scaA+=2;}
+				sca1=1*sin(scaA);
+				if(alpha1<255){alphaA+=2;}
+				alpha1=255*sin(alphaA);
+				ObjEffect_SetScale(id[0],sca1-0.4,sca1-0.4);
+				ObjEffect_SetScale(id[1],sca1,sca1);
+				ObjEffect_SetScale(id[2],sca1*1.5,sca1*1.5);
+				ObjEffect_SetVertexColor(id[0],0,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[0],1,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[0],2,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[0],3,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[1],0,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[1],1,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[1],2,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[1],3,alpha1,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[2],0,alpha1/1.5,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[2],1,alpha1/1.5,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[2],2,alpha1/1.5,rgb,rgb,rgb);
+				ObjEffect_SetVertexColor(id[2],3,alpha1/1.5,rgb,rgb,rgb);
+			}
+			
+			loop(3){
+				Obj_SetPosition(id[i],GetX,GetY);
+				i++;
+			}i=0;
+			
+			spin+=10;
+			ObjEffect_SetAngle(id[1],0,0,spin);
+			ObjEffect_SetAngle(id[2],0,0,spin*-1);
+			
+			yield;
+		}
+		Obj_Delete(id[0]);
+		Obj_Delete(id[1]);
+		Obj_Delete(id[2]);
+	}
+	
+	#include_function".\lib_anime_fairy.txt"
+	#include_function".\lib_kshot.txt"
+	#include_function".\Obj_Shot.txt"
+}

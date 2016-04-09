@@ -1,0 +1,232 @@
+task Ending02Bad{
+	let frame1	= 0;
+	let frame2	= 0;
+	let y		= CenX+220;
+	let csd		= GetCurrentScriptDirectory;
+	
+	CreateCommonDataArea("ending");
+	SetCommonDataEx("ending","TextChange",0);
+	SetCommonDataEx("ending","BGChange",0);
+	
+	loop{
+		let gtc		= GetCommonDataEx("ending","TextChange");
+		let tdif	= GetCommonDataEx("title","Diffi");
+		let tcse	= GetCommonDataEx("title","clear_stageE");
+		let tcsn	= GetCommonDataEx("title","clear_stageN");
+		let tcsh	= GetCommonDataEx("title","clear_stageH");
+		let tcsl	= GetCommonDataEx("title","clear_stageL");
+
+		if(gtc==0){frame1++;frame2=0;}
+		if(gtc==0&&frame1==1){
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\0.png",-1,0);
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb00.png",156,61,0.7,0);
+		}
+		if(gtc==1){frame2++;frame1=0;}
+		if(gtc==1&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb01.png",885,92,0.7,1);
+		}
+		if(gtc==2){frame1++;frame2=0;}
+		if(gtc==2&&frame1==1){
+			SetCommonDataEx("ending","BGChange",1);
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\6.png",-1,1);
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb02.png",489,92,0.7,2);
+		}
+		if(gtc==3){frame2++;frame1=0;}
+		if(gtc==3&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb03.png",303,91,0.7,3);
+		}
+		if(gtc==4){frame1++;frame2=0;}
+		if(gtc==4&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb04.png",1069,92,0.6,4);
+		}
+		if(gtc==5){frame2++;frame1=0;}
+		if(gtc==5&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb05.png",898,92,0.7,5);
+		}
+		if(gtc==6){frame1++;frame2=0;}
+		if(gtc==6&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb06.png",969,91,0.65,6);
+		}
+		if(gtc==7){frame2++;frame1=0;}
+		if(gtc==7&&frame2==1){
+			SetCommonDataEx("ending","BGChange",2);
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\7.png",-1,2);
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb07.png",784,91,0.7,7);
+		}
+		if(gtc==8){frame1++;frame2=0;}
+		if(gtc==8&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb08.png",433,62,0.7,8);
+		}
+		if(gtc==9){frame2++;frame1=0;}
+		if(gtc==9&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb09.png",279,61,0.7,9);
+		}
+		if(gtc==10){frame1++;frame2=0;}
+		if(gtc==10&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb10.png",343,62,0.7,10);
+		}
+		if(gtc==11){frame2++;frame1=0;}
+		if(gtc==11&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb11.png",701,92,0.7,11);
+		}
+		if(gtc==12){frame1++;frame2=0;}
+		if(gtc==12&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb12.png",951,92,0.65,12);
+		}
+		if(gtc==13){frame2++;frame1=0;}
+		if(gtc==13&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb13.png",701,92,0.7,13);
+		}
+		if(gtc==14){frame1++;frame2=0;}
+		if(gtc==14&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\bad\end_mb14.png",298,61,0.7,14);
+		}
+		if(gtc==15){
+			OutED(120);
+			loop(300){yield;}
+			SetCommonDataEx("ending","BGChange",15);
+			alternative(tdif)
+			case("easy"){
+				SetCommonDataEx("title","clear_stageE",8);
+			}case("normal"){
+				SetCommonDataEx("title","clear_stageN",8);
+			}case("hard"){
+				SetCommonDataEx("title","clear_stageH",8);
+			}case("lunatic"){
+				SetCommonDataEx("title","clear_stageL",8);
+			}
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task Ending02Good{
+	let frame1	= 0;
+	let frame2	= 0;
+	let y		= CenX+220;
+	let csd		= GetCurrentScriptDirectory;
+	
+	CreateCommonDataArea("ending");
+	SetCommonDataEx("ending","TextChange",0);
+	SetCommonDataEx("ending","BGChange",0);
+	
+	loop{
+		let gtc		= GetCommonDataEx("ending","TextChange");
+		let tdif	= GetCommonDataEx("title","Diffi");
+		let tcse	= GetCommonDataEx("title","clear_stageE");
+		let tcsn	= GetCommonDataEx("title","clear_stageN");
+		let tcsh	= GetCommonDataEx("title","clear_stageH");
+		let tcsl	= GetCommonDataEx("title","clear_stageL");
+		
+		if(gtc==0){frame1++;frame2=0;}
+		if(gtc==0&&frame1==1){
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\8.png",-1,0);
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg00.png",181,61,0.7,0);
+		}
+		if(gtc==1){frame2++;frame1=0;}
+		if(gtc==1&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg01.png",877,92,0.7,1);
+		}
+		if(gtc==2){frame1++;frame2=0;}
+		if(gtc==2&&frame1==1){
+			SetCommonDataEx("ending","BGChange",1);
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\9.png",-1,1);
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg02.png",877,92,0.7,2);
+		}
+		if(gtc==3){frame2++;frame1=0;}
+		if(gtc==3&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg03.png",792,61,0.7,3);
+		}
+		if(gtc==4){frame1++;frame2=0;}
+		if(gtc==4&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg04.png",792,92,0.7,4);
+		}
+		if(gtc==5){frame2++;frame1=0;}
+		if(gtc==5&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg05.png",926,91,0.7,5);
+		}
+		if(gtc==6){frame1++;frame2=0;}
+		if(gtc==6&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg06.png",987,122,0.65,6);
+		}
+		if(gtc==7){frame2++;frame1=0;}
+		if(gtc==7&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg07.png",975,92,0.65,7);
+		}
+		if(gtc==8){frame1++;frame2=0;}
+		if(gtc==8&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg08.png",937,92,0.7,8);
+		}
+		if(gtc==9){frame2++;frame1=0;}
+		if(gtc==9&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg09.png",872,61,0.7,9);
+		}
+		if(gtc==10){frame1++;frame2=0;}
+		if(gtc==10&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg10.png",925,92,0.7,10);
+		}
+		if(gtc==11){frame2++;frame1=0;}
+		if(gtc==11&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg11.png",824,92,0.7,11);
+		}
+		if(gtc==12){frame1++;frame2=0;}
+		if(gtc==12&&frame1==1){
+			SetCommonDataEx("ending","BGChange",2);
+			EndingBack(csd~".\end\02\back\bg00.png",csd~".\end\02\back\10.png",-1,2);
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg12.png",929,91,0.7,12);
+		}
+		if(gtc==13){frame2++;frame1=0;}
+		if(gtc==13&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg13.png",671,62,0.7,13);
+		}
+		if(gtc==14){frame1++;frame2=0;}
+		if(gtc==14&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg14.png",1058,121,0.6,14);
+		}
+		if(gtc==15){frame2++;frame1=0;}
+		if(gtc==15&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg15.png",287,92,0.7,15);
+		}
+		if(gtc==16){frame1++;frame2=0;}
+		if(gtc==16&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg16.png",558,62,0.7,16);
+		}
+		if(gtc==17){frame2++;frame1=0;}
+		if(gtc==17&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg17.png",840,92,0.7,17);
+		}
+		if(gtc==18){frame1++;frame2=0;}
+		if(gtc==18&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg18.png",934,62,0.7,18);
+		}
+		if(gtc==19){frame2++;frame1=0;}
+		if(gtc==19&&frame2==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg19.png",779,62,0.7,19);
+		}
+		if(gtc==20){frame1++;frame2=0;}
+		if(gtc==20&&frame1==1){
+			EndingText(CenX+96,y,csd~".\end\02\good\end_mg20.png",421,62,0.7,20);
+		}
+		if(gtc==21){
+			OutED(120);
+			loop(300){yield;}
+			SetCommonDataEx("ending","BGChange",21);
+			SetCommonDataEx("title","clear_stageN",8);
+			alternative(tdif)
+			case("easy"){
+				SetCommonDataEx("title","clear_stageE",8);
+			}case("normal"){
+				SetCommonDataEx("title","clear_stageN",8);
+			}case("hard"){
+				SetCommonDataEx("title","clear_stageH",8);
+			}case("lunatic"){
+				SetCommonDataEx("title","clear_stageL",8);
+			}
+			break;
+		}
+		
+		yield;
+	}
+}

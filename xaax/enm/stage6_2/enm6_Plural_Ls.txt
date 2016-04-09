@@ -1,0 +1,15 @@
+
+#Title[enm6_1 Plural Lunatic]
+#Text[邪星章6面中ボス　ピーマン 咲夜]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm6_1_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_1_Attack01_Lunatic.txt]
+ #ScriptPath[.\enm6_1_SpellCard01_Lunatic.txt]
+#ScriptNextStep
+
+#EndScriptPathData

@@ -1,0 +1,571 @@
+task World1{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage01 博麗神社近郊の森、火事*/
+	SetPerspectiveClip(100, 1500);			//可視範囲の設定
+	SetFog(300, 800, 60,80,80);				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(900-move1, 70+move1/10*2, 55-move1/10);	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(130,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz01);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz02);
+	SetGraphicRect(0,0+a/2*1.2,1000,1000+a/2*1.2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(200);
+	DrawGraphic3D(0,50,0);
+	
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(2,2);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(50+10*sin(a),150,0);
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(5,3);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0-10*sin(a/2),50,0);
+}
+	
+task World2{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage02 霧の湖、ほっとくと湖上に変貌*/
+	SetPerspectiveClip(100, 2000);			//可視範囲の設定
+	SetFog(200, 800, 130,60,10);				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(900-move1, 90, 55-move1/10);	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(130,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz02);
+	SetGraphicRect(0,0+a/2*1.2,1000,1000+a/2*1.2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(200);
+	DrawGraphic3D(0,50,0);
+	
+	loop(6){
+		SetTexture(imgz06);
+		SetGraphicRect(1,0,254,254);
+		SetGraphicAngle(140,0,0);
+		SetColor(255,255,255);
+		SetGraphicScale(1,1);
+		SetRenderState(ALPHA);
+		SetAlpha(255-alpha);
+		DrawGraphic3D(250,100,(-900+c)+b);
+		SetTexture(imgz06);
+		SetGraphicRect(1,0,254,254);
+		SetGraphicAngle(140,0,0);
+		SetColor(255,255,255);
+		SetGraphicScale(-1,1);
+		SetRenderState(ALPHA);
+		SetAlpha(255-alpha);
+		DrawGraphic3D(-250,100,(-750+c)+b);
+		c+=300;
+	}
+	c=0;
+	
+	SetTexture(imgz04);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,100,100);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(alpha);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz05);
+	SetGraphicRect(0,0+a/2*1.3,1000,1000+a/2*1.3);
+	SetGraphicAngle(75,0,0);
+	SetColor(255,0,0);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(alpha/2);
+	DrawGraphic3D(0,50,0);
+	
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,-20);
+	SetColor(255,255,255);
+	SetGraphicScale(2,2);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(50+10*sin(a),150,0);
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,-20);
+	SetColor(255,255,255);
+	SetGraphicScale(5,3);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(-50-10*sin(a/2),50,0);
+	
+	SetTexture(imgz07);
+	SetGraphicRect(0+a,0,512+a,512);
+	SetGraphicAngle(0,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(alpha/4);
+	DrawGraphic(CenX,CenY);
+	SetTexture(imgz07);
+	SetGraphicRect(0-a/2,0,512-a/2,512);
+	SetGraphicAngle(180,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(alpha/4);
+	DrawGraphic(CenX,CenY);
+}
+
+task World3{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage03 妖怪の山*/
+	SetPerspectiveClip(100, 2000);			//可視範囲の設定
+	SetFog(400, 900, 0,0,20);				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(900-move1, 90, 55-move1/10);	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(130,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz08);
+	SetGraphicRect(0,0+a/7,1000,1000+a/7);
+	SetGraphicAngle(120,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz08);
+	SetGraphicRect(0,0+a/7,1000,1000+a/7);
+	SetGraphicAngle(120,0,0);
+	SetColor(rand(0,255),rand(0,255),rand(0,255));
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(rand(0,255));
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz09);
+	SetGraphicRect(0,50-a/2*1.2,512,700-a/2*1.2);
+	SetGraphicAngle(100,0,180);
+	SetColor(255,255,255);
+	SetGraphicScale(-1.5,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,-50,0);
+	
+	SetTexture(imgz02);
+	SetGraphicRect(0,50-a*2,512,700-a*2);
+	SetGraphicAngle(100,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1.5,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,-70,0);
+	
+	SetTexture(imgz07);
+	SetGraphicRect(0+a,0,512+a,512);
+	SetGraphicAngle(0,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(10);
+	DrawGraphic(CenX,CenY);
+}
+
+task World4{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage04 風神の湖*/
+	SetPerspectiveClip(100, 2000);			//可視範囲の設定
+	SetFog(800, 900, 0,0,20);				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(900-move1, 90, 65-move1/10);	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(100,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0-a/3,1000,1000-a/3);
+	SetGraphicAngle(80,0,0);
+	SetColor(200,200,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,-50);
+	
+	SetTexture(imgz04);
+	SetGraphicRect(0,0-a,1000,1000-a);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(60);
+	DrawGraphic3D(0-10*sin(a),0,0);
+	SetTexture(imgz04);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(60);
+	DrawGraphic3D(0+10*sin(a),0,0);
+		
+	loop(6){
+		SetTexture(imgz11);
+		SetGraphicRect(0,0,512,512);
+		SetGraphicAngle(0,120+angle,0);
+		SetColor(100,100,255);
+		SetGraphicScale(0.1,1);
+		SetRenderState(ALPHA);
+		SetAlpha(255);
+		DrawGraphic3D(-250+44*sin(angle+120),100,-300+44*cos(angle+120)-450+e);
+		SetTexture(imgz04);
+		SetGraphicRect(0+a,0+a,512+a,512+a);
+		SetGraphicAngle(0,120+angle,0);
+		SetColor(100,100,255);
+		SetGraphicScale(0.1,1);
+		SetRenderState(ALPHA);
+		SetAlpha(40);
+		DrawGraphic3D(-250+44*sin(angle+120),100,-300+44*cos(angle+120)-450+e);
+		angle+=60;
+	}
+	angle=0;
+	
+	loop(8){
+		SetTexture(imgz10);
+		SetGraphicRect(5,0,480,640);
+		SetGraphicAngle(150,0,0);
+		SetColor(255,255,255);
+		SetGraphicScale(1,1);
+		SetRenderState(ADD);
+		SetAlpha(255);
+		DrawGraphic3D(300,100,600+d-angle);
+		angle+=200;
+	}
+	angle=0;
+}
+
+task World5{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage05 天使の砦*/
+	SetPerspectiveClip(100, 2000);
+	SetFog(500, 1000, 30,30,40);
+	SetViewTo(0, 0, 0);
+	SetViewFrom(800+50*sin(a/5),-20+5*sin(a/5), 0+10*sin(a/5));
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(0,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic(CenX,CenY);
+	
+	SetTexture(imgz14);
+	SetGraphicRect(0,0+a,1000,1000+a);
+	SetGraphicAngle(0,90,0);
+	SetColor(160,160,160);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,-50,0);
+	SetTexture(imgz07);
+	SetGraphicRect(0+a,0+a,1000+a,1000+a);
+	SetGraphicAngle(0,90,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(150);
+	DrawGraphic3D(0,0,0);
+	
+	loop(8){
+		SetTexture(imgz13);
+		SetGraphicRect(0-a,0+a,512-a,1000+a);
+		SetGraphicAngle(0,36*6+angle,0);
+		SetColor(100,100,100);
+		SetGraphicScale(0.17,1);
+		SetRenderState(ALPHA);
+		SetAlpha(255);
+		DrawGraphic3D(104*sin(angle+36*6),100,-500+104*cos(angle+36*6)+450+e);
+		
+		SetTexture(imgz12);
+		SetGraphicRect(0-a,0+a,512-a,1000+a);
+		SetGraphicAngle(0,180+angle,0);
+		SetColor(255,255,255);
+		SetGraphicScale(0.27,1);
+		SetRenderState(ALPHA);
+		SetAlpha(255);
+		DrawGraphic3D(162*sin(angle+180),100,-500+162*cos(angle+180)+450+e);
+		angle+=360/8;
+	}
+	angle=0;
+	
+	SetTexture(imgz07);
+	SetGraphicRect(0-a,0+a,1000-a,1000+a);
+	SetGraphicAngle(0,90,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(150);
+	DrawGraphic3D(0,0,0);
+}
+
+task World6{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage06 夜明けの雲海*/
+	SetPerspectiveClip(100, 2000);			//可視範囲の設定
+	SetFog(800, 900, 50+(move2/25*4),50,50-(move2/25*4));				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(800-move1, 90, 165-move1);	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	if(move2<250&&move1>=100&&tsst==true){moveB+=0.1}
+	move2=250.0*sin(moveB);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(0,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic(CenX,CenY);
+	
+	SetTexture(imgz17);
+	SetGraphicRect(0,0,512,700+move2);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz08);
+	SetGraphicRect(0,0+a/4,1000,1000+a/4);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(1,1);
+	SetRenderState(ADD);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz08);
+	SetGraphicRect(0,0+a/5,1000,1000+a/5);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-1,1);
+	SetRenderState(ADD);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgw);
+	SetGraphicRect(0,0-a,1000,1000-a);
+	SetGraphicAngle(60,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,-10,0);
+	SetTexture(imgz15);
+	SetGraphicRect(0,0-a/4,1000,1000-a/4);
+	SetGraphicAngle(60,0,0);
+	SetColor(150,150,150);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz16);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(60,0,0);
+	SetColor(150,150,150);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,10,0);
+	
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(2,2);
+	SetRenderState(ALPHA);
+	SetAlpha(move2/2);
+	DrawGraphic3D(-50+10*sin(a),150,0);
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-5,3);
+	SetRenderState(ALPHA);
+	SetAlpha(move2/2);
+	DrawGraphic3D(-50-10*sin(a/2),50,0);
+}
+
+task World7{
+	let tsst = GetCommonDataEx("title","start_stage2");
+	
+	/*Stage07 大自然の神秘的な(*/
+	SetPerspectiveClip(100, 1500);			//可視範囲の設定
+	SetFog(300, 800, 40,70,40);				//霧の発生
+	SetViewTo(0, 0, 0);
+	SetViewFrom(900-move1+10*sin(a/5), 70+move1/10*2+10*sin(a/5), 55-move1/10+5*sin(a/5));	//カメラの撮影箇所
+	
+	if(move1<100&&tsst==true){moveA+=0.5}
+	move1=100.0*sin(moveA);
+	
+	SetTexture(imgz01);
+	SetGraphicRect(0,0,1000,1000);
+	SetGraphicAngle(130,0,0);
+	SetColor(0,0,0);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	SetTexture(imgz01);
+	SetGraphicRect(0,0-a/2,1000,1000-a/2);
+	SetGraphicAngle(80,0,0);
+	SetColor(180,180,180);
+	SetGraphicScale(1,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz18);
+	SetGraphicRect(0,0-a*1.5,512,1000-a*1.5);
+	SetGraphicAngle(90,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(0.25,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(-64,0,0);
+	SetTexture(imgz18);
+	SetGraphicRect(0,0-a*1,512,1000-a*1);
+	SetGraphicAngle(90,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-0.25,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(-64,0,0);
+	SetTexture(imgz18);
+	SetGraphicRect(0,0-a/1,512,1000-a/1);
+	SetGraphicAngle(80,0,0);
+	SetColor(150,255,150);
+	SetGraphicScale(0.15,1);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(256,0,0);
+	
+	SetTexture(imgz19);
+	SetGraphicRect(0,0+a/2*1.8,1000,1000+a/2*1.8);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(200);
+	DrawGraphic3D(-96,64,0);
+	SetTexture(imgz19);
+	SetGraphicRect(0,0+a/2*1.6,1000,1000+a/2*1.8);
+	SetGraphicAngle(80,0,0);
+	SetColor(255,0,0);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(200);
+	DrawGraphic3D(-64,32,0);
+	SetTexture(imgz19);
+	SetGraphicRect(0,0-a/2*1.4,1000,1000-a/2*1.4);
+	SetGraphicAngle(80,0,180);
+	SetColor(255,255,0);
+	SetGraphicScale(-1,-1);
+	SetRenderState(ALPHA);
+	SetAlpha(200);
+	DrawGraphic3D(0,0,0);
+	
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(200,255,200);
+	SetGraphicScale(2,2);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(50+10*sin(a),150,0);
+	SetTexture(imgz03);
+	SetGraphicRect(0,0,256,255);
+	SetGraphicAngle(130,0,0);
+	SetColor(255,255,255);
+	SetGraphicScale(5,3);
+	SetRenderState(ALPHA);
+	SetAlpha(255);
+	DrawGraphic3D(0-10*sin(a/2),50,0);
+}

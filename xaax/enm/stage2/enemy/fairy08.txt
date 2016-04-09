@@ -1,0 +1,138 @@
+script_enemy_main
+{//陰陽玉
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy=GetCurrentScriptDirectory~"img\dot-kaze-ti.png";
+	let imgAngle=0;
+	let shotAngle=0;
+	let tan       = GetCurrentScriptDirectory~".\se\shot1.wav";
+	let kira      = GetCurrentScriptDirectory~".\se\shot2.wav";
+	let Gspel     = GetCurrentScriptDirectory~".\se\echo5.wav";
+	let laser     = GetCurrentScriptDirectory~".\se\Laser2.wav";
+	let power     = GetCurrentScriptDirectory~".\se\enemy_powereffect.wav";
+	let powerl    = GetCurrentScriptDirectory~".\se\power_logo.wav";
+	let gekiha    = GetCurrentScriptDirectory~".\se\BossEnd.wav";
+	let powerla   = GetCurrentScriptDirectory~".\se\power_logo.wav";
+	let kaku      = GetCurrentScriptDirectory~".\se\核爆.wav";
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+
+	@Initialize
+	{
+		SetLife(40);//
+		LoadGraphic(imgEnemy);
+		SetTexture(imgEnemy);
+		SetGraphicRect(0,0,32,32);//描画元矩形を設定
+		SetLife(GetLife+100);
+		LoadUserShotData(csd~"data_usershot.txt");
+		CML(255,64,64);//敵爆発とか処理
+		Shot;
+	}
+	
+	@MainLoop
+	{
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		if(GetX<MinX-100){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100){
+		//VanishEnemy;
+		}
+		if(GetY>MaxY+100){
+		VanishEnemy;
+		}
+		if(!enmfin){
+			SetCollisionA(GetX(),GetY(),16);//当たり判定(自弾)登録
+			SetCollisionB(GetX(),GetY(),16);//当たり判定(体当たり)登録
+			}
+		if(GetCommonData("BossFlag")&&!enmfin) {
+			TrashEnemy(255,64,64);
+			enmfin=true;
+			}
+		count++;
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		SetTexture(GetCurrentScriptDirectory~"img\dot-kaze-ti.png");
+		if(count<=0){SetAlpha(0);}
+		if(count>=0&&count<=61){SetGraphicScale(count/50,count/50);SetAlpha((count)*4);}
+		if(count>=61){SetGraphicScale(1.1,1.1);SetAlpha(255);}
+		SetGraphicRect(64,0,128,64);if(GetArgument==2){SetGraphicRect(192,0,256,64);}
+		SetRenderState(ALPHA);
+		SetColor(225+count%4*30,225+count%4*30,225+count%4*30);
+		SetGraphicAngle(0,0,-count*5);
+		DrawGraphic(GetX(),GetY());
+
+		SetTexture(GetCurrentScriptDirectory~"img\dot-kaze-ti.png");
+		SetGraphicRect(0,0,64,64);if(GetArgument==2){SetGraphicRect(128,0,192,64);}
+		SetColor(255,255,255);
+		SetGraphicScale(1,1);
+		if(count>=0&&count<=61){SetGraphicScale(count/61,count/61);}
+		SetGraphicAngle(0,0,count*4);
+		DrawGraphic(GetX(),GetY());
+	}
+	
+	task Shot {
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		loop(10){yield;}
+		loop{
+			if(!enmfin){
+				alternative(tdif)
+				case("easy"){
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer+32,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer-32,-0.1,1.5,97,10);
+				}
+				case("normal"){
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer+15,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer-15,-0.1,1.5,97,10);
+				}
+				case("hard"){
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer+15,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer-15,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer+8,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,3,GetAngleToPlayer-8,-0.1,1.5,97,10);
+				}
+				case("lunatic"){
+					CreateShot02(GetX,GetY,5,GetAngleToPlayer+15,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,5,GetAngleToPlayer-15,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,5,GetAngleToPlayer+8,-0.1,1.5,97,10);
+					CreateShot02(GetX,GetY,5,GetAngleToPlayer-8,-0.1,1.5,97,10);
+				}
+				PlaySE(tan);
+				}
+			loop(45){yield;}
+			}
+		}
+#include_function".\lib_anime_fairy.txt"
+}

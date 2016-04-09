@@ -1,0 +1,19 @@
+
+#Title[enm7_2 Plural Extra]
+#Text[邪星章Extra中 Plural]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm7_2_Event01.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_2_Attack01_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_2_SpellCard01_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_2_SpellCard02_Extra.txt]
+#ScriptNextStep
+
+
+#EndScriptPathData

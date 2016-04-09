@@ -1,0 +1,192 @@
+
+#Title[enm6 spell01 Hard]
+#Text[イシュア・ナザレヌス
+大漁「深みへ漕ぎ出す者へ」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let gcsd      = GetCurrentScriptDirectory;
+    let effimg    = gcsd ~ ".\enm6eff\bulletbreak.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,CenY-100,10,5);
+        LoadGraphic(imgEffect);
+        LoadGraphic(imgSPNB);
+	LoadGraphic(effimg);
+	Aura(8,255,255,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,2);
+	EnemyTexture06(true);
+	SetEffectForZeroLife(0,0,0);
+	VSname(0);
+	let tact = GetCommonDataEx("title","act");
+	if(tact!=11){
+	VSname2(0,0);
+	VSname2(10,0);
+	VSname2(20,0);
+	VSname2(30,0);
+	VSname2(40,0);
+	VSname2(50,0);
+	}
+	RedMagicCircle(1,0);
+	SpellPracticeSave("hard",24);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(20,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(20,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm6img\iesua10000.png",0,0,384,512);
+	CutinSP2(-275,-10,GetCurrentScriptDirectory~".\enm6spell\sn_094.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	if(frame==120){
+	loop(1){
+	CreateShotA(0,MaxX,rand(MinY,MaxY),10);
+	SetShotDataA(0,0,rand(-0.5,-1),0+angle,0,0,5,kPURPLE_F);
+	FireShot(0);
+	FishShot2(MaxX,rand(MinY,MaxY),180-angle,rand(0.5,2),"BLUE",-1,true);
+	FishShot2(MaxX,rand(MinY,MaxY),180-angle,2,"YELLOW",-1,true);
+	}
+	loop(1){
+	CreateShotA(0,MinX,rand(MinY,MaxY),10);
+	SetShotDataA(0,0,rand(-0.5,-1),180-angle,0,0,5,kPURPLE_F);
+	FireShot(0);
+	FishShot2(MinX,rand(MinY,MaxY),0+angle,rand(0.5,2),"AQUA",-1,true);
+	FishShot2(MinX,rand(MinY,MaxY),0+angle,2,"YELLOW",-1,true);
+	}
+	PlaySE(kira);
+	frame=110;
+	}
+	if(timer==300){
+	Concentration(50,powerla);
+	}
+	if(timer==350){
+	angle+=1;
+	timer=345;
+	}
+	if(angle>=45){
+	angle2++;
+	if(angle2==2){angle2=0;}
+	angle=0;
+	timer=-60;
+	count=-60;
+	frame=-60;
+	}
+
+	alternative(count)
+	case(200){
+	if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+        else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}}
+	if(count==200){
+	//frame=0;
+	//count=0;
+	}
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	DeleteAllEnemyWithoutBoss;
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

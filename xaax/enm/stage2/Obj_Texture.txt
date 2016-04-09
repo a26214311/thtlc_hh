@@ -1,0 +1,439 @@
+task EnemyTexture(hv){
+	LoadGraphic(GetCurrentScriptDirectory~".\enm2img\enm2.png");
+	let aeff = Obj_Create(OBJ_EFFECT);
+	let alpha = 255;
+	let scale = 1;
+	let MoveY = 0;
+	let mtcount = 0;
+	let mtchange = 10;
+	let lifemax = GetLife;
+	SetCommonData("Charge",false);
+	SetCommonData("Attack",false);
+	loop {
+		//if(GetHitCount!=0&&GetLife>=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\enm2se\dmg1.wav");}
+		//if(GetHitCount!=0&&GetLife<=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\enm2se\dmg2.wav");}
+		ObjEffect_SetTexture(aeff,GetCurrentScriptDirectory~".\enm2img\enm2.png");
+		ObjEffect_SetRenderState(aeff,ALPHA);
+		ObjEffect_SetPrimitiveType(aeff,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(aeff,scale,scale);
+		ObjEffect_SetLayer(aeff,3);
+		ObjEffect_CreateVertex(aeff,4);
+		ObjEffect_SetVertexXY(aeff,0,-60,-60);
+		ObjEffect_SetVertexXY(aeff,1,-60, 60);
+		ObjEffect_SetVertexXY(aeff,2, 60,-60);
+		ObjEffect_SetVertexXY(aeff,3, 60, 60);
+		if(GetSpeedX==0) {//立ち
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,  0,  0);
+			ObjEffect_SetVertexUV(aeff,1,  0,120);
+			ObjEffect_SetVertexUV(aeff,2,120,  0);
+			ObjEffect_SetVertexUV(aeff,3,120,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,  0,120);
+			ObjEffect_SetVertexUV(aeff,1,  0,240);
+			ObjEffect_SetVertexUV(aeff,2,120,120);
+			ObjEffect_SetVertexUV(aeff,3,120,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,  0,240);
+			ObjEffect_SetVertexUV(aeff,1,  0,360);
+			ObjEffect_SetVertexUV(aeff,2,120,240);
+			ObjEffect_SetVertexUV(aeff,3,120,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetSpeedX>0) {//右進行
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,120,  0);
+			ObjEffect_SetVertexUV(aeff,1,120,120);
+			ObjEffect_SetVertexUV(aeff,2,240,  0);
+			ObjEffect_SetVertexUV(aeff,3,240,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,120,120);
+			ObjEffect_SetVertexUV(aeff,1,120,240);
+			ObjEffect_SetVertexUV(aeff,2,240,120);
+			ObjEffect_SetVertexUV(aeff,3,240,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,120,240);
+			ObjEffect_SetVertexUV(aeff,1,120,360);
+			ObjEffect_SetVertexUV(aeff,2,240,240);
+			ObjEffect_SetVertexUV(aeff,3,240,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetSpeedX<0) {//左進行
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,240,  0);
+			ObjEffect_SetVertexUV(aeff,1,240,120);
+			ObjEffect_SetVertexUV(aeff,2,360,  0);
+			ObjEffect_SetVertexUV(aeff,3,360,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,240,120);
+			ObjEffect_SetVertexUV(aeff,1,240,240);
+			ObjEffect_SetVertexUV(aeff,2,360,120);
+			ObjEffect_SetVertexUV(aeff,3,360,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,240,240);
+			ObjEffect_SetVertexUV(aeff,1,240,360);
+			ObjEffect_SetVertexUV(aeff,2,360,240);
+			ObjEffect_SetVertexUV(aeff,3,360,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetCommonData("Charge")) {//溜め
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,360,  0+360);
+			ObjEffect_SetVertexUV(aeff,1,360,120+360);
+			ObjEffect_SetVertexUV(aeff,2,480,  0+360);
+			ObjEffect_SetVertexUV(aeff,3,480,120+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,360,120+360);
+			ObjEffect_SetVertexUV(aeff,1,360,240+360);
+			ObjEffect_SetVertexUV(aeff,2,480,120+360);
+			ObjEffect_SetVertexUV(aeff,3,480,240+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,360,240+360);
+			ObjEffect_SetVertexUV(aeff,1,360,360+360);
+			ObjEffect_SetVertexUV(aeff,2,480,240+360);
+			ObjEffect_SetVertexUV(aeff,3,480,360+360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-2+MoveY);
+		}
+		if(GetCommonData("Attack")) {//攻撃
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,480,  0+360);
+			ObjEffect_SetVertexUV(aeff,1,480,120+360);
+			ObjEffect_SetVertexUV(aeff,2,600,  0+360);
+			ObjEffect_SetVertexUV(aeff,3,600,120+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,480,120+360);
+			ObjEffect_SetVertexUV(aeff,1,480,240+360);
+			ObjEffect_SetVertexUV(aeff,2,600,120+360);
+			ObjEffect_SetVertexUV(aeff,3,600,240+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,480,240+360);
+			ObjEffect_SetVertexUV(aeff,1,480,360+360);
+			ObjEffect_SetVertexUV(aeff,2,600,240+360);
+			ObjEffect_SetVertexUV(aeff,3,600,360+360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX+3,GetEnemyY-2+MoveY);
+		}
+		ObjEffect_SetVertexColor(aeff,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(aeff,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(aeff,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(aeff,3,alpha,255,255,255);
+		MoveY=sin(mtcount*4)*6;//ふよふよ
+		mtcount++;
+		yield;
+/*		loop(30){
+			ObjEffect_SetRenderState(aeff,ADD);
+			ObjEffect_SetScale(aeff,scale,scale);
+			ObjEffect_SetVertexColor(aeff,0,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,1,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,2,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,3,alpha,255,100,50);
+			if(GetSpeedX==0) {//立ち
+			ObjEffect_SetVertexUV(aeff,0, 0,  0);
+			ObjEffect_SetVertexUV(aeff,1, 0,100);
+			ObjEffect_SetVertexUV(aeff,2,84,  0);
+			ObjEffect_SetVertexUV(aeff,3,84,100);
+			Obj_SetPosition(aeff,GetEnemyX+5,GetEnemyY-8);
+			}
+			if(GetSpeedX>0) {//右進行
+			ObjEffect_SetVertexUV(aeff,0, 84,  0);
+			ObjEffect_SetVertexUV(aeff,1, 84,100);
+			ObjEffect_SetVertexUV(aeff,2,168,  0);
+			ObjEffect_SetVertexUV(aeff,3,168,100);
+			Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-8);
+			}
+			if(GetSpeedX<0) {//左進行
+			ObjEffect_SetVertexUV(aeff,0,168,  0);
+			ObjEffect_SetVertexUV(aeff,1,168,100);
+			ObjEffect_SetVertexUV(aeff,2,252,  0);
+			ObjEffect_SetVertexUV(aeff,3,252,100);
+			Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-8);
+			}
+			scale+=0.1;
+			alpha-=64/30;
+			yield;
+			}
+*/
+		}
+		Obj_Delete(aeff);
+	}
+	
+task EnemyTexture2(hv){//BadCloud
+	LoadGraphic(GetCurrentScriptDirectory~".\enm2img\enm2_dot.png");
+	let aeff = Obj_Create(OBJ_EFFECT);
+	let alpha = 255;
+	let scale = 1;
+	let MoveY = 0;
+	let mtcount = 0;
+	let mtchange = 10;
+	let lifemax = GetLife;
+	SetCommonData("Charge",false);
+	SetCommonData("Attack",false);
+	loop {
+		if(GetHitCount!=0&&GetLife>=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\enm2se\dmg1.wav");}
+		if(GetHitCount!=0&&GetLife<=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\enm2se\dmg2.wav");}
+		ObjEffect_SetTexture(aeff,GetCurrentScriptDirectory~".\enm2img\enm2_dot.png");
+		ObjEffect_SetRenderState(aeff,ALPHA);
+		ObjEffect_SetPrimitiveType(aeff,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(aeff,scale,scale);
+		ObjEffect_SetLayer(aeff,3);
+		ObjEffect_CreateVertex(aeff,4);
+		ObjEffect_SetVertexXY(aeff,0,-60,-60);
+		ObjEffect_SetVertexXY(aeff,1,-60, 60);
+		ObjEffect_SetVertexXY(aeff,2, 60,-60);
+		ObjEffect_SetVertexXY(aeff,3, 60, 60);
+		if(GetSpeedX==0) {//立ち
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,  0,  0);
+			ObjEffect_SetVertexUV(aeff,1,  0,120);
+			ObjEffect_SetVertexUV(aeff,2,120,  0);
+			ObjEffect_SetVertexUV(aeff,3,120,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,  0,120);
+			ObjEffect_SetVertexUV(aeff,1,  0,240);
+			ObjEffect_SetVertexUV(aeff,2,120,120);
+			ObjEffect_SetVertexUV(aeff,3,120,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,  0,240);
+			ObjEffect_SetVertexUV(aeff,1,  0,360);
+			ObjEffect_SetVertexUV(aeff,2,120,240);
+			ObjEffect_SetVertexUV(aeff,3,120,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetSpeedX>0) {//右進行
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,120,  0);
+			ObjEffect_SetVertexUV(aeff,1,120,120);
+			ObjEffect_SetVertexUV(aeff,2,240,  0);
+			ObjEffect_SetVertexUV(aeff,3,240,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,120,120);
+			ObjEffect_SetVertexUV(aeff,1,120,240);
+			ObjEffect_SetVertexUV(aeff,2,240,120);
+			ObjEffect_SetVertexUV(aeff,3,240,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,120,240);
+			ObjEffect_SetVertexUV(aeff,1,120,360);
+			ObjEffect_SetVertexUV(aeff,2,240,240);
+			ObjEffect_SetVertexUV(aeff,3,240,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetSpeedX<0) {//左進行
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,240,  0);
+			ObjEffect_SetVertexUV(aeff,1,240,120);
+			ObjEffect_SetVertexUV(aeff,2,360,  0);
+			ObjEffect_SetVertexUV(aeff,3,360,120);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,240,120);
+			ObjEffect_SetVertexUV(aeff,1,240,240);
+			ObjEffect_SetVertexUV(aeff,2,360,120);
+			ObjEffect_SetVertexUV(aeff,3,360,240);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,240,240);
+			ObjEffect_SetVertexUV(aeff,1,240,360);
+			ObjEffect_SetVertexUV(aeff,2,360,240);
+			ObjEffect_SetVertexUV(aeff,3,360,360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY+MoveY);
+		}
+		if(GetCommonData("Charge")) {//溜め
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,360,  0+360);
+			ObjEffect_SetVertexUV(aeff,1,360,120+360);
+			ObjEffect_SetVertexUV(aeff,2,480,  0+360);
+			ObjEffect_SetVertexUV(aeff,3,480,120+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,360,120+360);
+			ObjEffect_SetVertexUV(aeff,1,360,240+360);
+			ObjEffect_SetVertexUV(aeff,2,480,120+360);
+			ObjEffect_SetVertexUV(aeff,3,480,240+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,360,240+360);
+			ObjEffect_SetVertexUV(aeff,1,360,360+360);
+			ObjEffect_SetVertexUV(aeff,2,480,240+360);
+			ObjEffect_SetVertexUV(aeff,3,480,360+360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-2+MoveY);
+		}
+		if(GetCommonData("Attack")) {//攻撃
+			if(mtcount%(mtchange*3)<=mtchange*1 && mtcount%(mtchange*3)>=mtchange*0){
+			ObjEffect_SetVertexUV(aeff,0,480,  0+360);
+			ObjEffect_SetVertexUV(aeff,1,480,120+360);
+			ObjEffect_SetVertexUV(aeff,2,600,  0+360);
+			ObjEffect_SetVertexUV(aeff,3,600,120+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*2 && mtcount%(mtchange*3)>=mtchange*1){
+			ObjEffect_SetVertexUV(aeff,0,480,120+360);
+			ObjEffect_SetVertexUV(aeff,1,480,240+360);
+			ObjEffect_SetVertexUV(aeff,2,600,120+360);
+			ObjEffect_SetVertexUV(aeff,3,600,240+360);
+			}
+			if(mtcount%(mtchange*3)<=mtchange*3 && mtcount%(mtchange*3)>=mtchange*2){
+			ObjEffect_SetVertexUV(aeff,0,480,240+360);
+			ObjEffect_SetVertexUV(aeff,1,480,360+360);
+			ObjEffect_SetVertexUV(aeff,2,600,240+360);
+			ObjEffect_SetVertexUV(aeff,3,600,360+360);
+			}
+		Obj_SetPosition(aeff,GetEnemyX+3,GetEnemyY-2+MoveY);
+		}
+		ObjEffect_SetVertexColor(aeff,0,alpha/2,255,255,255);
+		ObjEffect_SetVertexColor(aeff,1,alpha/2,255,255,255);
+		ObjEffect_SetVertexColor(aeff,2,alpha/2,255,255,255);
+		ObjEffect_SetVertexColor(aeff,3,alpha/2,255,255,255);
+		ObjEffect_SetScale(aeff,scale+0.1*sin(mtcount*10),scale+0.1*cos(mtcount*10));
+		MoveY=sin(mtcount*4)*6;//ふよふよ
+		mtcount++;
+		yield;
+/*		loop(30){
+			ObjEffect_SetRenderState(aeff,ADD);
+			ObjEffect_SetScale(aeff,scale,scale);
+			ObjEffect_SetVertexColor(aeff,0,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,1,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,2,alpha,255,100,50);
+			ObjEffect_SetVertexColor(aeff,3,alpha,255,100,50);
+			if(GetSpeedX==0) {//立ち
+			ObjEffect_SetVertexUV(aeff,0, 0,  0);
+			ObjEffect_SetVertexUV(aeff,1, 0,100);
+			ObjEffect_SetVertexUV(aeff,2,84,  0);
+			ObjEffect_SetVertexUV(aeff,3,84,100);
+			Obj_SetPosition(aeff,GetEnemyX+5,GetEnemyY-8);
+			}
+			if(GetSpeedX>0) {//右進行
+			ObjEffect_SetVertexUV(aeff,0, 84,  0);
+			ObjEffect_SetVertexUV(aeff,1, 84,100);
+			ObjEffect_SetVertexUV(aeff,2,168,  0);
+			ObjEffect_SetVertexUV(aeff,3,168,100);
+			Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-8);
+			}
+			if(GetSpeedX<0) {//左進行
+			ObjEffect_SetVertexUV(aeff,0,168,  0);
+			ObjEffect_SetVertexUV(aeff,1,168,100);
+			ObjEffect_SetVertexUV(aeff,2,252,  0);
+			ObjEffect_SetVertexUV(aeff,3,252,100);
+			Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-8);
+			}
+			scale+=0.1;
+			alpha-=64/30;
+			yield;
+			}
+*/
+		}
+		Obj_Delete(aeff);
+	}
+
+task BackGroundEffect{
+let imgBACK1	= GetCurrentScriptDirectory~".\enm2img\enm2b.png";
+let imgBACK2	= GetCurrentScriptDirectory~".\enm2img\enm2a.png";
+
+let spn1		= Obj_Create(OBJ_EFFECT);
+let spn2		= Obj_Create(OBJ_EFFECT);
+let spn3		= Obj_Create(OBJ_EFFECT);
+let cc			= 0;
+let alpha1		= 0;
+let alpha2		= 0;
+let alpha3		= 0;
+
+LoadGraphic(imgBACK1);
+LoadGraphic(imgBACK2);
+
+Obj_SetPosition(spn1,CenX,CenY);
+ObjEffect_SetTexture(spn1,imgBACK1);
+ObjEffect_SetRenderState(spn1,ALPHA);
+ObjEffect_SetPrimitiveType(spn1,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn1,1,1);
+ObjEffect_SetLayer(spn1,2);
+ObjEffect_CreateVertex(spn1,4);
+ObjEffect_SetVertexXY(spn1,0,384/-2,448/-2);
+ObjEffect_SetVertexXY(spn1,1,384/-2,448/2);
+ObjEffect_SetVertexXY(spn1,2,384/2,448/-2);
+ObjEffect_SetVertexXY(spn1,3,384/2,448/2);
+ObjEffect_SetVertexUV(spn1,0,0,0);
+ObjEffect_SetVertexUV(spn1,1,0,448);
+ObjEffect_SetVertexUV(spn1,2,384,0);
+ObjEffect_SetVertexUV(spn1,3,384,448);
+Obj_SetPosition(spn2,CenX,CenY);
+ObjEffect_SetTexture(spn2,imgBACK2);
+ObjEffect_SetRenderState(spn2,ADD);
+ObjEffect_SetPrimitiveType(spn2,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn2,1,1);
+ObjEffect_SetAngle(spn2,0,0,0);
+ObjEffect_SetLayer(spn2,2);
+ObjEffect_CreateVertex(spn2,4);
+ObjEffect_SetVertexXY(spn2,0,384/-2,896/-2);
+ObjEffect_SetVertexXY(spn2,1,384/-2,896/2);
+ObjEffect_SetVertexXY(spn2,2,384/2,896/-2);
+ObjEffect_SetVertexXY(spn2,3,384/2,896/2);
+ObjEffect_SetVertexUV(spn2,0,0,0);
+ObjEffect_SetVertexUV(spn2,1,0,896);
+ObjEffect_SetVertexUV(spn2,2,384,0);
+ObjEffect_SetVertexUV(spn2,3,384,896);
+Obj_SetPosition(spn3,CenX,CenY);
+ObjEffect_SetTexture(spn3,imgBACK2);
+ObjEffect_SetRenderState(spn3,SUBTRACT);
+ObjEffect_SetPrimitiveType(spn3,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn3,1,1);
+ObjEffect_SetAngle(spn3,0,0,180);
+ObjEffect_SetLayer(spn3,2);
+ObjEffect_CreateVertex(spn3,4);
+ObjEffect_SetVertexXY(spn3,0,384/-2,896/-2);
+ObjEffect_SetVertexXY(spn3,1,384/-2,896/2);
+ObjEffect_SetVertexXY(spn3,2,384/2,896/-2);
+ObjEffect_SetVertexXY(spn3,3,384/2,896/2);
+ObjEffect_SetVertexUV(spn3,0,0,0);
+ObjEffect_SetVertexUV(spn3,1,0,896);
+ObjEffect_SetVertexUV(spn3,2,384,0);
+ObjEffect_SetVertexUV(spn3,3,384,896);
+
+loop{
+cc+=1;
+
+if(alpha1<255){alpha1+=15}
+if(alpha2<255){alpha2+=15}
+
+ObjEffect_SetVertexColor(spn1,0,alpha1,150,150,150+sin(cc)*55);
+ObjEffect_SetVertexColor(spn1,1,alpha1,150,150,150+sin(cc)*55);
+ObjEffect_SetVertexColor(spn1,2,alpha1,150,150,150+sin(cc)*55);
+ObjEffect_SetVertexColor(spn1,3,alpha1,150,150,150+sin(cc)*55);
+ObjEffect_SetVertexColor(spn2,0,alpha2/3,200-sin(cc)*55,100+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn2,1,alpha2/3,200-sin(cc)*55,100+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn2,2,alpha2/3,200-sin(cc)*55,100+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn2,3,alpha2/3,200-sin(cc)*55,100+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn3,0,alpha2,200-sin(cc)*55,200+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn3,1,alpha2,200-sin(cc)*55,200+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn3,2,alpha2,200-sin(cc)*55,200+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexColor(spn3,3,alpha2,200-sin(cc)*55,200+sin(cc/2)*55,200+sin(cc)*55);
+ObjEffect_SetVertexUV(spn2,0,0,0-cc*2);
+ObjEffect_SetVertexUV(spn2,1,0,896-cc*2);
+ObjEffect_SetVertexUV(spn2,2,384,0-cc*2);
+ObjEffect_SetVertexUV(spn2,3,384,896-cc*2);
+ObjEffect_SetVertexUV(spn3,0,0,0-cc*2);
+ObjEffect_SetVertexUV(spn3,1,0,896-cc*2);
+ObjEffect_SetVertexUV(spn3,2,384,0-cc*2);
+ObjEffect_SetVertexUV(spn3,3,384,896-cc*2);
+yield;
+}
+}

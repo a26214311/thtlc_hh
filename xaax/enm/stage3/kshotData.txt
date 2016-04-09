@@ -1,0 +1,291 @@
+#UserShotData
+ShotImage=".\enm3img\kShot_P.png"
+
+/*
+255,63,63
+63,255,63
+63,63,255
+255,255,63
+255,63,255
+63,255,255
+255,127,63
+127,63,255
+63,127,255
+255,255,255
+*/
+
+ShotData{ id=1  rect=(0,0,20,20)  delay_color=(255,63,63)  }
+ShotData{ id=2  rect=(21,0,41,20)  delay_color=(63,255,63)  }
+ShotData{ id=3  rect=(42,0,62,20)  delay_color=(63,63,255)  }
+ShotData{ id=4  rect=(63,0,83,20)  delay_color=(255,255,63)  }
+ShotData{ id=5  rect=(84,0,104,20)  delay_color=(255,63,255)  }
+ShotData{ id=6  rect=(105,0,125,20)  delay_color=(63,255,255)  }
+ShotData{ id=7  rect=(126,0,146,20)  delay_color=(255,127,63)  }
+ShotData{ id=8  rect=(147,0,167,20)  delay_color=(127,63,255)  }
+ShotData{ id=9  rect=(168,0,188,20)  delay_color=(63,127,255)  }
+ShotData{ id=10  rect=(189,0,209,20)  delay_color=(255,255,255)  }
+
+ShotData{ id=11  rect=(0,22,19,39)  delay_color=(255,63,63)  }
+ShotData{ id=12  rect=(20,22,39,39)  delay_color=(63,255,63)  }
+ShotData{ id=13  rect=(40,22,59,39)  delay_color=(63,63,255)  }
+ShotData{ id=14  rect=(60,22,79,39)  delay_color=(255,255,63)  }
+ShotData{ id=15  rect=(80,22,99,39)  delay_color=(255,63,255)  }
+ShotData{ id=16  rect=(100,22,119,39)  delay_color=(63,255,255)  }
+ShotData{ id=17  rect=(120,22,139,39)  delay_color=(255,127,63)  }
+ShotData{ id=18  rect=(140,22,159,39)  delay_color=(127,63,255)  }
+ShotData{ id=19  rect=(160,22,179,39)  delay_color=(63,127,255)  }
+ShotData{ id=20  rect=(180,22,199,39)  delay_color=(255,255,255)  }
+
+ShotData{ id=21  rect=(0,41,20,61)  delay_color=(255,63,63)  }
+ShotData{ id=22  rect=(21,41,41,61)  delay_color=(63,255,63)  }
+ShotData{ id=23  rect=(42,41,62,61)  delay_color=(63,63,255)  }
+ShotData{ id=24  rect=(63,41,83,61)  delay_color=(255,255,63)  }
+ShotData{ id=25  rect=(84,41,104,61)  delay_color=(255,63,255)  }
+ShotData{ id=26  rect=(105,41,125,61)  delay_color=(63,255,255)  }
+ShotData{ id=27  rect=(126,41,146,61)  delay_color=(255,127,63)  }
+ShotData{ id=28  rect=(147,41,167,61)  delay_color=(127,63,255)  }
+ShotData{ id=29  rect=(168,41,188,61)  delay_color=(63,127,255)  }
+ShotData{ id=30  rect=(189,41,209,61)  delay_color=(255,255,255)  }
+
+ShotData{ id=31  rect=(0,63,11,81)  delay_color=(255,63,63) }
+ShotData{ id=32  rect=(12,63,23,81)  delay_color=(63,255,63) }
+ShotData{ id=33  rect=(24,63,35,81)  delay_color=(63,63,255) }
+ShotData{ id=34  rect=(36,63,47,81)  delay_color=(255,255,63) }
+ShotData{ id=35  rect=(48,63,59,81)  delay_color=(255,63,255) }
+ShotData{ id=36  rect=(60,63,71,81)  delay_color=(63,255,255) }
+ShotData{ id=37  rect=(72,63,83,81)  delay_color=(255,127,63) }
+ShotData{ id=38  rect=(84,63,95,81)  delay_color=(127,63,255) }
+ShotData{ id=39  rect=(96,63,107,81)  delay_color=(63,127,255) }
+ShotData{ id=40  rect=(108,63,119,81)  delay_color=(255,255,255) }
+
+ShotData{ id=41  rect=(0,83,10,93)  delay_color=(255,63,63) }
+ShotData{ id=42  rect=(11,83,21,93)  delay_color=(63,255,63) }
+ShotData{ id=43  rect=(22,83,32,93)  delay_color=(63,63,255) }
+ShotData{ id=44  rect=(33,83,43,93)  delay_color=(255,255,63) }
+ShotData{ id=45  rect=(44,83,54,93)  delay_color=(255,63,255) }
+ShotData{ id=46  rect=(55,83,65,93)  delay_color=(63,255,255) }
+ShotData{ id=47  rect=(66,83,76,93)  delay_color=(255,127,63) }
+ShotData{ id=48  rect=(77,83,87,93)  delay_color=(127,63,255) }
+ShotData{ id=49  rect=(88,83,98,93)  delay_color=(63,127,255) }
+ShotData{ id=50  rect=(99,83,109,93)  delay_color=(255,255,255) }
+
+ShotData{ id=51  rect=(0,95,12,113)  delay_color=(255,63,63) }
+ShotData{ id=52  rect=(13,95,25,113)  delay_color=(63,255,63) }
+ShotData{ id=53  rect=(26,95,38,113)  delay_color=(63,63,255) }
+ShotData{ id=54  rect=(39,95,51,113)  delay_color=(255,255,63) }
+ShotData{ id=55  rect=(52,95,64,113)  delay_color=(255,63,255) }
+ShotData{ id=56  rect=(65,95,77,113)  delay_color=(63,255,255) }
+ShotData{ id=57  rect=(78,95,90,113)  delay_color=(255,127,63) }
+ShotData{ id=58  rect=(91,95,103,113)  delay_color=(127,63,255) }
+ShotData{ id=59  rect=(104,95,116,113)  delay_color=(63,127,255) }
+ShotData{ id=60  rect=(117,95,129,113)  delay_color=(255,255,255) }
+
+ShotData{ id=61  rect=(0,131,27,161)  delay_color=(255,63,63) }
+ShotData{ id=62  rect=(28,131,55,161)  delay_color=(63,255,63) }
+ShotData{ id=63  rect=(56,131,83,161)  delay_color=(63,63,255) }
+ShotData{ id=64  rect=(84,131,111,161)  delay_color=(255,255,63) }
+ShotData{ id=65  rect=(112,131,139,161)  delay_color=(255,63,255) }
+ShotData{ id=66  rect=(140,131,167,161)  delay_color=(63,255,255) }
+ShotData{ id=67  rect=(168,131,195,161)  delay_color=(255,127,63) }
+ShotData{ id=68  rect=(196,131,223,161)  delay_color=(127,63,255) }
+ShotData{ id=69  rect=(224,131,251,161)  delay_color=(63,127,255) }
+ShotData{ id=70  rect=(252,131,279,161)  delay_color=(255,255,255) }
+
+ShotData{ id=71  rect=(0,163,11,181)  delay_color=(255,63,63) }
+ShotData{ id=72  rect=(12,163,23,181)  delay_color=(63,255,63) }
+ShotData{ id=73  rect=(24,163,35,181)  delay_color=(63,63,255) }
+ShotData{ id=74  rect=(36,163,47,181)  delay_color=(255,255,63) }
+ShotData{ id=75  rect=(48,163,59,181)  delay_color=(255,63,255) }
+ShotData{ id=76  rect=(60,163,71,181)  delay_color=(63,255,255) }
+ShotData{ id=77  rect=(72,163,83,181)  delay_color=(255,127,63) }
+ShotData{ id=78  rect=(84,163,95,181)  delay_color=(127,63,255) }
+ShotData{ id=79  rect=(96,163,107,181)  delay_color=(63,127,255) }
+ShotData{ id=80  rect=(108,163,119,181)  delay_color=(255,255,255) }
+
+ShotData{ id=81  rect=(0,183,16,213)  delay_color=(255,63,63) }
+ShotData{ id=82  rect=(17,183,33,213)  delay_color=(63,255,63) }
+ShotData{ id=83  rect=(34,183,50,213)  delay_color=(63,63,255) }
+ShotData{ id=84  rect=(51,183,67,213)  delay_color=(255,255,63) }
+ShotData{ id=85  rect=(68,183,84,213)  delay_color=(255,63,255) }
+ShotData{ id=86  rect=(85,183,101,213)  delay_color=(63,255,255) }
+ShotData{ id=87  rect=(102,183,118,213)  delay_color=(255,127,63) }
+ShotData{ id=88  rect=(119,183,135,213)  delay_color=(127,63,255) }
+ShotData{ id=89  rect=(136,183,152,213)  delay_color=(63,127,255) }
+ShotData{ id=90  rect=(153,183,169,213)  delay_color=(255,255,255) }
+
+ShotData{ id=91  rect=(0,215,16,235)  delay_color=(255,63,63) }
+ShotData{ id=92  rect=(17,215,33,235)  delay_color=(63,255,63) }
+ShotData{ id=93  rect=(34,215,50,235)  delay_color=(63,63,255) }
+ShotData{ id=94  rect=(51,215,67,235)  delay_color=(255,255,63) }
+ShotData{ id=95  rect=(68,215,84,235)  delay_color=(255,63,255) }
+ShotData{ id=96  rect=(85,215,101,235)  delay_color=(63,255,255) }
+ShotData{ id=97  rect=(102,215,118,235)  delay_color=(255,127,63) }
+ShotData{ id=98  rect=(119,215,135,235)  delay_color=(127,63,255) }
+ShotData{ id=99  rect=(136,215,152,235)  delay_color=(63,127,255) }
+ShotData{ id=100  rect=(153,215,169,235)  delay_color=(255,255,255) }
+
+ShotData{ id=101  rect=(0,237,12,249)  delay_color=(255,63,63)  angular_velocity=rand(-5,5) }
+ShotData{ id=102  rect=(13,237,25,249)  delay_color=(63,255,63)  angular_velocity=rand(-5,5) }
+ShotData{ id=103  rect=(26,237,38,249)  delay_color=(63,63,255)  angular_velocity=rand(-5,5) }
+ShotData{ id=104  rect=(39,237,51,249)  delay_color=(255,255,63)  angular_velocity=rand(-5,5) }
+ShotData{ id=105  rect=(52,237,64,249)  delay_color=(255,63,255)  angular_velocity=rand(-5,5) }
+ShotData{ id=106  rect=(65,237,77,249)  delay_color=(63,255,255)  angular_velocity=rand(-5,5) }
+ShotData{ id=107  rect=(78,237,90,249)  delay_color=(255,127,63)  angular_velocity=rand(-5,5) }
+ShotData{ id=108  rect=(91,237,103,249)  delay_color=(127,63,255)  angular_velocity=rand(-5,5) }
+ShotData{ id=109  rect=(104,237,116,249)  delay_color=(63,127,255)  angular_velocity=rand(-5,5) }
+ShotData{ id=110  rect=(117,237,129,249)  delay_color=(255,255,255)  angular_velocity=rand(-5,5) }
+
+ShotData{ id=111  rect=(0,251,18,269)  delay_color=(255,63,63) angular_velocity=rand(-5,5)}
+ShotData{ id=112  rect=(19,251,37,269)  delay_color=(63,255,63) angular_velocity=rand(-5,5)}
+ShotData{ id=113  rect=(38,251,56,269)  delay_color=(63,63,255) angular_velocity=rand(-5,5)}
+ShotData{ id=114  rect=(57,251,75,269)  delay_color=(255,255,63) angular_velocity=rand(-5,5)}
+ShotData{ id=115  rect=(76,251,94,269)  delay_color=(255,63,255) angular_velocity=rand(-5,5)}
+ShotData{ id=116  rect=(95,251,113,269)  delay_color=(63,255,255) angular_velocity=rand(-5,5)}
+ShotData{ id=117  rect=(114,251,132,269)  delay_color=(255,127,63) angular_velocity=rand(-5,5)}
+ShotData{ id=118  rect=(133,251,151,269)  delay_color=(127,63,255) angular_velocity=rand(-5,5)}
+ShotData{ id=119  rect=(152,251,170,269)  delay_color=(63,127,255) angular_velocity=rand(-5,5)}
+ShotData{ id=120  rect=(171,251,189,269)  delay_color=(255,255,255) angular_velocity=rand(-5,5)}
+
+ShotData{ id=121  rect=(0,271,29,300)  delay_color=(255,63,63) angular_velocity=200}
+ShotData{ id=122  rect=(30,271,59,300)  delay_color=(63,255,63) angular_velocity=200}
+ShotData{ id=123  rect=(60,271,89,300)  delay_color=(63,63,255) angular_velocity=200}
+ShotData{ id=124  rect=(90,271,119,300)  delay_color=(255,255,63) angular_velocity=200}
+ShotData{ id=125  rect=(120,271,149,300)  delay_color=(255,63,255) angular_velocity=200}
+ShotData{ id=126  rect=(150,271,179,300)  delay_color=(63,255,255) angular_velocity=200}
+ShotData{ id=127  rect=(180,271,209,300)  delay_color=(255,127,63) angular_velocity=200}
+ShotData{ id=128  rect=(210,271,239,300)  delay_color=(127,63,255) angular_velocity=200}
+ShotData{ id=129  rect=(240,271,269,300)  delay_color=(63,127,255) angular_velocity=200}
+ShotData{ id=130  rect=(270,271,299,300)  delay_color=(255,255,255) angular_velocity=200}
+
+/*追加した弾幕(大玉、炎弾)*/
+ShotData{ id=131  rect=(1,310,63,372)  delay_color=(255,0,0) angular_velocity=100}
+ShotData{ id=132  rect=(65,310,127,372)  delay_color=(255,0,255) angular_velocity=100}
+ShotData{ id=133  rect=(129,310,191,372)  delay_color=(255,200,0) angular_velocity=100}
+ShotData{ id=134  rect=(193,310,255,372)  delay_color=(255,255,0) angular_velocity=100}
+ShotData{ id=135  rect=(257,310,319,372)  delay_color=(0,255,0) angular_velocity=100}
+ShotData{ id=136  rect=(321,310,383,372)  delay_color=(0,200,255) angular_velocity=100}
+ShotData{ id=137  rect=(385,310,447,372)  delay_color=(0,0,255) angular_velocity=100}
+ShotData{ id=138  rect=(449,310,511,372)  delay_color=(255,255,255) angular_velocity=100}
+
+ShotData{ id=139
+delay_color=(255,0,0)
+angular_velocity=0
+render=ADD
+AnimationData{
+animation_data = (5,11,379,36,411)
+animation_data = (5,58,379,85,415)
+animation_data = (5,105,379,132,415)
+animation_data = (5,151,379,180,415)
+animation_data = (5,200,384,228,413)
+animation_data = (5,249,379,277,413)}
+}
+
+ShotData{ id=140
+delay_color=(0,0,255)
+angular_velocity=0
+render=ADD
+AnimationData{
+animation_data = (5,11,426,35,459)
+animation_data = (5,58,427,85,463)
+animation_data = (5,105,427,132,463)
+animation_data = (5,151,427,180,463)
+animation_data = (5,200,433,228,461)
+animation_data = (5,249,427,277,461)}
+}
+
+ShotData{ id=159
+delay_color=(255,102,0)
+angular_velocity=0
+render=ADD
+AnimationData{
+animation_data = (5,210,2,234,33)
+animation_data = (5,257,2,283,37)
+animation_data = (5,304,2,330,37)
+animation_data = (5,350,2,378,37)
+animation_data = (5,399,7,426,35)
+animation_data = (5,448,2,475,35)}
+}
+
+ShotData{ id=160
+delay_color=(255,102,0)
+angular_velocity=0
+render=ADD
+AnimationData{
+animation_data = (5,210,38,233,68)
+animation_data = (5,257,38,282,73)
+animation_data = (5,304,38,330,73)
+animation_data = (5,350,38,378,73)
+animation_data = (5,399,44,426,71)
+animation_data = (5,448,38,475,71)}
+}
+
+//RED,ORANGE,YELLOW,GREEN,AQUA,BLUE,PURPLE,WHITE
+ShotData{ id=141  rect=(132,467,148,499) delay_color=(255,0,0) render=ALPHA}
+ShotData{ id=142  rect=(13,467,29,499) delay_color=(255,102,0) render=ALPHA}
+ShotData{ id=143  rect=(81,467,97,499) delay_color=(255,255,0) render=ALPHA}
+ShotData{ id=144  rect=(115,467,131,499) delay_color=(0,255,0) render=ALPHA}
+ShotData{ id=145  rect=(47,467,63,499) delay_color=(102,255,255) render=ALPHA}
+ShotData{ id=146  rect=(98,467,114,499) delay_color=(0,0,255) render=ALPHA}
+ShotData{ id=147  rect=(64,467,80,499) delay_color=(255,0,255) render=ALPHA}
+ShotData{ id=148  rect=(30,467,46,499) delay_color=(255,255,255) render=ALPHA}
+
+ShotData{ id=149  rect=(161,478,171,498) delay_color=(255,0,0) render=ALPHA}
+ShotData{ id=150  rect=(259,478,269,498) delay_color=(255,102,0) render=ALPHA}
+ShotData{ id=151  rect=(203,478,213,498) delay_color=(255,255,0) render=ALPHA}
+ShotData{ id=152  rect=(175,478,185,498) delay_color=(0,255,0) render=ALPHA}
+ShotData{ id=153  rect=(231,478,241,498) delay_color=(102,255,255) render=ALPHA}
+ShotData{ id=154  rect=(189,478,199,498) delay_color=(0,0,255) render=ALPHA}
+ShotData{ id=155  rect=(217,478,227,498) delay_color=(255,0,255) render=ALPHA}
+ShotData{ id=156  rect=(245,478,255,498) delay_color=(255,255,255) render=ALPHA}
+
+ShotData{ id=157  rect=(340,425,355,482) delay_color=(255,102,0) render=ALPHA}//bar
+ShotData{ id=158  rect=(399,425,414,482) delay_color=(255,102,0) render=ALPHA}
+
+ShotData{ id=161  rect=(473,111,507,142) delay_color=(255,0,0) render=ALPHA}
+ShotData{ id=162  rect=(473,143,507,174) delay_color=(100,100,255) render=ALPHA}
+ShotData{ id=163  rect=(473,175,507,206) delay_color=(0,0,255) render=ALPHA}
+ShotData{ id=164  rect=(473,207,507,238) delay_color=(255,255,0) render=ALPHA}
+ShotData{ id=165  rect=(473,240,507,270) delay_color=(255,0,255) render=ALPHA}
+ShotData{ id=166  rect=(473,271,507,302) delay_color=(255,255,255) render=ALPHA}
+
+ShotData{ id=167  rect=(189,237,199,267)  delay_color=(255,255,255)render=ALPHA}
+ShotData{ id=168  rect=(200,237,210,267)  delay_color=(255,50,50)  render=ALPHA}
+ShotData{ id=169  rect=(211,237,221,267)  delay_color=(255,50,255) render=ALPHA}
+ShotData{ id=170  rect=(222,237,232,267)  delay_color=(50,50,255)  render=ALPHA}
+ShotData{ id=171  rect=(233,237,243,267)  delay_color=(50,255,255) render=ALPHA}
+ShotData{ id=172  rect=(244,237,254,267)  delay_color=(50,255,50)  render=ALPHA}
+ShotData{ id=173  rect=(255,237,265,267)  delay_color=(255,255,50) render=ALPHA}
+
+ShotData{ id=174  rect=(188,576,246,634)  delay_color=(255,255,255)render=ADD angular_velocity=0}
+ShotData{ id=175  rect=(64,514,122,572)  delay_color=(255,50,50)  render=ADD angular_velocity=0}
+ShotData{ id=176  rect=(64,576,122,634)  delay_color=(255,50,255) render=ADD angular_velocity=0}
+ShotData{ id=177  rect=(188,514,246,572)  delay_color=(50,50,255)  render=ADD angular_velocity=0}
+ShotData{ id=178  rect=(2,576,60,634)  delay_color=(50,255,255) render=ADD angular_velocity=0}
+ShotData{ id=179  rect=(126,514,184,572)  delay_color=(50,255,50)  render=ADD angular_velocity=0}
+ShotData{ id=180  rect=(126,576,184,634)  delay_color=(255,255,50) render=ADD angular_velocity=0}
+ShotData{ id=181  rect=(2,514,60,572)  delay_color=(255,255,50) render=ADD angular_velocity=0}
+
+ShotData{ id=182  rect=(513,64,522,80)  delay_color=(255,63,63) render=ADD}
+ShotData{ id=183  rect=(525,64,534,80)  delay_color=(63,255,63) render=ADD}//513,511
+ShotData{ id=184  rect=(537,64,546,80)  delay_color=(63,63,255) render=ADD}
+ShotData{ id=185  rect=(549,64,558,80)  delay_color=(255,255,63) render=ADD}
+ShotData{ id=186  rect=(561,64,570,80)  delay_color=(255,63,255) render=ADD}
+ShotData{ id=187  rect=(573,64,582,80)  delay_color=(63,255,255) render=ADD}
+ShotData{ id=188  rect=(585,64,594,80)  delay_color=(255,127,63) render=ADD}
+ShotData{ id=189  rect=(597,64,606,80)  delay_color=(127,63,255) render=ADD}
+ShotData{ id=190  rect=(609,64,618,80)  delay_color=(63,127,255) render=ADD}
+ShotData{ id=191  rect=(621,64,630,80)  delay_color=(255,255,255) render=ADD}
+
+ShotData{ id=192  rect=(513,131,538,161)  delay_color=(255,63,63) render=ADD}//513,511
+ShotData{ id=193  rect=(541,131,566,161)  delay_color=(63,255,63) render=ADD}
+ShotData{ id=194  rect=(569,131,594,161)  delay_color=(63,63,255) render=ADD}
+ShotData{ id=195  rect=(597,131,622,161)  delay_color=(255,255,63) render=ADD}
+ShotData{ id=196  rect=(625,131,650,161)  delay_color=(255,63,255) render=ADD}
+ShotData{ id=197  rect=(653,131,678,161)  delay_color=(63,255,255) render=ADD}
+ShotData{ id=198  rect=(681,131,706,161)  delay_color=(255,127,63) render=ADD}
+ShotData{ id=199  rect=(709,131,734,161)  delay_color=(127,63,255) render=ADD}
+ShotData{ id=200  rect=(737,131,762,161)  delay_color=(63,127,255) render=ADD}
+ShotData{ id=201  rect=(765,131,790,161)  delay_color=(255,255,255) render=ADD}
+
+ShotData{ id=254  rect=(852,425,867,482) delay_color=(255,102,0) render=ADD}//barADD
+ShotData{ id=255  rect=(911,425,926,482) delay_color=(255,102,0) render=ADD}

@@ -1,0 +1,159 @@
+//(因数:2)
+//1)ゲージの増減
+//  0:ゲージ量の多い方
+//  1:ゲージ量の少ない方
+//  2:分割無し
+//2)開幕処理
+//  0:回復無し
+//  1:回復有り
+//3)分割場所
+//  0:初期値
+//  数値：1〜301
+//  上記以外の数値を入力するとエラー
+task hpb(a,b,c)
+	{
+		let imgEffect15 = GetCurrentScriptDirectory~".\enm4eff\Life_bar.png";
+		let obj = Obj_Create(OBJ_EFFECT);
+		let obj2 = Obj_Create(OBJ_EFFECT);
+		let obj3 = Obj_Create(OBJ_EFFECT);
+		let obj4 = Obj_Create(OBJ_EFFECT);
+
+		let obj_a = 0 ;
+		let obj_b = 240 ;
+		let obj_c = 1 ;
+		let obj_d = 1 ;
+		let obj_e = 180 ;
+		let obj_f = 0 ;
+		let obj_g = 0 ;
+
+		let obj_count = 0 ;
+
+		let obj_aa = [240+c,180,180];
+		let obj_ab = [180,0,180];
+		let obj_ac = [60.25-c/5,12.5,72.5];
+		let obj_ae = [240+c,240,240];
+
+		let obj_ad = a ;
+
+		let riy = 7 ; //レイヤー
+
+		LoadGraphic(imgEffect15);
+
+//1----------------------------------------------------------
+		Obj_SetPosition(obj, GetX, GetY);
+		ObjEffect_SetTexture(obj,imgEffect15);
+		ObjEffect_SetPrimitiveType(obj, PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_CreateVertex(obj, 722);
+		ObjEffect_SetScale(obj,1,1);
+		ObjEffect_SetLayer(obj,riy);
+		//ObjEffect_SetRenderState(obj,ADD);
+//2----------------------------------------------------------
+		Obj_SetPosition(obj2, GetX, GetY);
+		ObjEffect_SetTexture(obj2,imgEffect15);
+		ObjEffect_SetPrimitiveType(obj2, PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_CreateVertex(obj2, 722);
+		ObjEffect_SetScale(obj2,1,1);
+		ObjEffect_SetLayer(obj2,riy);
+		ObjEffect_SetRenderState(obj2,ADD);
+//3----------------------------------------------------------
+		Obj_SetPosition(obj3, GetX, GetY);
+		ObjEffect_SetTexture(obj3,imgEffect15);
+		ObjEffect_SetPrimitiveType(obj3, PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_CreateVertex(obj3, 4);
+		ObjEffect_SetScale(obj3,0.25,0.2);
+		ObjEffect_SetLayer(obj3,riy);
+		//ObjEffect_SetRenderState(obj3,ADD);
+//4----------------------------------------------------------
+		Obj_SetPosition(obj4, GetX, GetY);
+		ObjEffect_SetTexture(obj4,imgEffect15);
+		ObjEffect_SetPrimitiveType(obj4, PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_CreateVertex(obj4, 722);
+		ObjEffect_SetScale(obj4,1,1);
+		ObjEffect_SetLayer(obj4,riy);
+		ObjEffect_SetRenderState(obj4,ADD);
+//-----------------------------------------------------------
+
+		obj_b = obj_aa[a] ;
+		obj_e = obj_ab[a] ;
+
+		loop(722){
+
+		ObjEffect_SetVertexXY(obj, obj_a, sin(obj_b)*65, cos(obj_b)*65);
+		ObjEffect_SetVertexXY(obj, obj_d, sin(obj_b)*60, cos(obj_b)*60);
+		ObjEffect_SetVertexXY(obj2, obj_a, sin(obj_b)*64, cos(obj_b)*64);
+		ObjEffect_SetVertexXY(obj2, obj_d, sin(obj_b)*61, cos(obj_b)*61);
+		ObjEffect_SetVertexXY(obj4, obj_a, sin(obj_e)*64, cos(obj_e)*64);
+		ObjEffect_SetVertexXY(obj4, obj_d, sin(obj_e)*61, cos(obj_e)*61);
+		
+		ObjEffect_SetVertexUV(obj, obj_a, 2, 0);
+		ObjEffect_SetVertexUV(obj, obj_d, 6, 15);
+		ObjEffect_SetVertexUV(obj2, obj_a, 7, 0);
+		ObjEffect_SetVertexUV(obj2, obj_d, 11, 15);
+		ObjEffect_SetVertexUV(obj4, obj_a, 7, 0);
+		ObjEffect_SetVertexUV(obj4, obj_d, 11, 15);
+		
+		ObjEffect_SetVertexColor(obj2,obj_g,255,0,0,0);
+
+		obj_a+=2;
+		obj_d+=2;
+		obj_b++;
+		obj_e++;
+		obj_g++;
+		}	
+		
+		ObjEffect_SetVertexXY(obj3, 0, -20, -16);
+		ObjEffect_SetVertexXY(obj3, 1, -20, 16);
+		ObjEffect_SetVertexXY(obj3, 2, 20, -16);
+		ObjEffect_SetVertexXY(obj3, 3, 20, 16);
+
+		ObjEffect_SetVertexUV(obj3, 0, 12, 1);
+		ObjEffect_SetVertexUV(obj3, 1, 12, 5);
+		ObjEffect_SetVertexUV(obj3, 2, 17, 1);
+		ObjEffect_SetVertexUV(obj3, 3, 17, 5);
+
+		let GEL = GetEnemyLife ;
+
+		loop
+		{
+		Obj_SetPosition(obj, GetX, GetY);
+		Obj_SetPosition(obj2, GetX, GetY);
+		Obj_SetPosition(obj3, GetX+sin(obj_ae[a])*63, GetY+cos(obj_ae[a])*63);
+		Obj_SetPosition(obj4, GetX, GetY);
+				
+		let kakudo = atan2(GetY - Obj_GetY(obj3), GetX - Obj_GetX(obj3));
+		ObjEffect_SetAngle(obj3,0,0,kakudo);
+		
+		if(obj_ad==0){
+		ObjEffect_ResizeVertexCount(obj2,(GetEnemyLife*10)/(GEL/obj_ac[a]));
+		ObjEffect_ResizeVertexCount(obj4,122+c*2);}
+		if(obj_ad==1){
+		ObjEffect_ResizeVertexCount(obj4,0);
+		ObjEffect_ResizeVertexCount(obj2,(GetEnemyLife*10)/(GEL/obj_ac[a]));
+		if(GEL>GetEnemyLife){
+		ObjEffect_ResizeVertexCount(obj3,0);}}
+		if(obj_ad==2){
+		ObjEffect_ResizeVertexCount(obj2,(GetEnemyLife*10)/(GEL/obj_ac[a]));
+		ObjEffect_ResizeVertexCount(obj3,0);
+		ObjEffect_ResizeVertexCount(obj4,0);}
+
+		if(b==0){
+		loop(722){
+		ObjEffect_SetVertexColor(obj2,obj_f,255,255,255,255);
+		obj_f++;}}
+		if(b==1){
+		if(obj_count==1){		
+		loop(10){
+		ObjEffect_SetVertexColor(obj2,obj_f,255,255,255,255);
+		obj_f++;}
+		obj_count=0;
+		}
+		obj_count++;
+		}
+		
+		if(GetEnemyLife<=0){return;}
+
+		yield;
+		}
+			
+
+}

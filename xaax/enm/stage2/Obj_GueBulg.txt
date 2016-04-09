@@ -1,0 +1,118 @@
+task GueBlug(x,y,speed,angle,shote,width,length,delay){
+	let id	= [Obj_Create(OBJ_LASER),
+				Obj_Create(OBJ_LASER),
+				Obj_Create(OBJ_LASER)];
+	let i		= 0;
+	let frame	= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let sp		= 0;
+	let sp2		= 0.1;
+	let gex;
+	let gey;
+
+	loop(3){
+	Obj_SetPosition(id[i],x,y-150);
+	Obj_SetSpeed(id[i],2);
+	Obj_SetAutoDelete(id[i],false);
+	ObjShot_SetDelay(id[i],delay);
+	ObjShot_SetBombResist(id[i],false);
+	ObjShot_SetGraphic(id[i],shote);
+	ObjLaser_SetSource(id[i],false);
+	i++;
+	}
+	i=0;
+	ObjLaser_SetLength(id[0],length);
+	ObjLaser_SetWidth(id[0],width);
+	Obj_SetAngle(id[0],angle);
+	ObjLaser_SetLength(id[1],length/2);
+	ObjLaser_SetWidth(id[1],width/2);
+	Obj_SetAngle(id[1],angle+160);
+	ObjLaser_SetLength(id[2],length/2);
+	ObjLaser_SetWidth(id[2],width/2);
+	Obj_SetAngle(id[2],angle-160);
+	
+	loop{
+		if(Obj_BeDeleted(id[1])==false&&Obj_BeDeleted(id[2])==false){
+			gex		= ObjLaser_GetEndX(id[0]);
+			gey		= ObjLaser_GetEndY(id[0]);
+		}else{
+			gex		= 0;
+			gey		= 0;
+		}
+	
+		if(gey>=MaxY+50||GetEnemyLife<=0||OnBomb==true){
+			ObjShot_FadeDelete(id[1]);
+			ObjShot_FadeDelete(id[2]);
+		}
+		if(Obj_BeDeleted(id[1])==true&&Obj_BeDeleted(id[2])==true){
+			ObjShot_FadeDelete(id[0]);
+			PlaySE(kaku);
+			WaveShot(x,kRED12a,1,30);
+			WaveShot(x,kRED01,0.5,30);
+			WaveShot(x,kRED06,0.25,20);
+			break;
+		}
+		
+		frame++;
+		if(frame==1){
+		loop(delay){
+			CreateShotA(0,gex,gey,rand(0,30));
+			SetShotDataA(0,0,rand(3,5),angle+180+rand(-35,35),0,0,5,kRED51);
+			FireShot(0);
+		}
+		}
+		if(frame==delay){
+			PlaySE(tan);
+		}
+		if(frame>delay){
+			if(move1<50){moveA+=3;}
+			move1=50*sin(moveA);
+			if(move1>=50){
+				sp2+=0.2;
+				sp+=sp2;
+			}
+			Obj_SetPosition(id[0],x,y-150-move1+sp);
+		}
+		
+		if(Obj_BeDeleted(id[1])==false&&Obj_BeDeleted(id[2])==false){
+			Obj_SetPosition(id[1],gex,gey);
+			Obj_SetPosition(id[2],gex,gey);
+			CreateShotA(0,gex,gey,0);
+			SetShotDataA(0,0,5,angle+180+10*sin(frame*8),0,0,5,kRED12a);
+			SetShotKillTime(0,50);
+			FireShot(0);
+			CreateShotA(0,gex,gey,0);
+			SetShotDataA(0,0,5,angle+180-10*sin(frame*8),0,0,5,kRED12a);
+			SetShotKillTime(0,50);
+			FireShot(0);
+		}
+		yield;
+	}
+}
+
+task WaveShot(x,shote,ms,w){
+	let frame	= 0;
+	let angle	= 0;
+
+	loop{
+		frame++;
+		if(frame==1){
+			CreateShotA(0,x+angle,MaxY,10);
+			SetShotDataA(0,0,5,270,0,-0.5,ms,shote);
+			FireShot(0);
+			CreateShotA(0,x-angle,MaxY,10);
+			SetShotDataA(0,0,5,270,0,-0.5,ms,shote);
+			FireShot(0);
+			angle+=w;
+			PlaySE(kira);
+			frame=-4;
+		}
+		
+		if(angle>=w*15){
+			break;
+		}
+		
+		yield;
+	}
+}

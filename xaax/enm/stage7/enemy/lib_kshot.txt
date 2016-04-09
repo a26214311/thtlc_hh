@@ -1,0 +1,253 @@
+/*
+01 普通弾
+02 中弾
+03 大弾
+04 輪有弾
+05 小弾
+06 菌弾
+07 光弾
+12 細弾
+13 グミ弾
+21 鱗弾
+22 蝶弾
+23 米弾
+24 銃弾
+31 クナイ弾
+32 ナイフ弾
+41 札弾
+42 小星弾
+50 矢弾
+51 大光弾
+_F 炎弾
+
+12a 細弾add
+
+bar   バー
+barXa バーadd
+*/
+
+let kRED01=1;
+let kGREEN01=2;
+let kBLUE01=3;
+let kYELLOW01=4;
+let kPURPLE01=5;
+let kAQUA01=6;
+let kORANGE01=7;
+let kVIOLET01=8;
+let kSKY01=9;
+let kWHITE01=10;
+
+let kRED21=11;
+let kGREEN21=12;
+let kBLUE21=13;
+let kYELLOW21=14;
+let kPURPLE21=15;
+let kAQUA21=16;
+let kORANGE21=17;
+let kVIOLET21=18;
+let kSKY21=19;
+let kWHITE21=20;
+
+let kRED04=21;
+let kGREEN04=22;
+let kBLUE04=23;
+let kYELLOW04=24;
+let kPURPLE04=25;
+let kAQUA04=26;
+let kORANGE04=27;
+let kVIOLET04=28;
+let kSKY04=29;
+let kWHITE04=30;
+
+let kRED12=31;
+let kGREEN12=32;
+let kBLUE12=33;
+let kYELLOW12=34;
+let kPURPLE12=35;
+let kAQUA12=36;
+let kORANGE12=37;
+let kVIOLET12=38;
+let kSKY12=39;
+let kWHITE12=40;
+
+let kRED05=41;
+let kGREEN05=42;
+let kBLUE05=43;
+let kYELLOW05=44;
+let kPURPLE05=45;
+let kAQUA05=46;
+let kORANGE05=47;
+let kVIOLET05=48;
+let kSKY05=49;
+let kWHITE05=50;
+
+let kRED23=51;
+let kGREEN23=52;
+let kBLUE23=53;
+let kYELLOW23=54;
+let kPURPLE23=55;
+let kAQUA23=56;
+let kORANGE23=57;
+let kVIOLET23=58;
+let kSKY23=59;
+let kWHITE23=60;
+
+let kRED02=61;
+let kGREEN02=62;
+let kBLUE02=63;
+let kYELLOW02=64;
+let kPURPLE02=65;
+let kAQUA02=66;
+let kORANGE02=67;
+let kVIOLET02=68;
+let kSKY02=69;
+let kWHITE02=70;
+
+let kRED24=71;
+let kGREEN24=72;
+let kBLUE24=73;
+let kYELLOW24=74;
+let kPURPLE24=75;
+let kAQUA24=76;
+let kORANGE24=77;
+let kVIOLET24=78;
+let kSKY24=79;
+let kWHITE24=80;
+
+let kRED13=81;
+let kGREEN13=82;
+let kBLUE13=83;
+let kYELLOW13=84;
+let kPURPLE13=85;
+let kAQUA13=86;
+let kORANGE13=87;
+let kVIOLET13=88;
+let kSKY13=89;
+let kWHITE13=90;
+
+let kRED41=91;
+let kGREEN41=92;
+let kBLUE41=93;
+let kYELLOW41=94;
+let kPURPLE41=95;
+let kAQUA41=96;
+let kORANGE41=97;
+let kVIOLET41=98;
+let kSKY41=99;
+let kWHITE41=100;
+
+let kRED06=101;
+let kGREEN06=102;
+let kBLUE06=103;
+let kYELLOW06=104;
+let kPURPLE06=105;
+let kAQUA06=106;
+let kORANGE06=107;
+let kVIOLET06=108;
+let kSKY06=109;
+let kWHITE06=110;
+
+let kRED42=111;
+let kGREEN42=112;
+let kBLUE42=113;
+let kYELLOW42=114;
+let kPURPLE42=115;
+let kAQUA42=116;
+let kORANGE42=117;
+let kVIOLET42=118;
+let kSKY42=119;
+let kWHITE42=120;
+
+let kRED07=121;
+let kGREEN07=122;
+let kBLUE07=123;
+let kYELLOW07=124;
+let kPURPLE07=125;
+let kAQUA07=126;
+let kORANGE07=127;
+let kVIOLET07=128;
+let kSKY07=129;
+let kWHITE07=130;
+
+let kRED03=131;
+let kPURPLE03=132;
+let kORANGE03=133;
+let kYELLOW03=134;
+let kGREEN03=135;
+let kSKY03=136;
+let kBLUE03=137;
+let kWHITE03=138;
+
+let kRED_F=139;
+let kBLUE_F=140;
+let kPURPLE_F=159;
+let kORANGE_F=160;
+
+let kRED32=141;
+let kORANGE32=142;
+let kYELLOW32=143;
+let kGREEN32=144;
+let kAQUA32=145;
+let kBLUE32=146;
+let kPURPLE32=147;
+let kWHITE32=148;
+
+let kRED31=149;
+let kORANGE31=150;
+let kYELLOW31=151;
+let kGREEN31=152;
+let kAQUA31=153;
+let kBLUE31=154;
+let kPURPLE31=155;
+let kWHITE31=156;
+
+let kBarL=157;
+let kBarR=158;
+
+let kRED22=161;
+let kAQUA22=162;
+let kBLUE22=163;
+let kYELLOW22=164;
+let kPURPLE22=165;
+let kWHITE22=166;
+
+let kWHITE50=167;
+let kRED50=168;
+let kPURPLE50=169;
+let kBLUE50=170;
+let kAQUA50=171;
+let kGREEN50=172;
+let kYELLOW50=173;
+
+let kWHITE51=174;
+let kRED51=175;
+let kGREEN51=176;
+let kBLUE51=177;
+let kAQUA51=178;
+let kPURPLE51=179;
+let kYELLOW51=180;
+let kBLACK51=181;
+
+let kRED12a=182;
+let kGREEN12a=183;
+let kBLUE12a=184;
+let kYELLOW12a=185;
+let kPURPLE12a=186;
+let kAQUA12a=187;
+let kORANGE12a=188;
+let kVIOLET12a=189;
+let kSKY12a=190;
+let kWHITE12a=191;
+
+let kRED02a=192;
+let kGREEN02a=193;
+let kBLUE02a=194;
+let kYELLOW02a=195;
+let kPURPLE02a=196;
+let kAQUA02a=197;
+let kORANGE02a=198;
+let kVIOLET02a=199;
+let kSKY02a=200;
+let kWHITE02a=201;
+
+let kSTAR=219;

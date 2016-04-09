@@ -1,0 +1,1612 @@
+task DiffiSelect3(){
+	let id2		= Obj_Create(OBJ_EFFECT);
+	let id		= [Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT)];
+	let alpha1	= 0;
+	let alpha2	= 255;
+	let rgb		= [255,255,255];
+	let rgb2	= [0,0,0];
+	let i		= 0;
+	let frame	= 0;
+	let count	= 0;
+	let timer	= 0;
+	let ctr		= 0;
+	let spin1	= 0;
+	let spinA	= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let move3	= 0;
+	let moveC	= 0;
+	let move4	= 0;
+	let moveD	= 0;
+	let move5	= 0;
+	let moveE	= 0;
+	let move6	= 0;
+	let moveF	= 0;
+	let cc		= 0;
+	let stc		= 0;
+	let rect1	= [0,256,256,256];
+	let rectA	= [256,512,512,512];
+	let rect2	= [256,0,256,256];
+	let rectB	= [512,256,512,512];
+	let rect3	= [256,256,0,256];
+	let rectC	= [512,512,256,512];
+	let rect4	= [256,256,256,0];
+	let rectD	= [512,512,512,256];
+	let lal		= [255,150];
+	let mt		= "NoData";
+
+	loop(4){
+		ObjEffect_SetTexture(id[i],imgt05);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.85,0.85);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,256/-2,116/-2);
+		ObjEffect_SetVertexXY(id[i],1,256/-2,116/2);
+		ObjEffect_SetVertexXY(id[i],2,256/2,116/-2);
+		ObjEffect_SetVertexXY(id[i],3,256/2,116/2);
+		i++;
+	}
+	i=0;
+	
+	Obj_SetPosition(id2,CenX+96,CenY+25);
+	ObjEffect_SetTexture(id2,imgw);
+	ObjEffect_SetRenderState(id2,ALPHA);
+	ObjEffect_SetPrimitiveType(id2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id2,8);
+	ObjEffect_SetScale(id2,0.5,0.3);
+	ObjEffect_CreateVertex(id2,6);
+	ObjEffect_SetVertexXY(id2,0,640/-2,480/-2);
+	ObjEffect_SetVertexXY(id2,1,640/-2,480/2);
+	ObjEffect_SetVertexXY(id2,2,0,480/-2);
+	ObjEffect_SetVertexXY(id2,3,0,480/2);
+	ObjEffect_SetVertexXY(id2,4,640/2,480/-2);
+	ObjEffect_SetVertexXY(id2,5,640/2,480/2);
+	ObjEffect_SetVertexUV(id2,0,0,0);
+	ObjEffect_SetVertexUV(id2,1,0,480);
+	ObjEffect_SetVertexUV(id2,2,0,0);
+	ObjEffect_SetVertexUV(id2,3,0,480);
+	ObjEffect_SetVertexUV(id2,4,640,0);
+	ObjEffect_SetVertexUV(id2,5,640,480);
+	
+loop{
+	let tact = GetCommonDataEx("title","act");
+	let tdif = GetCommonDataEx("title","Diffi");
+	
+	cc++;
+	if(tact!=2&&tact!=14&&tact!=6&&alpha1<255){alpha1+=15;}
+	if(tact==6&&alpha1>0){alpha1-=15;}
+	ObjEffect_SetVertexColor(id[0],0,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[0],1,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[0],2,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[0],3,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[1],0,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[1],1,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[1],2,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[1],3,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[2],0,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[2],1,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[2],2,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[2],3,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[3],0,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[3],1,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[3],2,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id[3],3,alpha1,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,0,0,rgb2[0],rgb2[1],rgb2[2]);
+	ObjEffect_SetVertexColor(id2,1,0,rgb2[0],rgb2[1],rgb2[2]);
+	ObjEffect_SetVertexColor(id2,2,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+	ObjEffect_SetVertexColor(id2,3,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+	ObjEffect_SetVertexColor(id2,4,0,rgb2[0],rgb2[1],rgb2[2]);
+	ObjEffect_SetVertexColor(id2,5,0,rgb2[0],rgb2[1],rgb2[2]);
+	
+	if(tact!=6){ctr++;}
+	if(tact!=2&&tact!=14&&tact!=6&&stc!=0&&tact!=6&&ctr>11&&GetKeyState(VK_UP)==KEY_PUSH){
+		if(stc==1){stc=0;mt="UP";}
+		else if(stc==2){stc=1;mt="UP";}
+		else if(stc==3){stc=2;mt="UP";}
+		moveA=0;
+		moveB=0;
+		moveC=0;
+		moveD=0;
+		ctr=0;
+		PlaySE(sel);
+	}
+	if(tact!=2&&tact!=14&&tact!=6&&stc!=3&&tact!=6&&ctr>11&&GetKeyState(VK_DOWN)==KEY_PUSH){
+		if(stc==0){stc=1;mt="DOWN";}
+		else if(stc==1){stc=2;mt="DOWN";}
+		else if(stc==2){stc=3;mt="DOWN";}
+		moveA=0;
+		moveB=0;
+		moveC=0;
+		moveD=0;
+		ctr=0;
+		PlaySE(sel);
+	}
+	
+	if(tact!=2&&tact!=14&&tact!=6&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+		if(stc==0){tdif="easy";}
+		else if(stc==1){tdif="normal";}
+		else if(stc==2){tdif="hard";}
+		else if(stc==3){tdif="lunatic";}
+		moveE=0;
+		spinA=0;
+		PlaySE(ket);
+		tact=6;
+		SetCommonDataEx("title","act",tact);
+		SetCommonDataEx("title","Diffi",tdif);
+		SetStageP();
+	}
+	
+	if(move1<150){moveA+=5;}
+	move1=150*sin(moveA);
+	if(move2<150){moveB+=5;}
+	move2=150*sin(moveB);
+	if(move3<150){moveC+=5;}
+	move3=150*sin(moveC);
+	if(move4<150){moveD+=5;}
+	move4=150*sin(moveD);
+	
+	alternative(stc)
+	case(0){
+		Obj_SetPosition(id[0],(CenX+96)+move5*2.4,(CenY+25)-150+move1+move5*1.7);
+		Obj_SetPosition(id[1],(CenX+96),(CenY+25)+move2);
+		Obj_SetPosition(id[2],(CenX+96),(CenY+25)+150+move3);
+		Obj_SetPosition(id[3],(CenX+96),(CenY+25)+300+move4);
+	}
+	case(1){
+		if(mt=="UP"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-300+move1);}
+		if(mt=="DOWN"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-move1);}
+		if(mt=="UP"){Obj_SetPosition(id[1],(CenX+96)+move5*2.4,(CenY+25)-150+move2+move5*1.7);}
+		if(mt=="DOWN"){Obj_SetPosition(id[1],(CenX+96)+move5*2.4,(CenY+25)+150-move2+move5*1.7);}
+		if(mt=="UP"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)+move3);}
+		if(mt=="DOWN"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)+300-move3);}
+		if(mt=="UP"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+150+move4);}
+		if(mt=="DOWN"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+450-move4);}
+	}
+	case(2){
+		if(mt=="UP"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-450+move1);}
+		if(mt=="DOWN"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-150-move1);}
+		if(mt=="UP"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)-300+move2);}
+		if(mt=="DOWN"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)-move2);}
+		if(mt=="UP"){Obj_SetPosition(id[2],(CenX+96)+move5*2.4,(CenY+25)-150+move3+move5*1.7);}
+		if(mt=="DOWN"){Obj_SetPosition(id[2],(CenX+96)+move5*2.4,(CenY+25)+150-move3+move5*1.7);}
+		if(mt=="UP"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+move4);}
+		if(mt=="DOWN"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+300-move4);}
+	}
+	case(3){
+		Obj_SetPosition(id[0],(CenX+96),(CenY+25)-300-move1);
+		Obj_SetPosition(id[1],(CenX+96),(CenY+25)-150-move2);
+		Obj_SetPosition(id[2],(CenX+96),(CenY+25)-move3);
+		Obj_SetPosition(id[3],(CenX+96)+move5*2.4,(CenY+25)+150-move4+move5*1.7);
+	}
+	
+	ObjEffect_SetAngle(id2,0,0,-15+5*sin(cc*2));
+	
+	ObjEffect_SetVertexUV(id[0],0,rect1[stc],0);
+	ObjEffect_SetVertexUV(id[0],1,rect1[stc],117);
+	ObjEffect_SetVertexUV(id[0],2,rectA[stc],0);
+	ObjEffect_SetVertexUV(id[0],3,rectA[stc],117);
+	ObjEffect_SetVertexUV(id[1],0,rect2[stc],117);
+	ObjEffect_SetVertexUV(id[1],1,rect2[stc],234);
+	ObjEffect_SetVertexUV(id[1],2,rectB[stc],117);
+	ObjEffect_SetVertexUV(id[1],3,rectB[stc],234);
+	ObjEffect_SetVertexUV(id[2],0,rect3[stc],234);
+	ObjEffect_SetVertexUV(id[2],1,rect3[stc],351);
+	ObjEffect_SetVertexUV(id[2],2,rectC[stc],234);
+	ObjEffect_SetVertexUV(id[2],3,rectC[stc],351);
+	ObjEffect_SetVertexUV(id[3],0,rect4[stc],351);
+	ObjEffect_SetVertexUV(id[3],1,rect4[stc],468);
+	ObjEffect_SetVertexUV(id[3],2,rectD[stc],351);
+	ObjEffect_SetVertexUV(id[3],3,rectD[stc],468);
+	
+	if(tact==2||tact==14){
+		if(alpha1>0){alpha1-=10;}
+		if(alpha2>0){alpha2-=10;}
+		if(spin1<90){spinA+=5;}
+		spin1=90.0*sin(spinA);
+		ObjEffect_SetAngle(id2,0,spin1,spin1);
+	}
+	if(tact==5){
+		move5=0;
+		ObjEffect_SetAngle(id2,0,0,0-15+5*sin(cc*2));
+		if(move6<100){moveF+=5;}
+		move6=100*sin(moveF);
+		alternative(tdif)
+		case("easy"){
+		ObjEffect_SetVertexColor(id[0],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[0],0.55+(move6/1000*3),0.55+(move6/1000*3));}
+		case("normal"){
+		ObjEffect_SetVertexColor(id[1],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[1],0.55+(move6/1000*3),0.55+(move6/1000*3));}
+		case("hard"){
+		ObjEffect_SetVertexColor(id[2],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[2],0.55+(move6/1000*3),0.55+(move6/1000*3));}
+		case("lunatic"){
+		ObjEffect_SetVertexColor(id[3],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[3],0.55+(move6/1000*3),0.55+(move6/1000*3));}
+	}
+	if(tact==6){
+		moveF=0;
+		if(spin1<90){spinA+=5;}
+		spin1=90.0*sin(spinA);
+		ObjEffect_SetAngle(id2,0,spin1,spin1);
+		if(move5<100){moveE+=5;}
+		move5=100*sin(moveE);
+		alternative(tdif)
+		case("easy"){
+		ObjEffect_SetVertexColor(id[0],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[0],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("normal"){
+		ObjEffect_SetVertexColor(id[1],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[1],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("hard"){
+		ObjEffect_SetVertexColor(id[2],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[2],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("lunatic"){
+		ObjEffect_SetVertexColor(id[3],0,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],1,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],3,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[3],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+	}
+	if(tact==14){
+		ObjEffect_SetAngle(id2,0,spin1,spin1);
+		if(alpha2>0){alpha2-=15;}
+		alternative(tdif)
+		case("easy"){
+		ObjEffect_SetVertexColor(id[0],0,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],1,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[0],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("normal"){
+		ObjEffect_SetVertexColor(id[1],0,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],1,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],2,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],3,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[1],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("hard"){
+		ObjEffect_SetVertexColor(id[2],0,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],1,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],2,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],3,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[2],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+		case("lunatic"){
+		ObjEffect_SetVertexColor(id[3],0,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],1,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],2,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],3,alpha2,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetScale(id[3],0.85-(move5/1000*3),0.85-(move5/1000*3));}
+	}
+	if(spin1>=90&&alpha2<=0){
+		Obj_Delete(id[0]);
+		Obj_Delete(id[1]);
+		Obj_Delete(id[2]);
+		Obj_Delete(id[3]);
+		Obj_Delete(id2);
+		break;
+	}
+	yield;
+	}
+}
+
+task SetStageP(){
+	let id		= [Obj_Create(OBJ_EFFECT),//背景画像
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//STAGE
+				Obj_Create(OBJ_EFFECT),//1
+				Obj_Create(OBJ_EFFECT),//2
+				Obj_Create(OBJ_EFFECT),//3
+				Obj_Create(OBJ_EFFECT),//4
+				Obj_Create(OBJ_EFFECT),//5
+				Obj_Create(OBJ_EFFECT)];//6
+	let imgf1	= GetCurrentScriptDirectory~".\front\score.png";
+	let rect1   	= [43,84,123,162,201,242,284,322,361,402,474];
+	let rect2	= [41,40,40,40,40,40,40,41,40,40,45];
+	let rect3	= [77,116,157,196,238,274,315,354,394,433,508];
+	let rect4	= [94,94,95,95,94,94,95,95,95,95,100];
+	let alpha	= 0;
+	let rgb1	= [255,50,50,50,50,50];
+	let rgb2	= [50,255,50,50,50,50];
+	let rgb3	= [50,50,255,50,50,50];
+	let rgb4	= [50,50,50,255,50,50];
+	let rgb5	= [50,50,50,50,255,50];
+	let rgb6	= [50,50,50,50,50,255];
+	let sca1	= 0;
+	let scaA	= 0;
+	let sca2	= 0;
+	let scaB	= 0;
+	let i		= 0;
+	let stc		= 0;
+	let dl		= false;
+	let ctr		= 0;
+	let cc		= 0;
+	let change	= false;
+	let chcc	= 0;
+	
+	ObjEffect_SetTexture(id[0],imgw);
+	ObjEffect_SetRenderState(id[0],ALPHA);
+	ObjEffect_SetPrimitiveType(id[0],PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id[0],8);
+	ObjEffect_CreateVertex(id[0],4);
+	ObjEffect_SetVertexXY(id[0],0,256/-2,256/-2);
+	ObjEffect_SetVertexXY(id[0],1,256/-2,256/2);
+	ObjEffect_SetVertexXY(id[0],2,256/2,256/-2);
+	ObjEffect_SetVertexXY(id[0],3,256/2,256/2);
+	ObjEffect_SetVertexUV(id[0],0,0,0);
+	ObjEffect_SetVertexUV(id[0],1,0,256);
+	ObjEffect_SetVertexUV(id[0],2,256,0);
+	ObjEffect_SetVertexUV(id[0],3,256,256);
+	
+	loop(6){
+		ObjEffect_SetTexture(id[1+i],imgot00);
+		ObjEffect_SetRenderState(id[1+i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[1+i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[1+i],8);
+		ObjEffect_SetScale(id[1+i],0.5,0.5);
+		ObjEffect_CreateVertex(id[1+i],4);
+		ObjEffect_SetVertexXY(id[1+i],0,115/-2,27/-2);
+		ObjEffect_SetVertexXY(id[1+i],1,115/-2,27/2);
+		ObjEffect_SetVertexXY(id[1+i],2,115/2,27/-2);
+		ObjEffect_SetVertexXY(id[1+i],3,115/2,27/2);
+		ObjEffect_SetVertexUV(id[1+i],0,69,385);
+		ObjEffect_SetVertexUV(id[1+i],1,69,412);
+		ObjEffect_SetVertexUV(id[1+i],2,184,385);
+		ObjEffect_SetVertexUV(id[1+i],3,184,412);
+		i++;
+	}
+	i=0;
+	
+	loop(6){
+		ObjEffect_SetTexture(id[7+i],imgf1);
+		ObjEffect_SetRenderState(id[7+i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[7+i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[7+i],8);
+		ObjEffect_SetScale(id[7+i],0.2,0.2);
+		ObjEffect_CreateVertex(id[7+i],4);
+		ObjEffect_SetVertexXY(id[7+i],0,34/-2,56/-2);
+		ObjEffect_SetVertexXY(id[7+i],1,34/-2,56/2);
+		ObjEffect_SetVertexXY(id[7+i],2,34/2,56/-2);
+		ObjEffect_SetVertexXY(id[7+i],3,34/2,56/2);
+		i++;
+	}
+	i=0;
+	
+	ObjEffect_SetVertexUV(id[7],0,rect1[1],rect2[1]);
+	ObjEffect_SetVertexUV(id[7],1,rect1[1],rect4[1]);
+	ObjEffect_SetVertexUV(id[7],2,rect3[1],rect2[1]);
+	ObjEffect_SetVertexUV(id[7],3,rect3[1],rect4[1]);
+	ObjEffect_SetVertexUV(id[8],0,rect1[2],rect2[2]);
+	ObjEffect_SetVertexUV(id[8],1,rect1[2],rect4[2]);
+	ObjEffect_SetVertexUV(id[8],2,rect3[2],rect2[2]);
+	ObjEffect_SetVertexUV(id[8],3,rect3[2],rect4[2]);
+	ObjEffect_SetVertexUV(id[9],0,rect1[3],rect2[3]);
+	ObjEffect_SetVertexUV(id[9],1,rect1[3],rect4[3]);
+	ObjEffect_SetVertexUV(id[9],2,rect3[3],rect2[3]);
+	ObjEffect_SetVertexUV(id[9],3,rect3[3],rect4[3]);
+	ObjEffect_SetVertexUV(id[10],0,rect1[4],rect2[4]);
+	ObjEffect_SetVertexUV(id[10],1,rect1[4],rect4[4]);
+	ObjEffect_SetVertexUV(id[10],2,rect3[4],rect2[4]);
+	ObjEffect_SetVertexUV(id[10],3,rect3[4],rect4[4]);
+	ObjEffect_SetVertexUV(id[11],0,rect1[5],rect2[5]);
+	ObjEffect_SetVertexUV(id[11],1,rect1[5],rect4[5]);
+	ObjEffect_SetVertexUV(id[11],2,rect3[5],rect2[5]);
+	ObjEffect_SetVertexUV(id[11],3,rect3[5],rect4[5]);
+	ObjEffect_SetVertexUV(id[12],0,rect1[6],rect2[6]);
+	ObjEffect_SetVertexUV(id[12],1,rect1[6],rect4[6]);
+	ObjEffect_SetVertexUV(id[12],2,rect3[6],rect2[6]);
+	ObjEffect_SetVertexUV(id[12],3,rect3[6],rect4[6]);
+
+loop{
+	let tact = GetCommonDataEx("title","act");
+	let tdif = GetCommonDataEx("title","Diffi");
+	let tdif2= GetCommonDataEx("title","Diffi2");
+	let tsps = GetCommonDataEx("title","sp_stage");
+	let tsre	= GetCommonDataEx("r","st_score_reimu_easy");
+	let tsrn	= GetCommonDataEx("r","st_score_reimu_normal");
+	let tsrh	= GetCommonDataEx("r","st_score_reimu_hard");
+	let tsrl	= GetCommonDataEx("r","st_score_reimu_lunatic");
+	let tsme	= GetCommonDataEx("m","st_score_marisa_easy");
+	let tsmn	= GetCommonDataEx("m","st_score_marisa_normal");
+	let tsmh	= GetCommonDataEx("m","st_score_marisa_hard");
+	let tsml	= GetCommonDataEx("m","st_score_marisa_lunatic");
+	let tsse	= GetCommonDataEx("s","st_score_sakuya_easy");
+	let tssn	= GetCommonDataEx("s","st_score_sakuya_normal");
+	let tssh	= GetCommonDataEx("s","st_score_sakuya_hard");
+	let tssl	= GetCommonDataEx("s","st_score_sakuya_lunatic");
+	let gste = GetCommonDataEx("title","clear_stageE");
+	let gstn = GetCommonDataEx("title","clear_stageN");
+	let gsth = GetCommonDataEx("title","clear_stageH");
+	let gstl = GetCommonDataEx("title","clear_stageL");
+	let goy = Obj_GetY(id[1]);
+	
+	if(tact!=14){change=false;chcc=0;}
+	
+	Obj_SetPosition(id[0],CenX+96,CenY);
+	Obj_SetPosition(id[1],CenX+5,CenY-75);
+	Obj_SetPosition(id[2],CenX+5,goy+30);
+	Obj_SetPosition(id[3],CenX+5,goy+60);
+	Obj_SetPosition(id[4],CenX+5,goy+90);
+	Obj_SetPosition(id[5],CenX+5,goy+120);
+	Obj_SetPosition(id[6],CenX+5,goy+150);
+	Obj_SetPosition(id[7],CenX+50,goy);
+	Obj_SetPosition(id[8],CenX+50,goy+30);
+	Obj_SetPosition(id[9],CenX+50,goy+60);
+	Obj_SetPosition(id[10],CenX+50,goy+90);
+	Obj_SetPosition(id[11],CenX+50,goy+120);
+	Obj_SetPosition(id[12],CenX+50,goy+150);
+	
+	ctr++;
+	if(tact==6&&stc!=0&&ctr>5&&GetKeyState(VK_UP)==KEY_PUSH){
+		if(stc==1){stc=0;}
+		else if(stc==2){stc=1;}
+		else if(stc==3){stc=2;}
+		else if(stc==4){stc=3;}
+		else if(stc==5){stc=4;}
+		ctr=0;
+		PlaySE(sel);
+	}
+	if(tact==6&&stc!=5&&ctr>5&&GetKeyState(VK_DOWN)==KEY_PUSH){
+		alternative(tdif)
+		case("easy"){
+			if(stc==0&&gste>1){stc=1;PlaySE(sel);}
+			else if(stc==1&&gste>2){stc=2;PlaySE(sel);}
+			else if(stc==2&&gste>3){stc=3;PlaySE(sel);}
+			else if(stc==3&&gste>4){stc=4;PlaySE(sel);}
+			else if(stc==4&&gste>5){stc=5;PlaySE(sel);}
+		}case("normal"){
+			if(stc==0&&gstn>1){stc=1;PlaySE(sel);}
+			else if(stc==1&&gstn>2){stc=2;PlaySE(sel);}
+			else if(stc==2&&gstn>3){stc=3;PlaySE(sel);}
+			else if(stc==3&&gstn>4){stc=4;PlaySE(sel);}
+			else if(stc==4&&gstn>5){stc=5;PlaySE(sel);}
+		}case("hard"){
+			if(stc==0&&gsth>1){stc=1;PlaySE(sel);}
+			else if(stc==1&&gsth>2){stc=2;PlaySE(sel);}
+			else if(stc==2&&gsth>3){stc=3;PlaySE(sel);}
+			else if(stc==3&&gsth>4){stc=4;PlaySE(sel);}
+			else if(stc==4&&gsth>5){stc=5;PlaySE(sel);}
+		}case("lunatic"){
+			if(stc==0&&gstl>1){stc=1;PlaySE(sel);}
+			else if(stc==1&&gstl>2){stc=2;PlaySE(sel);}
+			else if(stc==2&&gstl>3){stc=3;PlaySE(sel);}
+			else if(stc==3&&gstl>4){stc=4;PlaySE(sel);}
+			else if(stc==4&&gstl>5){stc=5;PlaySE(sel);}
+		}
+		ctr=0;
+	}
+	
+	if(tact==6&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+		alternative(tdif)
+		case("easy"){
+			if(stc==0&&gste>0){tsps=1;tdif2=1;change=true;}
+			else if(stc==1&&gste>1){tsps=2;tdif2=2;change=true;}
+			else if(stc==2&&gste>2){tsps=3;tdif2=3;change=true;}
+			else if(stc==3&&gste>3){tsps=4;tdif2=4;change=true;}
+			else if(stc==4&&gste>4){tsps=5;tdif2=5;change=true;}
+			else if(stc==5&&gste>5){tsps=6;tdif2=6;change=true;}
+		}case("normal"){
+			if(stc==0&&gstn>0){tsps=1;tdif2=1;change=true;}
+			else if(stc==1&&gstn>1){tsps=2;tdif2=2;change=true;}
+			else if(stc==2&&gstn>2){tsps=3;tdif2=3;change=true;}
+			else if(stc==3&&gstn>3){tsps=4;tdif2=4;change=true;}
+			else if(stc==4&&gstn>4){tsps=5;tdif2=5;change=true;}
+			else if(stc==5&&gstn>5){tsps=6;tdif2=6;change=true;}
+		}case("hard"){
+			if(stc==0&&gsth>0){tsps=1;tdif2=1;change=true;}
+			else if(stc==1&&gsth>1){tsps=2;tdif2=2;change=true;}
+			else if(stc==2&&gsth>2){tsps=3;tdif2=3;change=true;}
+			else if(stc==3&&gsth>3){tsps=4;tdif2=4;change=true;}
+			else if(stc==4&&gsth>4){tsps=5;tdif2=5;change=true;}
+			else if(stc==5&&gsth>5){tsps=6;tdif2=6;change=true;}
+		}case("lunatic"){
+			if(stc==0&&gstl>0){tsps=1;tdif2=1;change=true;}
+			else if(stc==1&&gstl>1){tsps=2;tdif2=2;change=true;}
+			else if(stc==2&&gstl>2){tsps=3;tdif2=3;change=true;}
+			else if(stc==3&&gstl>3){tsps=4;tdif2=4;change=true;}
+			else if(stc==4&&gstl>4){tsps=5;tdif2=5;change=true;}
+			else if(stc==5&&gstl>5){tsps=6;tdif2=6;change=true;}
+		}
+	}
+	
+	if(change==true){chcc++;}
+	if(chcc==1){
+		SetCommonDataEx("title","act",14);
+		SetCommonDataEx("title","Diffi2",tdif2);
+		SetCommonDataEx("title","sp_stage",tsps);
+		AutoSatgeMain();
+		CloudOut(50,50,50,120);
+	}
+	
+	if(tact!=6){dl=true;}
+	
+	if(alpha>=200){cc++;}
+	if(cc==1){
+	alternative(GetPlayerScriptName)
+	case("Reimu.txt"){
+		alternative(tdif)
+		case("easy"){
+			if(gste>0){
+			SetScoreETC(CenX+100,goy,tsre[0]);
+			SetScoreETC(CenX+100,goy+30,tsre[1]);
+			SetScoreETC(CenX+100,goy+60,tsre[2]);
+			SetScoreETC(CenX+100,goy+90,tsre[3]);
+			SetScoreETC(CenX+100,goy+120,tsre[4]);
+			SetScoreETC(CenX+100,goy+150,tsre[5]);}}
+		case("normal"){
+			if(gstn>0){
+			SetScoreETC(CenX+100,goy,tsrn[0]);
+			SetScoreETC(CenX+100,goy+30,tsrn[1]);
+			SetScoreETC(CenX+100,goy+60,tsrn[2]);
+			SetScoreETC(CenX+100,goy+90,tsrn[3]);
+			SetScoreETC(CenX+100,goy+120,tsrn[4]);
+			SetScoreETC(CenX+100,goy+150,tsrn[5]);}}
+		case("hard"){
+			if(gsth>0){
+			SetScoreETC(CenX+100,goy,tsrh[0]);
+			SetScoreETC(CenX+100,goy+30,tsrh[1]);
+			SetScoreETC(CenX+100,goy+60,tsrh[2]);
+			SetScoreETC(CenX+100,goy+90,tsrh[3]);
+			SetScoreETC(CenX+100,goy+120,tsrh[4]);
+			SetScoreETC(CenX+100,goy+150,tsrh[5]);}}
+		case("lunatic"){
+			if(gstl>0){
+			SetScoreETC(CenX+100,goy,tsrl[0]);
+			SetScoreETC(CenX+100,goy+30,tsrl[1]);
+			SetScoreETC(CenX+100,goy+60,tsrl[2]);
+			SetScoreETC(CenX+100,goy+90,tsrl[3]);
+			SetScoreETC(CenX+100,goy+120,tsrl[4]);
+			SetScoreETC(CenX+100,goy+150,tsrl[5]);}}
+	}
+	case("Marisa.txt"){
+		alternative(tdif)
+		case("easy"){
+			if(gste>0){
+			SetScoreETC(CenX+100,goy,tsme[0]);
+			SetScoreETC(CenX+100,goy+30,tsme[1]);
+			SetScoreETC(CenX+100,goy+60,tsme[2]);
+			SetScoreETC(CenX+100,goy+90,tsme[3]);
+			SetScoreETC(CenX+100,goy+120,tsme[4]);
+			SetScoreETC(CenX+100,goy+150,tsme[5]);}}
+		case("normal"){
+			if(gstn>0){
+			SetScoreETC(CenX+100,goy,tsmn[0]);
+			SetScoreETC(CenX+100,goy+30,tsmn[1]);
+			SetScoreETC(CenX+100,goy+60,tsmn[2]);
+			SetScoreETC(CenX+100,goy+90,tsmn[3]);
+			SetScoreETC(CenX+100,goy+120,tsmn[4]);
+			SetScoreETC(CenX+100,goy+150,tsmn[5]);}}
+		case("hard"){
+			if(gsth>0){
+			SetScoreETC(CenX+100,goy,tsmh[0]);
+			SetScoreETC(CenX+100,goy+30,tsmh[1]);
+			SetScoreETC(CenX+100,goy+60,tsmh[2]);
+			SetScoreETC(CenX+100,goy+90,tsmh[3]);
+			SetScoreETC(CenX+100,goy+120,tsmh[4]);
+			SetScoreETC(CenX+100,goy+150,tsmh[5]);}}
+		case("lunatic"){
+			if(gstl>0){
+			SetScoreETC(CenX+100,goy,tsml[0]);
+			SetScoreETC(CenX+100,goy+30,tsml[1]);
+			SetScoreETC(CenX+100,goy+60,tsml[2]);
+			SetScoreETC(CenX+100,goy+90,tsml[3]);
+			SetScoreETC(CenX+100,goy+120,tsml[4]);
+			SetScoreETC(CenX+100,goy+150,tsml[5]);}}
+	}
+	case("Sakuya.txt"){
+		alternative(tdif)
+		case("easy"){
+			if(gste>0){
+			SetScoreETC(CenX+100,goy,tsse[0]);
+			SetScoreETC(CenX+100,goy+30,tsse[1]);
+			SetScoreETC(CenX+100,goy+60,tsse[2]);
+			SetScoreETC(CenX+100,goy+90,tsse[3]);
+			SetScoreETC(CenX+100,goy+120,tsse[4]);
+			SetScoreETC(CenX+100,goy+150,tsse[5]);}}
+		case("normal"){
+			if(gstn>0){
+			SetScoreETC(CenX+100,goy,tssn[0]);
+			SetScoreETC(CenX+100,goy+30,tssn[1]);
+			SetScoreETC(CenX+100,goy+60,tssn[2]);
+			SetScoreETC(CenX+100,goy+90,tssn[3]);
+			SetScoreETC(CenX+100,goy+120,tssn[4]);
+			SetScoreETC(CenX+100,goy+150,tssn[5]);}}
+		case("hard"){
+			if(gsth>0){
+			SetScoreETC(CenX+100,goy,tssh[0]);
+			SetScoreETC(CenX+100,goy+30,tssh[1]);
+			SetScoreETC(CenX+100,goy+60,tssh[2]);
+			SetScoreETC(CenX+100,goy+90,tssh[3]);
+			SetScoreETC(CenX+100,goy+120,tssh[4]);
+			SetScoreETC(CenX+100,goy+150,tssh[5]);}}
+		case("lunatic"){
+			if(gstl>0){
+			SetScoreETC(CenX+100,goy,tssl[0]);
+			SetScoreETC(CenX+100,goy+30,tssl[1]);
+			SetScoreETC(CenX+100,goy+60,tssl[2]);
+			SetScoreETC(CenX+100,goy+90,tssl[3]);
+			SetScoreETC(CenX+100,goy+120,tssl[4]);
+			SetScoreETC(CenX+100,goy+150,tssl[5]);}}
+		}
+	}
+	
+	if(dl==false){
+		if(sca1<0.8){scaA+=5;}
+		sca1=0.8*sin(scaA);
+		ObjEffect_SetScale(id[0],1,sca1);
+		if(sca1>=0.8&&alpha<255){alpha+=15;}
+	}else {
+		if(alpha<=0&&sca2<0.8){scaB+=5;}
+		sca2=0.8*sin(scaB);
+		ObjEffect_SetScale(id[0],1,sca1-sca2);
+		if(alpha>0){alpha-=15;}
+	}
+	
+	ObjEffect_SetVertexColor(id[0],0,155,0,0,0);
+	ObjEffect_SetVertexColor(id[0],1,155,0,0,0);
+	ObjEffect_SetVertexColor(id[0],2,155,0,0,0);
+	ObjEffect_SetVertexColor(id[0],3,155,0,0,0);
+	ObjEffect_SetVertexColor(id[1],0,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[1],1,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[1],2,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[1],3,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[2],0,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[2],1,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[2],2,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[2],3,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[3],0,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[3],1,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[3],2,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[3],3,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[4],0,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[4],1,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[4],2,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[4],3,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[5],0,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[5],1,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[5],2,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[5],3,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[6],0,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[6],1,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[6],2,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[6],3,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[7],0,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[7],1,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[7],2,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[7],3,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+	ObjEffect_SetVertexColor(id[8],0,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[8],1,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[8],2,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[8],3,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+	ObjEffect_SetVertexColor(id[9],0,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[9],1,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[9],2,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[9],3,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+	ObjEffect_SetVertexColor(id[10],0,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[10],1,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[10],2,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[10],3,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+	ObjEffect_SetVertexColor(id[11],0,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[11],1,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[11],2,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[11],3,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+	ObjEffect_SetVertexColor(id[12],0,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[12],1,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[12],2,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	ObjEffect_SetVertexColor(id[12],3,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+	if(dl==true&&alpha<=0&&sca2>=0.8){
+		loop(13){
+			Obj_Delete(id[i]);
+			i++;
+		}
+		i=0;
+		break;
+	}
+	yield;
+	}
+}
+
+task SetSpellPractice00(){
+	//この関数の管轄はact7です。
+	let id		= [Obj_Create(OBJ_EFFECT),//STAGE1
+				Obj_Create(OBJ_EFFECT),//STAGE2
+				Obj_Create(OBJ_EFFECT),//STAGE3
+				Obj_Create(OBJ_EFFECT),//STAGE4
+				Obj_Create(OBJ_EFFECT),//STAGE5
+				Obj_Create(OBJ_EFFECT),//STAGE6
+				Obj_Create(OBJ_EFFECT),//EXTRA
+				Obj_Create(OBJ_EFFECT)];//PHANTASM
+	let i		= 0;
+	let ctr		= 0;
+	let stc		= 0;
+	let alpha	= 0;
+	let dl		= false;
+	let rgb1	= [255,50,50,50,50,50,50,50];
+	let rgb2	= [50,255,50,50,50,50,50,50];
+	let rgb3	= [50,50,255,50,50,50,50,50];
+	let rgb4	= [50,50,50,255,50,50,50,50];
+	let rgb5	= [50,50,50,50,255,50,50,50];
+	let rgb6	= [50,50,50,50,50,255,50,50];
+	let rgb7	= [50,50,50,50,50,50,255,50];
+	let rgb8	= [50,50,50,50,50,50,50,255];
+	let rect2	= [23,68,113,158,203,248,293,338];
+	let rect4	= [63,108,153,198,243,288,333,378];
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+
+	loop(8){
+		ObjEffect_SetTexture(id[i],imgot01);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.7,0.7);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,190/-2,40/-2);
+		ObjEffect_SetVertexXY(id[i],1,190/-2,40/2);
+		ObjEffect_SetVertexXY(id[i],2,190/2,40/-2);
+		ObjEffect_SetVertexXY(id[i],3,190/2,40/2);
+		ObjEffect_SetVertexUV(id[i],0,292,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],1,292,rect4[i]);
+		ObjEffect_SetVertexUV(id[i],2,482,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],3,482,rect4[i]);
+		i++;
+	}
+	i=0;
+
+	loop{
+		let tsps = GetCommonDataEx("title","sp_stage");
+		let tact = GetCommonDataEx("title","act");
+		let tex  = GetCommonDataEx("title","ex");
+		let tph  = GetCommonDataEx("title","ph");
+		let gox  = Obj_GetX(id[0]);
+		let goy  = Obj_GetY(id[0]);
+		
+		if(tact!=7&&tact!=12&&tact!=13){dl=true;}
+		
+		if(tact==7||tact==12){
+			if(move1<100){moveA+=5;}
+			move1=100*sin(moveA);
+			moveB=0;
+			Obj_SetPosition(id[0],CenX-300+move1*2,CenY-150);
+			Obj_SetPosition(id[1],gox,goy+50);
+			Obj_SetPosition(id[2],gox,goy+100);
+			Obj_SetPosition(id[3],gox,goy+150);
+			Obj_SetPosition(id[4],gox,goy+200);
+			Obj_SetPosition(id[5],gox,goy+250);
+			Obj_SetPosition(id[6],gox,goy+300);
+			Obj_SetPosition(id[7],gox,goy+350);
+		}
+		if(tact==13){
+			if(move2<100){moveB+=5;}
+			move2=100*sin(moveB);
+			moveA=0;
+			Obj_SetPosition(id[0],CenX-100-move2*2,CenY-150);
+			Obj_SetPosition(id[1],gox,goy+50);
+			Obj_SetPosition(id[2],gox,goy+100);
+			Obj_SetPosition(id[3],gox,goy+150);
+			Obj_SetPosition(id[4],gox,goy+200);
+			Obj_SetPosition(id[5],gox,goy+250);
+			Obj_SetPosition(id[6],gox,goy+300);
+			Obj_SetPosition(id[7],gox,goy+350);
+		}
+		
+		if(tact==7){ctr++;}
+		if(tact==7&&stc!=0&&ctr>1&&GetKeyState(VK_UP)==KEY_PUSH){
+			if(stc==1){stc=0;}
+			else if(stc==2){stc=1;}
+			else if(stc==3){stc=2;}
+			else if(stc==4){stc=3;}
+			else if(stc==5){stc=4;}
+			else if(stc==6){stc=5;}
+			else if(stc==7){stc=6;}
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact==7&&stc!=7&&ctr>1&&GetKeyState(VK_DOWN)==KEY_PUSH){
+			if(stc==0){stc=1;}
+			else if(stc==1){stc=2;}
+			else if(stc==2){stc=3;}
+			else if(stc==3){stc=4;}
+			else if(stc==4){stc=5;}
+			else if(stc==5&&tex==true){stc=6;}
+			else if(stc==6&&tph==true){stc=7;}
+			ctr=0;
+			PlaySE(sel);
+		}
+		
+		if(tact==7&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+			if(stc==0){tact=12;tsps=1;SetCommonDataEx("title","act",tact);SetSpellPractice01(1);}
+			else if(stc==1){tact=12;tsps=2;SetCommonDataEx("title","act",tact);SetSpellPractice01(2);}
+			else if(stc==2){tact=12;tsps=3;SetCommonDataEx("title","act",tact);SetSpellPractice01(3);}
+			else if(stc==3){tact=12;tsps=4;SetCommonDataEx("title","act",tact);SetSpellPractice01(4);}
+			else if(stc==4){tact=12;tsps=5;SetCommonDataEx("title","act",tact);SetSpellPractice01(5);}
+			else if(stc==5){tact=12;tsps=6;SetCommonDataEx("title","act",tact);SetSpellPractice01(6);}
+			else if(stc==6){tact=12;tsps=7;SetCommonDataEx("title","act",tact);SetSpellPractice01(7);}//ex
+			else if(stc==7){tact=12;tsps=8;SetCommonDataEx("title","act",tact);SetSpellPractice01(8);}//ph
+			SetCommonDataEx("title","sp_stage",tsps);
+			PlaySE(ket);
+		}
+		
+		if(dl==false){
+			if(alpha<255){alpha+=10;}
+			}else{
+			if(alpha>0){alpha-=10;}
+		}
+		
+		ObjEffect_SetVertexColor(id[0],0,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],1,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],2,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],3,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[1],0,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],1,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],2,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],3,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[2],0,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],1,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],2,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],3,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[3],0,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],1,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],2,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],3,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[4],0,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],1,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],2,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],3,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[5],0,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],1,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],2,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],3,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		if(tex==true){
+			ObjEffect_SetVertexColor(id[6],0,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],1,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],2,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],3,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+		}else{
+			ObjEffect_SetVertexColor(id[6],0,0,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],1,0,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],2,0,rgb7[stc],rgb7[stc],rgb7[stc]);
+			ObjEffect_SetVertexColor(id[6],3,0,rgb7[stc],rgb7[stc],rgb7[stc]);
+		}
+		if(tph==true){
+			ObjEffect_SetVertexColor(id[7],0,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],1,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],2,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],3,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+		}else{
+			ObjEffect_SetVertexColor(id[7],0,0,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],1,0,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],2,0,rgb8[stc],rgb8[stc],rgb8[stc]);
+			ObjEffect_SetVertexColor(id[7],3,0,rgb8[stc],rgb8[stc],rgb8[stc]);
+		}
+		
+		if(dl==true&&alpha<=0){
+			loop(8){
+				Obj_Delete(id[i]);
+				i++;
+			}
+			i=0;
+			break;
+		}
+		yield;
+	}
+}
+
+task SetSpellPractice01(type){
+	let id		= [Obj_Create(OBJ_EFFECT),//0 1
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),//4 5
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),//9 10
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT)];//12 13
+	let i		= 0;
+	let ctr		= 0;
+	let stc		= 0;
+	let alpha	= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let move3	= 0;
+	let moveC	= 0;
+	let dl		= false;
+	let rgb1	= [255,50,50,50,50,50,50,50,50,50,50,50,50];
+	let rgb2	= [50,255,50,50,50,50,50,50,50,50,50,50,50];
+	let rgb3	= [50,50,255,50,50,50,50,50,50,50,50,50,50];
+	let rgb4	= [50,50,50,255,50,50,50,50,50,50,50,50,50];
+	let rgb5	= [50,50,50,50,255,50,50,50,50,50,50,50,50];
+	let rgb6	= [50,50,50,50,50,255,50,50,50,50,50,50,50];
+	let rgb7	= [50,50,50,50,50,50,255,50,50,50,50,50,50];
+	let rgb8	= [50,50,50,50,50,50,50,255,50,50,50,50,50];
+	let rgb9	= [50,50,50,50,50,50,50,50,255,50,50,50,50];
+	let rgb10	= [50,50,50,50,50,50,50,50,50,255,50,50,50];
+	let rgb11	= [50,50,50,50,50,50,50,50,50,50,255,50,50];
+	let rgb12	= [50,50,50,50,50,50,50,50,50,50,50,255,50];
+	let rgb13	= [50,50,50,50,50,50,50,50,50,50,50,50,255];
+	let rect2	= [22,67,112,157,202,247,292,337,382,427,472,517,562];
+	let rect4	= [64,109,154,199,244,289,334,379,424,469,514,559,604];
+	let tdif	= GetCommonDataEx("title","sp_diffi");
+	let gncs	= false;
+
+	loop(13){
+		Obj_SetPosition(id[i],CenX-100,CenY-150);
+		ObjEffect_SetTexture(id[i],imgot01);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.5,0.5);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,242/-2,42/-2);
+		ObjEffect_SetVertexXY(id[i],1,242/-2,42/2);
+		ObjEffect_SetVertexXY(id[i],2,242/2,42/-2);
+		ObjEffect_SetVertexXY(id[i],3,242/2,42/2);
+		ObjEffect_SetVertexUV(id[i],0,25,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],1,25,rect4[i]);
+		ObjEffect_SetVertexUV(id[i],2,267,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],3,267,rect4[i]);
+		i++;
+	}
+	i=0;
+	
+	alternative(type)
+	case(1){
+		loop(10){
+			Obj_Delete(id[3+i]);
+			i++;
+		}
+	}
+	case(2){
+		loop(9){
+			Obj_Delete(id[4+i]);
+			i++;
+		}
+	}
+	case(3){
+		loop(8){
+			Obj_Delete(id[5+i]);
+			i++;
+		}
+	}
+	case(4){
+		loop(8){
+			Obj_Delete(id[5+i]);
+			i++;
+		}
+	}
+	case(5){
+		loop(7){
+			Obj_Delete(id[6+i]);
+			i++;
+		}
+	}
+	case(6){
+		loop(5){
+			Obj_Delete(id[8+i]);
+			i++;
+		}
+	}
+	case(7){
+		Obj_Delete(id[12]);
+		CreateCommonDataArea("ncs");
+		SetCommonDataEx("ncs","ncs_f",false);
+	}
+	i=0;
+	
+	loop{
+		if(type==7){
+			gncs = GetCommonDataEx("ncs","ncs_f");
+		}
+		let tspe = GetCommonDataEx("title","sp_spell");
+		let tsps = GetCommonDataEx("title","sp_stage");
+		let tdif = GetCommonDataEx("title","sp_diffi");
+		let tact = GetCommonDataEx("title","act");
+		let gox  = Obj_GetX(id[0]);
+		let goy  = Obj_GetY(id[0]);
+		
+		if(tact!=12&&tact!=13){dl=true;}
+		
+		if(tact==12||tdif=="Extra"){ctr++;}
+		if(tact==12&&stc!=0&&ctr>1&&GetKeyState(VK_UP)==KEY_PUSH){
+			if(stc==1){stc=0;}
+			else if(stc==2){stc=1;}
+			else if(stc==3){stc=2;}
+			else if(stc==4){stc=3;}
+			else if(stc==5){stc=4;}
+			else if(stc==6){stc=5;}
+			else if(stc==7){stc=6;}
+			else if(stc==8){stc=7;}
+			else if(stc==9){stc=8;}
+			else if(stc==10){stc=9;}
+			else if(stc==11){stc=10;}
+			else if(stc==12){stc=11;}
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact==12&&stc!=12&&ctr>1&&GetKeyState(VK_DOWN)==KEY_PUSH){
+			if(stc==0&&Obj_BeDeleted(id[1])==false){stc=1;}
+			else if(stc==1&&Obj_BeDeleted(id[2])==false){stc=2;}
+			else if(stc==2&&Obj_BeDeleted(id[3])==false){stc=3;}
+			else if(stc==3&&Obj_BeDeleted(id[4])==false){stc=4;}
+			else if(stc==4&&Obj_BeDeleted(id[5])==false){stc=5;}
+			else if(stc==5&&Obj_BeDeleted(id[6])==false){stc=6;}
+			else if(stc==6&&Obj_BeDeleted(id[7])==false){stc=7;}
+			else if(stc==7&&Obj_BeDeleted(id[8])==false){stc=8;}
+			else if(stc==8&&Obj_BeDeleted(id[9])==false){stc=9;}
+			else if(stc==9&&Obj_BeDeleted(id[10])==false){stc=10;}
+			else if(stc==10&&Obj_BeDeleted(id[11])==false){stc=11;}
+			else if(stc==11&&Obj_BeDeleted(id[12])==false){stc=12;}
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact==12&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+			ctr=0;
+			if(stc==0){tact=13;tspe=1;SetCommonDataEx("title","act",tact);}
+			else if(stc==1){tact=13;tspe=2;SetCommonDataEx("title","act",tact);}
+			else if(stc==2){tact=13;tspe=3;SetCommonDataEx("title","act",tact);}
+			else if(stc==3){tact=13;tspe=4;SetCommonDataEx("title","act",tact);}
+			else if(stc==4){tact=13;tspe=5;SetCommonDataEx("title","act",tact);}
+			else if(stc==5){tact=13;tspe=6;SetCommonDataEx("title","act",tact);}
+			else if(stc==6){tact=13;tspe=7;SetCommonDataEx("title","act",tact);}
+			else if(stc==7){tact=13;tspe=8;SetCommonDataEx("title","act",tact);}
+			else if(stc==8){tact=13;tspe=9;SetCommonDataEx("title","act",tact);}
+			else if(stc==9){tact=13;tspe=10;SetCommonDataEx("title","act",tact);}
+			else if(stc==10){tact=13;tspe=11;SetCommonDataEx("title","act",tact);}
+			else if(stc==11){tact=13;tspe=12;SetCommonDataEx("title","act",tact);}
+			else if(stc==12){tact=13;tspe=13;SetCommonDataEx("title","act",tact);}
+			SetCommonDataEx("title","sp_spell",tspe);
+			if(tsps==1&&tspe!=1){SetSpellPractice02(0);}//ENHL HL NHL
+			if(tsps==1&&tspe==1){SetSpellPractice02(1);}
+			if(tsps==2){SetSpellPractice02(0);}
+			if(tsps==3&&tspe!=5){SetSpellPractice02(0);}
+			if(tsps==3&&tspe==5){SetSpellPractice02(1);}
+			if(tsps==4){SetSpellPractice02(0);}
+			if(tsps==5&&tspe!=6){SetSpellPractice02(0);}
+			if(tsps==5&&tspe==6){SetSpellPractice02(2);}
+			if(tsps==6&&tspe!=7){SetSpellPractice02(0);}
+			if(tsps==6&&tspe==7){SetSpellPractice02(1);}
+			if(tsps==7){SetCommonDataEx("title","sp_diffi","Extra");}
+			if(tsps==8){SetCommonDataEx("title","sp_diffi","Phantasm");}
+			
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				SpellPracticeMain2_R();
+			}
+			case("Marisa.txt"){
+				SpellPracticeMain2_R();
+			}
+			case("Sakuya.txt"){
+				SpellPracticeMain2_R();
+			}
+			PlaySE(ket);
+		}
+		
+		if(tact==13&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH&&tdif=="Extra"&&gncs==true){
+			SetCommonDataEx("title","act",11);
+			SpellPracticeMain();
+			SpellPracticeBGM();
+			SpellPracticeMain2_R();
+			CloudOut(50,50,50,120);
+		}
+		
+		if(move1<10){moveA+=5;}
+		move1=10*sin(moveA);
+		
+		if(tact==12){
+			if(move2<100){moveB+=5;}
+			move2=100*sin(moveB);
+			moveC=0;
+			Obj_SetPosition(id[0],CenX-100+move2*2,CenY-150);
+			Obj_SetPosition(id[1],gox,goy+move1*3);
+			Obj_SetPosition(id[2],gox,goy+move1*6);
+			Obj_SetPosition(id[3],gox,goy+move1*9);
+			Obj_SetPosition(id[4],gox,goy+move1*12);
+			Obj_SetPosition(id[5],gox,goy+move1*15);
+			Obj_SetPosition(id[6],gox,goy+move1*18);
+			Obj_SetPosition(id[7],gox,goy+move1*21);
+			Obj_SetPosition(id[8],gox,goy+move1*24);
+			Obj_SetPosition(id[9],gox,goy+move1*27);
+			Obj_SetPosition(id[10],gox,goy+move1*30);
+			Obj_SetPosition(id[11],gox,goy+move1*33);
+			Obj_SetPosition(id[12],gox,goy+move1*36);
+		}
+		if(tact==13){
+			if(move3<100){moveC+=5;}
+			move3=100*sin(moveC);
+			moveB=0;
+			Obj_SetPosition(id[0],CenX+100-move3*2,CenY-150);
+			Obj_SetPosition(id[1],gox,goy+move1*3);
+			Obj_SetPosition(id[2],gox,goy+move1*6);
+			Obj_SetPosition(id[3],gox,goy+move1*9);
+			Obj_SetPosition(id[4],gox,goy+move1*12);
+			Obj_SetPosition(id[5],gox,goy+move1*15);
+			Obj_SetPosition(id[6],gox,goy+move1*18);
+			Obj_SetPosition(id[7],gox,goy+move1*21);
+			Obj_SetPosition(id[8],gox,goy+move1*24);
+			Obj_SetPosition(id[9],gox,goy+move1*27);
+			Obj_SetPosition(id[10],gox,goy+move1*30);
+			Obj_SetPosition(id[11],gox,goy+move1*33);
+			Obj_SetPosition(id[12],gox,goy+move1*36);
+		}
+		
+		if(dl==false){
+			if(alpha<255){alpha+=15;}
+		}else{
+			if(alpha>0){alpha-=15;}
+		}
+		
+		ObjEffect_SetVertexColor(id[0],0,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],1,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],2,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],3,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[1],0,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],1,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],2,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],3,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[2],0,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],1,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],2,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],3,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[3],0,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],1,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],2,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],3,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[4],0,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],1,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],2,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],3,alpha,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[5],0,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],1,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],2,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[5],3,alpha,rgb6[stc],rgb6[stc],rgb6[stc]);
+		ObjEffect_SetVertexColor(id[6],0,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+		ObjEffect_SetVertexColor(id[6],1,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+		ObjEffect_SetVertexColor(id[6],2,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+		ObjEffect_SetVertexColor(id[6],3,alpha,rgb7[stc],rgb7[stc],rgb7[stc]);
+		ObjEffect_SetVertexColor(id[7],0,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+		ObjEffect_SetVertexColor(id[7],1,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+		ObjEffect_SetVertexColor(id[7],2,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+		ObjEffect_SetVertexColor(id[7],3,alpha,rgb8[stc],rgb8[stc],rgb8[stc]);
+		ObjEffect_SetVertexColor(id[8],0,alpha,rgb9[stc],rgb9[stc],rgb9[stc]);
+		ObjEffect_SetVertexColor(id[8],1,alpha,rgb9[stc],rgb9[stc],rgb9[stc]);
+		ObjEffect_SetVertexColor(id[8],2,alpha,rgb9[stc],rgb9[stc],rgb9[stc]);
+		ObjEffect_SetVertexColor(id[8],3,alpha,rgb9[stc],rgb9[stc],rgb9[stc]);
+		ObjEffect_SetVertexColor(id[9],0,alpha,rgb10[stc],rgb10[stc],rgb10[stc]);
+		ObjEffect_SetVertexColor(id[9],1,alpha,rgb10[stc],rgb10[stc],rgb10[stc]);
+		ObjEffect_SetVertexColor(id[9],2,alpha,rgb10[stc],rgb10[stc],rgb10[stc]);
+		ObjEffect_SetVertexColor(id[9],3,alpha,rgb10[stc],rgb10[stc],rgb10[stc]);
+		ObjEffect_SetVertexColor(id[10],0,alpha,rgb11[stc],rgb11[stc],rgb11[stc]);
+		ObjEffect_SetVertexColor(id[10],1,alpha,rgb11[stc],rgb11[stc],rgb11[stc]);
+		ObjEffect_SetVertexColor(id[10],2,alpha,rgb11[stc],rgb11[stc],rgb11[stc]);
+		ObjEffect_SetVertexColor(id[10],3,alpha,rgb11[stc],rgb11[stc],rgb11[stc]);
+		ObjEffect_SetVertexColor(id[11],0,alpha,rgb12[stc],rgb12[stc],rgb12[stc]);
+		ObjEffect_SetVertexColor(id[11],1,alpha,rgb12[stc],rgb12[stc],rgb12[stc]);
+		ObjEffect_SetVertexColor(id[11],2,alpha,rgb12[stc],rgb12[stc],rgb12[stc]);
+		ObjEffect_SetVertexColor(id[11],3,alpha,rgb12[stc],rgb12[stc],rgb12[stc]);
+		ObjEffect_SetVertexColor(id[12],0,alpha,rgb13[stc],rgb13[stc],rgb13[stc]);
+		ObjEffect_SetVertexColor(id[12],1,alpha,rgb13[stc],rgb13[stc],rgb13[stc]);
+		ObjEffect_SetVertexColor(id[12],2,alpha,rgb13[stc],rgb13[stc],rgb13[stc]);
+		ObjEffect_SetVertexColor(id[12],3,alpha,rgb13[stc],rgb13[stc],rgb13[stc]);
+		
+		if(dl==true&&alpha<=0){
+			loop(13){
+				Obj_Delete(id[i]);
+				i++;
+			}
+			i=0;
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task SetSpellPractice02(type){
+	/*
+	type	0:ENHL 1:HL 2:NHL
+	*/
+	let id		= [Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT)];
+	let i		= 0;
+	let rect2	= [23,68,112,158,248,248];//LW:203 OD:248
+	let rect4	= [63,108,152,198,283,288];//LW:243 OD:288
+	let rgb1	= [255,50,50,50,50];
+	let rgb2	= [50,255,50,50,50];
+	let rgb3	= [50,50,255,50,50];
+	let rgb4	= [50,50,50,255,50];
+	let rgb5	= [50,50,50,50,255];
+	let stc		= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let alpha	= 0;
+	let ctr		= 0;
+	let dl		= false;
+	
+	CreateCommonDataArea("ncs");
+	SetCommonDataEx("ncs","ncs_f",false);
+	alternative(type)
+	case(0){
+	stc=0;
+		SetCommonDataEx("title","sp_diffi","Easy");
+	}case(1){
+	stc=2;
+		SetCommonDataEx("title","sp_diffi","Hard");
+	}case(2){
+	stc=1;
+		SetCommonDataEx("title","sp_diffi","Normal");
+	}
+	
+	loop(5){
+		Obj_SetPosition(id[i],CenX+100,CenY-150);
+		ObjEffect_SetTexture(id[i],imgot01);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.5,0.5);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,200/-2,40/-2);
+		ObjEffect_SetVertexXY(id[i],1,200/-2,40/2);
+		ObjEffect_SetVertexXY(id[i],2,200/2,40/-2);
+		ObjEffect_SetVertexXY(id[i],3,200/2,40/2);
+		ObjEffect_SetVertexUV(id[i],0,506,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],1,506,rect4[i]);
+		ObjEffect_SetVertexUV(id[i],2,706,rect2[i]);
+		ObjEffect_SetVertexUV(id[i],3,706,rect4[i]);
+		i++;
+	}
+	i=0;
+	
+	alternative(GetPlayerScriptName)
+	case("Reimu.txt"){
+	SpellPracticeMain2_R();}
+	case("Marisa.txt"){
+	SpellPracticeMain2_R();}
+	case("Sakuya.txt"){
+	SpellPracticeMain2_R();}
+	
+	loop{
+		let gncs = GetCommonDataEx("ncs","ncs_f");
+		let tdif = GetCommonDataEx("title","sp_diffi");
+		let tact = GetCommonDataEx("title","act");
+		let gox  = Obj_GetX(id[0]);
+		let goy  = Obj_GetY(id[0]);
+		
+		if(move1<10){moveA+=5;}
+		move1=10*sin(moveA);
+		
+		Obj_SetPosition(id[0],CenX+100,CenY-150);
+		Obj_SetPosition(id[1],gox,goy+move1*3);
+		Obj_SetPosition(id[2],gox,goy+move1*6);
+		Obj_SetPosition(id[3],gox,goy+move1*9);
+		Obj_SetPosition(id[4],gox,goy+move1*12);
+		
+		if(tact!=13){dl=true;}
+		if(tact==13){ctr++;}
+		if(tact==13&&stc!=0&&ctr>1&&GetKeyState(VK_UP)==KEY_PUSH){
+			if(stc==1&&type==0){stc=0;tdif="Easy";SetCommonDataEx("title","sp_diffi",tdif);}
+			else if(stc==2&&type!=1){stc=1;tdif="Normal";SetCommonDataEx("title","sp_diffi",tdif);}
+			else if(stc==3){stc=2;tdif="Hard";SetCommonDataEx("title","sp_diffi",tdif);}
+			else if(stc==4){stc=3;tdif="Lunatic";SetCommonDataEx("title","sp_diffi",tdif);}
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+			SpellPracticeMain2_R();}
+			case("Marisa.txt"){
+			SpellPracticeMain2_R();}
+			case("Sakuya.txt"){
+			SpellPracticeMain2_R();}
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact==13&&stc!=3&&ctr>1&&GetKeyState(VK_DOWN)==KEY_PUSH){
+			if(stc==0){stc=1;tdif="Normal";SetCommonDataEx("title","sp_diffi",tdif);}
+			else if(stc==1){stc=2;tdif="Hard";SetCommonDataEx("title","sp_diffi",tdif);}
+			else if(stc==2){stc=3;tdif="Lunatic";SetCommonDataEx("title","sp_diffi",tdif);}
+			//else if(stc==3){stc=4;tdif="OverDrive";SetCommonDataEx("title","sp_diffi",tdif);}//OD追加時は何らかのフラグで解放
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+			SpellPracticeMain2_R();}
+			case("Marisa.txt"){
+			SpellPracticeMain2_R();}
+			case("Sakuya.txt"){
+			SpellPracticeMain2_R();}
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact==13&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH&&gncs==true){
+			if(stc==0){tact=11;SetCommonDataEx("title","act",tact);}
+			else if(stc==1){tact=11;SetCommonDataEx("title","act",tact);}
+			else if(stc==2){tact=11;SetCommonDataEx("title","act",tact);}
+			else if(stc==3){tact=11;SetCommonDataEx("title","act",tact);}
+			else if(stc==4){tact=11;SetCommonDataEx("title","act",tact);}
+			SpellPracticeMain();
+			SpellPracticeBGM();
+			
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				SpellPracticeMain2_R();
+			}
+			case("Marisa.txt"){
+				SpellPracticeMain2_R();
+			}
+			case("Sakuya.txt"){
+				SpellPracticeMain2_R();
+			}
+			CloudOut(50,50,50,120);
+		}
+		
+		if(dl==false){
+			if(alpha<255){alpha+=15;}
+		}else{
+			if(alpha>0){alpha-=15;}
+		}
+		
+		if(type==0){
+		ObjEffect_SetVertexColor(id[0],0,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],1,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],2,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],3,alpha,rgb1[stc],rgb1[stc],rgb1[stc]);}
+		if(type!=0){
+		ObjEffect_SetVertexColor(id[0],0,0,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],1,0,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],2,0,rgb1[stc],rgb1[stc],rgb1[stc]);
+		ObjEffect_SetVertexColor(id[0],3,0,rgb1[stc],rgb1[stc],rgb1[stc]);}
+		if(type==0||type==2){
+		ObjEffect_SetVertexColor(id[1],0,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],1,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],2,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],3,alpha,rgb2[stc],rgb2[stc],rgb2[stc]);}
+		if(type==1){
+		ObjEffect_SetVertexColor(id[1],0,0,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],1,0,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],2,0,rgb2[stc],rgb2[stc],rgb2[stc]);
+		ObjEffect_SetVertexColor(id[1],3,0,rgb2[stc],rgb2[stc],rgb2[stc]);}
+		ObjEffect_SetVertexColor(id[2],0,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],1,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],2,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[2],3,alpha,rgb3[stc],rgb3[stc],rgb3[stc]);
+		ObjEffect_SetVertexColor(id[3],0,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],1,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],2,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		ObjEffect_SetVertexColor(id[3],3,alpha,rgb4[stc],rgb4[stc],rgb4[stc]);
+		//OD追加時は何らかのフラグでalpha値を対応
+		ObjEffect_SetVertexColor(id[4],0,0,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],1,0,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],2,0,rgb5[stc],rgb5[stc],rgb5[stc]);
+		ObjEffect_SetVertexColor(id[4],3,0,rgb5[stc],rgb5[stc],rgb5[stc]);
+		
+		if(dl==true&&alpha<=0){
+			loop(5){
+				Obj_Delete(id[i]);
+				i++;
+			}
+			i=0;
+			break;
+		}
+		yield;
+	}
+}
+
+task SetScoreETC(x,y,n){
+	/*
+	x	座標
+	y	座標
+	n	表示する数値
+	*/
+	let id      =  [Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT)];
+	let idc     =  [Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT)];
+	let imgf1   = GetCurrentScriptDirectory~".\front\score.png";
+	let i       = 0;
+	let rect1   = [43,84,123,162,201,242,284,322,361,402,474];
+	let rect2   = [41,40,40,40,40,40,40,41,40,40,45];
+	let rect3   = [77,116,157,196,238,274,315,354,394,433,508];
+	let rect4   = [94,94,95,95,94,94,95,95,95,95,100];
+	let cc      = 0;
+	let cc2     = 0;
+	let scax    = 0.25;
+	let scay    = 0.3;
+	
+	LoadGraphic(imgf1);
+	
+	loop(10){
+		ObjEffect_SetTexture(id[i],imgf1);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(id[i],scax,scay);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,34/-2,56/-2);
+		ObjEffect_SetVertexXY(id[i],1,34/-2,56/2);
+		ObjEffect_SetVertexXY(id[i],2,34/2,56/-2);
+		ObjEffect_SetVertexXY(id[i],3,34/2,56/2);
+		i++;
+	}
+	i=0;
+	loop(3){
+		ObjEffect_SetTexture(idc[i],imgf1);
+		ObjEffect_SetRenderState(idc[i],ALPHA);
+		ObjEffect_SetPrimitiveType(idc[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(idc[i],0.4,0.4);
+		ObjEffect_SetLayer(idc[i],8);
+		ObjEffect_CreateVertex(idc[i],4);
+		ObjEffect_SetVertexXY(idc[i],0,34/-2,56/-2);
+		ObjEffect_SetVertexXY(idc[i],1,34/-2,56/2);
+		ObjEffect_SetVertexXY(idc[i],2,34/2,56/-2);
+		ObjEffect_SetVertexXY(idc[i],3,34/2,56/2);
+		i++;
+	}
+	i=0;
+	
+	loop{
+		let tact = GetCommonDataEx("title","act");
+		let ogx     = Obj_GetX(id[9]);
+		let ogy     = Obj_GetY(id[9]);
+		let score1  = truncate(n%10);
+		let score2  = truncate((n%100)/10);
+		let score3  = truncate((n%1000)/100);
+		let score4  = truncate((n%10000)/1000);
+		let score5  = truncate((n%100000)/10000);
+		let score6  = truncate((n%1000000)/100000);
+		let score7  = truncate((n%10000000)/1000000);
+		let score8  = truncate((n%100000000)/10000000);
+		let score9  = truncate((n%1000000000)/100000000);
+		let score10 = truncate((n%10000000000)/1000000000);
+	
+		Obj_SetPosition(idc[0],ogx+75,ogy+5);
+		Obj_SetPosition(idc[1],ogx+39,ogy+5);
+		Obj_SetPosition(idc[2],ogx+3,ogy+5);
+		
+		Obj_SetPosition(id[0],ogx+108,ogy);
+		Obj_SetPosition(id[1],ogx+96,ogy);
+		Obj_SetPosition(id[2],ogx+84,ogy);
+		Obj_SetPosition(id[3],ogx+72,ogy);
+		Obj_SetPosition(id[4],ogx+60,ogy);
+		Obj_SetPosition(id[5],ogx+48,ogy);
+		Obj_SetPosition(id[6],ogx+36,ogy);
+		Obj_SetPosition(id[7],ogx+24,ogy);
+		Obj_SetPosition(id[8],ogx+12,ogy);
+		Obj_SetPosition(id[9],x,y);//high 27
+
+		ObjEffect_SetVertexUV(id[0],0,rect1[score1],rect2[score1]);
+		ObjEffect_SetVertexUV(id[0],1,rect1[score1],rect4[score1]);
+		ObjEffect_SetVertexUV(id[0],2,rect3[score1],rect2[score1]);
+		ObjEffect_SetVertexUV(id[0],3,rect3[score1],rect4[score1]);
+		if(n>=10){
+		ObjEffect_SetVertexUV(id[1],0,rect1[score2],rect2[score2]);
+		ObjEffect_SetVertexUV(id[1],1,rect1[score2],rect4[score2]);
+		ObjEffect_SetVertexUV(id[1],2,rect3[score2],rect2[score2]);
+		ObjEffect_SetVertexUV(id[1],3,rect3[score2],rect4[score2]);}
+		if(n>=100){
+		ObjEffect_SetVertexUV(id[2],0,rect1[score3],rect2[score3]);
+		ObjEffect_SetVertexUV(id[2],1,rect1[score3],rect4[score3]);
+		ObjEffect_SetVertexUV(id[2],2,rect3[score3],rect2[score3]);
+		ObjEffect_SetVertexUV(id[2],3,rect3[score3],rect4[score3]);}
+		if(n>=1000){
+		ObjEffect_SetVertexUV(id[3],0,rect1[score4],rect2[score4]);
+		ObjEffect_SetVertexUV(id[3],1,rect1[score4],rect4[score4]);
+		ObjEffect_SetVertexUV(id[3],2,rect3[score4],rect2[score4]);
+		ObjEffect_SetVertexUV(id[3],3,rect3[score4],rect4[score4]);
+		ObjEffect_SetVertexUV(idc[0],0,rect1[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[0],1,rect1[10],rect4[10]);
+		ObjEffect_SetVertexUV(idc[0],2,rect3[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[0],3,rect3[10],rect4[10]);}
+		if(n>=10000){
+		ObjEffect_SetVertexUV(id[4],0,rect1[score5],rect2[score5]);
+		ObjEffect_SetVertexUV(id[4],1,rect1[score5],rect4[score5]);
+		ObjEffect_SetVertexUV(id[4],2,rect3[score5],rect2[score5]);
+		ObjEffect_SetVertexUV(id[4],3,rect3[score5],rect4[score5]);}
+		if(n>=100000){
+		ObjEffect_SetVertexUV(id[5],0,rect1[score6],rect2[score6]);
+		ObjEffect_SetVertexUV(id[5],1,rect1[score6],rect4[score6]);
+		ObjEffect_SetVertexUV(id[5],2,rect3[score6],rect2[score6]);
+		ObjEffect_SetVertexUV(id[5],3,rect3[score6],rect4[score6]);}
+		if(n>=1000000){
+		ObjEffect_SetVertexUV(id[6],0,rect1[score7],rect2[score7]);
+		ObjEffect_SetVertexUV(id[6],1,rect1[score7],rect4[score7]);
+		ObjEffect_SetVertexUV(id[6],2,rect3[score7],rect2[score7]);
+		ObjEffect_SetVertexUV(id[6],3,rect3[score7],rect4[score7]);
+		ObjEffect_SetVertexUV(idc[1],0,rect1[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[1],1,rect1[10],rect4[10]);
+		ObjEffect_SetVertexUV(idc[1],2,rect3[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[1],3,rect3[10],rect4[10]);}
+		if(n>=10000000){
+		ObjEffect_SetVertexUV(id[7],0,rect1[score8],rect2[score8]);
+		ObjEffect_SetVertexUV(id[7],1,rect1[score8],rect4[score8]);
+		ObjEffect_SetVertexUV(id[7],2,rect3[score8],rect2[score8]);
+		ObjEffect_SetVertexUV(id[7],3,rect3[score8],rect4[score8]);}
+		if(n>=100000000){
+		ObjEffect_SetVertexUV(id[8],0,rect1[score9],rect2[score9]);
+		ObjEffect_SetVertexUV(id[8],1,rect1[score9],rect4[score9]);
+		ObjEffect_SetVertexUV(id[8],2,rect3[score9],rect2[score9]);
+		ObjEffect_SetVertexUV(id[8],3,rect3[score9],rect4[score9]);}
+		if(n>=1000000000){
+		ObjEffect_SetVertexUV(id[9],0,rect1[score10],rect2[score10]);
+		ObjEffect_SetVertexUV(id[9],1,rect1[score10],rect4[score10]);
+		ObjEffect_SetVertexUV(id[9],2,rect3[score10],rect2[score10]);
+		ObjEffect_SetVertexUV(id[9],3,rect3[score10],rect4[score10]);
+		ObjEffect_SetVertexUV(idc[2],0,rect1[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[2],1,rect1[10],rect4[10]);
+		ObjEffect_SetVertexUV(idc[2],2,rect3[10],rect2[10]);
+		ObjEffect_SetVertexUV(idc[2],3,rect3[10],rect4[10]);}
+
+		if(tact!=6&&tact!=13){
+			loop(10){
+				Obj_Delete(id[i]);
+				i++;
+			}
+			i=0;
+			Obj_Delete(idc[0]);
+			Obj_Delete(idc[1]);
+			Obj_Delete(idc[2]);
+			break;
+		}
+		yield;
+	}
+}
+
+task PlayMusicStg(){
+	loop{
+		let tsps = GetCommonDataEx("title","sp_stage");
+		alternative(tsps)
+		case(1){PlayMusicSP(1);break;}
+		case(2){PlayMusicSP(3);break;}
+		case(3){PlayMusicSP(5);break;}
+		case(4){PlayMusicSP(7);break;}
+		case(5){PlayMusicSP(9);break;}
+		case(6){PlayMusicSP(11);break;}
+		case(7){PlayMusicSP(13);break;}
+		yield;
+	}
+}

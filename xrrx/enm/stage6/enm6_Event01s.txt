@@ -1,0 +1,224 @@
+
+#Title[enm3 before talk(咲夜)]
+#Text[イシュア・ナザレヌス　戦闘前会話(咲夜)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm6img\咲夜通常.png",
+					csd~".\enm6img\咲夜=3.png",
+					csd~".\enm6img\咲夜ニヤリ.png",
+					csd~".\enm6img\咲夜驚き.png",
+					csd~".\enm6img\咲夜嫌.png",
+					csd~".\enm6img\咲夜困り.png",
+					csd~".\enm6img\咲夜笑顔.png",
+					csd~".\enm6img\咲夜怒り.png",
+					csd~".\enm6img\咲夜得意.png",
+					csd~".\enm6img\咲夜本気.png"];
+	let enmimg	= [csd~".\enm6img\iesua00000.png",//普通0
+					csd~".\enm6img\iesua00001.png",//閉目1
+					csd~".\enm6img\iesua00002.png",//半目2
+					csd~".\enm6img\iesua00003.png",//口開閉目3
+					csd~".\enm6img\iesua00004.png",//口開普通4
+					csd~".\enm6img\iesua00005.png"];//口開半目5
+	
+	@Initialize {
+		loop(10){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(6){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[1]);//左側キャラクタの画像を設定
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]拜天使们所赐\n明明是夜晚却亮如白昼");
+TextOut("\c[BLUE]幸亏我没把大小姐带来");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]你做得对");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[0]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]来，你要带上神圣的火\n返回恶魔的巢穴");
+TextOut("\c[RED]这便是你当做的事");
+
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我当做的事不是这个\n其中一个是调查陨石落下的原因");
+
+		SetChar(RIGHT,enmimg[4]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]不要为那古老的律法所束缚\n当要信仰父神的名");
+
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]落下陨石的就是你们吗？");
+
+		SetChar(RIGHT,enmimg[3]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]用比喻来说吧。假定2个人分别\n落下小石与星辰");
+TextOut("\c[RED]我将那些石头去除的时候\n除去哪一个将受到更多的感谢呢");
+
+		SetChar(LEFT,plaimg[0]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]所以落下星辰的就是你吧？");
+
+		SetChar(RIGHT,enmimg[5]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]落下星辰者");
+TextOut("\c[RED]但是那个人，带给人之子\n许多东西。我想宽恕那个人");
+
+		SetChar(LEFT,plaimg[9]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]到现在为止的所有人\n都没办法好好对话呢");
+TextOut("\c[BLUE]不过，我倒是明白了\n大概没办法原谅你这件事");
+
+		SetChar(RIGHT,enmimg[5]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]あなたは人の子だ、なのに何故神の声に背きサタンに魂を売り渡し続けるのか");
+
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我有被吸血鬼帮助过\n可不记得有收到过神的什么帮助来着");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]……这女子的罪，乃是『怠惰』");
+TextOut("\c[RED]无知不是罪\n但不去知晓却是罪恶");
+
+		SetChar(LEFT,plaimg[9]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]另外我当做的事还有一个：");
+TextOut("\c[BLUE]遵从大小姐的命令\n将带来光明者退治掉！");
+
+		SetChar(RIGHT,enmimg[4]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]啊啊，卖人之子的人有祸了");
+TextOut("\c[RED]所以那人\n不生在世上倒好！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let gcsd      = GetCurrentScriptDirectory;
+    let effimg    = gcsd ~ ".\enm6eff\bulletbreak.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+	@Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(8,255,255,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture06(true);
+	VSname(1);
+	VSname2(0,1);
+	VSname2(10,1);
+	VSname2(20,1);
+	VSname2(30,1);
+	VSname2(40,1);
+	VSname2(50,1);
+	CreateEventFromScript("Event01");
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+}
+
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,28 @@
+
+#Title[enm6_2 Plural ReimuN]
+#Text[邪星章6面ボス　イシュア・ナザレヌス 霊夢N]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm6_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack01_Normal.txt]
+ #ScriptPath[.\enm6_SpellCard01_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack02_Normal.txt]
+ #ScriptPath[.\enm6_SpellCard02_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack03_Normal.txt]
+ #ScriptPath[.\enm6_SpellCard03_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack04_Normal.txt]
+ #ScriptPath[.\enm6_SpellCard04_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack05_Normal.txt]
+ #ScriptPath[.\enm6_SpellCard05_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_SpellCard06_Normal.txt]
+
+#EndScriptPathData

@@ -1,0 +1,188 @@
+
+#Title[enm1 spell01 l]
+#Text[メリーシェパード　群符「群羊駆りて猛虎攻む」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm1eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~"..\..\se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~"..\..\se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~"..\..\se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~"..\..\se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~"..\..\se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~"..\..\se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~"..\..\se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~"..\..\se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~"..\..\se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,GetClipMinY+160,10,5);
+        LoadGraphic(imgEffect);
+	Aura(8,255,100,32);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,1);
+	VSname(0);
+	let tact = GetCommonDataEx("title","act");
+	if(tact!=11){
+	VSname2(0,0);
+	}
+	EnemyTexture(true);
+	RedMagicCircle(1,0);
+	Shot_Main;
+	SetEffectForZeroLife(0,0,0);
+	SpellPracticeSave("lunatic",0);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm1img\face101ct.png",0,0,384,512);
+	CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm1spell\enm1_sn01_hard.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	SetCommonData("Charge",true);
+	}
+	
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	DeleteAllEnemyWithoutBoss;
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+	
+	task Shot_Main {
+		loop(120){yield;}
+		SetCommonData("Charge",false);
+		SetCommonData("Attack",true);
+		loop {
+			let shotY=10;
+			angle=0;
+			loop(27){
+				PlaySE(tan);
+				CreateSheepShot(MinX-22,shotY,rand(1,5),angle+rand(-25,25),-0.05,1.5,0);
+				shotY+=18;
+				wait(1);
+			}
+			wait(40);
+			let shotY=10;
+			angle=180;
+			loop(27){
+				PlaySE(tan);
+				CreateSheepShot(MaxX+22,shotY,rand(1,5),angle+rand(-25,25),-0.05,1.5,0);
+				shotY+=18;
+				wait(1);
+			}
+			wait(40);
+		}
+	}
+	
+	task CreateSheepShot(x,y,s,a,s2,s0,d) {
+		let obj = CreateShot02(x,y,0,a,0,0,0,d);
+		let count = 0;
+		if(a>-90&&a< 90){Obj_SetAngle(obj,250);ObjShot_SetGraphic(obj,252);}
+		if(a> 90&&a<270){Obj_SetAngle(obj,-80);ObjShot_SetGraphic(obj,253);}
+		loop(d){yield;}
+		while(!Obj_BeDeleted(obj)) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			if(s>s0){s+=s2;}
+			count++;
+			Obj_SetAngle(obj,Obj_GetAngle(obj)+sin(count*6));
+			yield;
+		}
+		loop(60) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			if(s>s0){s+=s2;}
+			yield;
+		}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,439 @@
+	task StageTask2(){
+		let CX=GetCenterX();//STGシーンの中心x座標を取得
+		let CY=GetCenterY();//STGシーンの中心y座標を取得
+		let eFreeX=0;//敵の自由なx
+		let eFreeY=0;//敵の自由なy
+		let HayaCount = 0;//早回し用のカウント
+		let BreakTime = 0;//中ボスを倒すまでの時間
+		let timer=0;
+		let when=0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+		SetCommonData("BossFlag",false);
+		function Wait(let frame){
+			loop(frame){yield};
+		}
+		function WaitForZeroEnemy(){
+			while(GetEnemyNum() != 0){yield;}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(4);
+				PlayMusicName(-12,3);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+
+		Wait(180);//60
+		PlayMusicSP(3);
+		PlayMusicName(-15,2);
+		StageLogo(2,360,120);
+		Wait(480);//540
+		
+		ascent(i in 0..6) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",CX-120+i*20,MinY+40+i*30,0,0,1);
+			Wait(5);
+			}
+		//570
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..8) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy09.txt",MaxX+20,MinY-20,0,0,[1,i/7]);
+			Wait(10);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(10);
+		//650
+			
+		Wait(960-650);//960
+		ascent(i in 0..14) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy10.txt",MinX-rand(20,80),MinY-rand(20,80),0,0,[i*30,0,i/13]);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..18) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MinX+i*18+40,MinY+rand(60,100),0,0,i*30);
+			Wait(30);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		//1500
+		Wait(240);//1740(29秒)
+		
+		ascent(i in 0..14) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy10.txt",MaxX+rand(20,80),MinY-rand(20,80),0,0,[i*30,1,i/13]);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..18) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MaxX-(i*18)-40,MinY+rand(60,100),0,0,i*30);
+			Wait(30);
+			}//2280
+
+		Wait(240);
+		//2520(42秒)
+		
+		SetCommonData("BossFlag",true);
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_E.txt",CX,0,0,0,0);
+		}case("normal"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_N.txt",CX,0,0,0,0);
+		}case("hard"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_H.txt",CX,0,0,0,0);
+		}case("lunatic"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_L.txt",CX,0,0,0,0);
+		}
+		//中ボス
+		while(GetEnemyNum() != 0){BreakTime++;yield;}
+		//ここまでで4020フレーム（1分7秒）想定
+		SetCommonData("BossFlag",false);
+
+		loop(1500-BreakTime) {
+			if(HayaCount%8==0){
+				ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+				CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy11.txt",rand(MinX,MaxX),MinY-30,0,0,0);
+			}
+			HayaCount++;
+			yield;
+			}
+		//4020フレーム（1分7秒）まで早回し
+
+		Wait(60);//4080フレーム（1分8秒）
+		
+		EnemySet01;//落ちてくる妖精(同時は面倒なので)
+		ascent(i in 0..12) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MinX+i*18+40,MinY+rand(60,100),0,0,i*30);
+			Wait(60);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(60);
+		EnemySet01;//落ちてくる妖精(同時は面倒なので)
+		ascent(i in 0..12) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MaxX-i*18-40,MinY+rand(60,100),0,0,i*30);
+			Wait(60);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(60);//1分32秒(5520f)
+		
+		Wait(120);//1分34秒(5640f)
+		loop(10) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy12.txt",rand(MinX,MaxX),MinY+rand(60,100),0,0,0);
+			Wait(150);
+			}
+		//1分59秒
+		Wait(180);
+		//2分2秒
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy06.txt",CX-100,MinY-20,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy07.txt",CX+100,MinY-20,0,0,0);
+		
+		Wait(720);
+
+		SetCommonData("BossFlag",true);
+		yield;
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(1);
+		StartMusic();
+		WaitForZeroEnemy;//敵が消えるまで停止
+		SetCommonData("BossFlag",false);
+		alternative(GetPlayerScriptName)
+		case("Reimu.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02r.txt",0,0,0,0,0);
+		}case("Marisa.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02m.txt",0,0,0,0,0);
+		}case("Sakuya.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02s.txt",0,0,0,0,0);
+		}
+		Wait(120);//60フレーム待つ
+		//Clear();//ステージクリア
+	}
+
+	task StageTask2ns(){
+		let CX=GetCenterX();//STGシーンの中心x座標を取得
+		let CY=GetCenterY();//STGシーンの中心y座標を取得
+		let eFreeX=0;//敵の自由なx
+		let eFreeY=0;//敵の自由なy
+		let HayaCount = 0;//早回し用のカウント
+		let BreakTime = 0;//中ボスを倒すまでの時間
+		let timer=0;
+		let when=0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+		SetCommonData("BossFlag",false);
+		function Wait(let frame){
+			loop(frame){yield};
+		}
+		function WaitForZeroEnemy(){
+			while(GetEnemyNum() != 0){yield;}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(4);
+				PlayMusicName(-12,3);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+
+		Wait(180);//60
+		PlayMusicSP(3);
+		PlayMusicName(-15,2);
+		StageLogo(2,360,120);
+		Wait(480);//540
+		
+		ascent(i in 0..6) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",CX-120+i*20,MinY+40+i*30,0,0,1);
+			Wait(5);
+			}
+		//570
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..8) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy09.txt",MaxX+20,MinY-20,0,0,[1,i/7]);
+			Wait(10);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(10);
+		//650
+			
+		Wait(960-650);//960
+		ascent(i in 0..14) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy10.txt",MinX-rand(20,80),MinY-rand(20,80),0,0,[i*30,0,i/13]);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..18) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MinX+i*18+40,MinY+rand(60,100),0,0,i*30);
+			Wait(30);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		//1500
+		Wait(240);//1740(29秒)
+		
+		ascent(i in 0..14) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy10.txt",MaxX+rand(20,80),MinY-rand(20,80),0,0,[i*30,1,i/13]);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(i in 0..18) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MaxX-(i*18)-40,MinY+rand(60,100),0,0,i*30);
+			Wait(30);
+			}//2280
+
+		Wait(240);
+		//2520(42秒)
+		
+		SetCommonData("BossFlag",true);
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_E.txt",CX,0,0,0,0);
+		}case("normal"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_N.txt",CX,0,0,0,0);
+		}case("hard"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_H.txt",CX,0,0,0,0);
+		}case("lunatic"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural_L.txt",CX,0,0,0,0);
+		}
+		//中ボス
+		while(GetEnemyNum() != 0){BreakTime++;yield;}
+		//ここまでで4020フレーム（1分7秒）想定
+		SetCommonData("BossFlag",false);
+
+		loop(1500-BreakTime) {
+			if(HayaCount%8==0){
+				ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+				CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy11.txt",rand(MinX,MaxX),MinY-30,0,0,0);
+			}
+			HayaCount++;
+			yield;
+			}
+		//4020フレーム（1分7秒）まで早回し
+
+		Wait(60);//4080フレーム（1分8秒）
+		
+		EnemySet01;//落ちてくる妖精(同時は面倒なので)
+		ascent(i in 0..12) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MinX+i*18+40,MinY+rand(60,100),0,0,i*30);
+			Wait(60);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(60);
+		EnemySet01;//落ちてくる妖精(同時は面倒なので)
+		ascent(i in 0..12) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy08.txt",MaxX-i*18-40,MinY+rand(60,100),0,0,i*30);
+			Wait(60);
+			}
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		Wait(60);//1分32秒(5520f)
+		
+		Wait(120);//1分34秒(5640f)
+		loop(10) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy12.txt",rand(MinX,MaxX),MinY+rand(60,100),0,0,0);
+			Wait(150);
+			}
+		//1分59秒
+		Wait(180);
+		//2分2秒
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy06.txt",CX-100,MinY-20,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy07.txt",CX+100,MinY-20,0,0,0);
+		
+		Wait(720);
+
+		SetCommonData("BossFlag",true);
+		yield;
+		DeleteEnemyShotToItem(ALL);
+		SetCommonDataEx("title","listen_bgm",4);
+		SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(1);
+		StartMusic();
+		WaitForZeroEnemy;//敵が消えるまで停止
+		SetCommonData("BossFlag",false);
+		alternative(GetPlayerScriptName)
+		case("Reimu.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02r.txt",0,0,0,0,0);
+		}case("Marisa.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02m.txt",0,0,0,0,0);
+		}case("Sakuya.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage2\enm2_Event02s.txt",0,0,0,0,0);
+		}
+		WaitForZeroEnemy;//敵が消えるまで停止
+		SetCommonData("BossFlag",false);
+
+		
+		Wait(120);//60フレーム待つ
+
+		out(240);
+		Wait(180);
+
+		SetCommonDataEx("title","sp_stage",3);
+	}
+
+
+task EnemySet01 {
+	loop(12*6) {
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage2\enemy\fairy11.txt",rand(MinX,MaxX),MinY-30,0,0,1);
+		loop(10){yield;}
+		}
+	}

@@ -1,0 +1,269 @@
+
+#Title[enm5 spell01 normal]
+#Text[ミシェル・サンタンジェ　斬撃「大天使の剣」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm5eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm5se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm5se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm5se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm5se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm5se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm5se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm5se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm5se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm5se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,64);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,GetClipMinY+160,10,5);
+        LoadGraphic(imgEffect);
+	Aura(8,50,50,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,1);
+	VSname(0);
+	let tact = GetCommonDataEx("title","act");
+	if(tact!=11){
+	VSname2(0,0);
+	VSname2(10,0);
+	VSname2(20,0);
+	VSname2(30,0);
+	VSname2(40,0);
+	}
+	EnemyTexture05b_typeB(true);
+	RedMagicCircle(1,0);
+	Shot_Main;
+	SetEffectForZeroLife(0,0,0);
+	SpellPracticeSave("normal",16);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm5img\michel10000.png",0,0,384,512);
+	CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm5spell\enm5_sn01_normal.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	}
+	
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	DeleteAllEnemyWithoutBoss;
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+	
+task Shot_Main {
+	let wt = 330;
+		loop(60){yield;}
+		loop {
+			Sword(2.5,0);
+			loop(wt){yield;}
+			Sword(2.5,100);
+			loop(wt){yield;}
+			Sword(-2.5,0);
+			loop(wt){yield;}
+			Sword(-2.5,100);
+			loop(wt){yield;}
+		}
+	}
+	
+	task Sword(angle,r) {
+		let ang = -90;
+		let count = 0;
+		let w = 128;
+		let x;
+		let y;
+		let l = 250;
+		let bec = angle;
+		let quantity = 17;
+		let q = 10;
+		let obj = Obj_Create(OBJ_LASER);
+		let x = GetX+cos(ang)*r;
+		let y = GetY+sin(ang)*r;
+		
+		CreateSinewaveShot(GetX,GetY,3,ang, 40,10,10,42,0);
+		CreateSinewaveShot(GetX,GetY,3,ang,-40,10,10,42,0);
+		CreateSinewaveShot(GetX,GetY,3,ang, 40,20,10,42,0);
+		CreateSinewaveShot(GetX,GetY,3,ang,-40,20,10,42,0);
+		CreateSinewaveShot(GetX,GetY,3,ang, 40,30,10,42,0);
+		CreateSinewaveShot(GetX,GetY,3,ang,-40,30,10,42,0);
+		
+		ObjLaser_SetLength(obj,l);
+		ObjLaser_SetWidth(obj,w);
+		ObjShot_SetGraphic(obj,ORANGE21);
+		Obj_SetAngle(obj,ang);
+		Obj_SetPosition(obj,x,y);
+		Concentration(50,powerla);
+		PlaySE(laser);
+		loop(60) {
+			w-=(128-48)/60;
+			q-=10/60;
+			ObjLaser_SetWidth(obj,w);
+			Sword2(GetX+cos(ang)*r,GetY+sin(ang)*r,ang,l,w);
+			Obj_SetPosition(obj,x+rand(-q,q),y+rand(-q,q));
+			yield;
+			}
+		loop(240){
+			Obj_SetAngle(obj,ang);
+			Obj_SetPosition(obj,GetX+cos(ang)*r,GetY+sin(ang)*r);
+			ang+=angle;
+			angle/=1.005;
+			if(count%16==0){
+				ascent(let sr in 0..quantity) {
+					x = Obj_GetX(obj)+cos(ang)*sr*(250/quantity);
+					y = Obj_GetY(obj)+sin(ang)*sr*(250/quantity);
+					CreateShot02(x,y,0,ang-30*bec*sr/3,0.03,1.5,241,10);
+					}
+				Sword2(GetX+cos(ang)*r,GetY+sin(ang)*r,ang,250,w*2);
+				PlaySE(tan);
+				}
+			Sword2(GetX+cos(ang)*r,GetY+sin(ang)*r,ang,250,w);
+			count++;
+			yield;
+			}
+		ObjShot_FadeDelete(obj);
+		}
+		
+	function Sword2(x,y,a,l,w) {
+		let obj = Obj_Create(OBJ_LASER);
+		Obj_SetAlpha(obj,100);
+		ObjLaser_SetLength(obj,l);
+		ObjLaser_SetWidth(obj,w);
+		ObjShot_SetGraphic(obj,ORANGE21);
+		Obj_SetAngle(obj,a);
+		Obj_SetPosition(obj,x,y);
+		ObjShot_FadeDelete(obj);
+		}
+		
+	task CreateSinewaveShot(x,y,speed,angle,amp,om,arg,graphic,delay) {
+	
+	let t = 0;
+	let px = speed*t;
+	let py = amp*sin(om*t + arg);
+	let a = amp*om*3.1415926/(180*speed);
+	let w = 6;
+	let alpha = 150;
+	
+	//オブジェクト弾の作成
+	let obj = Obj_Create(OBJ_SINUATE_LASER);
+	
+	//パラメータの設定
+	Obj_SetCollisionToPlayer(obj,false);
+	ObjSinuateLaser_SetLength(obj,64);
+	ObjSinuateLaser_SetWidth(obj,w);
+	Obj_SetPosition(obj, x + px*cos(angle) - py*sin(angle), y + px*sin(angle) + py*cos(angle));
+	Obj_SetSpeed(obj, 0);
+	Obj_SetAngle(obj, angle + atan(a*cos(om*t + arg)));
+	ObjShot_SetGraphic(obj, 42);
+	ObjShot_SetDelay(obj, delay);
+	
+	loop(delay){ yield; }
+	
+	while(!Obj_BeDeleted(obj))
+	{
+		amp/=1.01;
+		Obj_SetAlpha(obj,alpha);
+		alpha-=1;
+		//(px,py)座標での弾の位置を計算
+		px=speed*t;
+		py=amp*sin(om*t + arg);
+		//回転・平行移動して実際の位置に
+		Obj_SetPosition(obj, x + px*cos(angle) - py*sin(angle),
+								 y + px*sin(angle) + py*cos(angle));
+		//弾の方向にもangleを足す
+		Obj_SetAngle(obj, angle + atan(a*cos(om*t + arg)));
+		
+		t++;
+		yield;
+	}
+}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,15 @@
+
+#Title[enm6_1 Plural Easy]
+#Text[邪星章6面中ボス　ピーマン 咲夜]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm6_1_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_1_Attack01_Easy.txt]
+ #ScriptPath[.\enm6_1_SpellCard01_Easy.txt]
+#ScriptNextStep
+
+#EndScriptPathData

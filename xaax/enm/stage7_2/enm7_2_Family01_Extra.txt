@@ -1,0 +1,103 @@
+script_enemy_main {//退魔符乱舞
+	let imgEffect	= GetCurrentScriptDirectory~".\enm7_2eff\bossEfect.png";
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm7_2eff\spellEfect.png";
+	let t5			= GetCurrentScriptDirectory~".\enm7_2se\timer1.wav";
+	let t10			= GetCurrentScriptDirectory~".\enm7_2se\timer2.wav";
+	let tan			= GetCurrentScriptDirectory~".\enm7_2se\shot1.wav";
+	let kira		= GetCurrentScriptDirectory~".\enm7_2se\shot2.wav";
+	let Gspel		= GetCurrentScriptDirectory~".\enm7_2se\echo5.wav";
+	let laser		= GetCurrentScriptDirectory~".\enm7_2se\Laser2.wav";
+	let power		= GetCurrentScriptDirectory~".\enm7_2se\enemy_powereffect.wav";
+	let powerl		= GetCurrentScriptDirectory~".\enm7_2se\power_logo.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\enm7_2se\BossEnd.wav";
+	let powerla		= GetCurrentScriptDirectory~".\enm7_2se\power_logo.wav";
+	let kaku		= GetCurrentScriptDirectory~".\enm7_2se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= GetCurrentScriptDirectory ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let S_count		= 0;
+	let endc		= 0;
+	let sp1			= 0;
+	let spA			= 0;
+
+	@Initialize {
+		SetX(MinX);
+		SetY(MinY-100);
+		SetLife(5000);
+
+		SetMovePosition03(CenX+150,CenY-50,10,8);
+		
+		SetShotAutoDeleteClip(30,30,30,30);
+		LoadUserShotData(shotdir);
+		LoadGraphic(imgEffect);
+		LoadGraphic(imgSPNB);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		Aura(8,255,255,0);
+		hpb(0,1,0);
+		EnemyTexture03(true);
+		//RedMagicCircle(0,0);//1が既出 引数2はﾃﾞｨﾚｲ
+    }
+
+    @MainLoop {
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		SetCollisionB(GetX, GetY, 16);
+
+		//ボム中、使用後一定時間ダメージ無効処理
+		if(OnBomb==true){SetDamageRateEx(150,150,0,0);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRateEx(150,150,0,0);}
+
+		frame++;
+		count++;
+		timer++;
+		if(sp1>=4&&S_count>=240){VanishEnemy;}
+		if(GetEnemyLife<=1000||GetLife<=1000){
+			S_count++;
+			SetInvincibility(120);
+			if(S_count>=120){
+				if(sp1<4){spA+=2;}
+				sp1=4*sin(spA);
+				SetMovePosition03(MinX-100,MinY,10,sp1);
+			}
+		}
+		if(GetEnemyLife>1000&&GetLife>1000){
+			if(timer==100){
+				CreateShotA(0,GetX+64*sin(count*8),GetY,10);
+				SetShotDataA(0,0,3,90,0,0,10,kYELLOW41);
+				FireShot(0);
+				CreateShotA(0,GetX-64*sin(count*8),GetY,10);
+				SetShotDataA(0,0,4,90,0,0,10,kPURPLE41);
+				FireShot(0);
+				PlaySE(tan);
+				timer=95;
+			}
+			if(frame>200){
+				SetMovePosition03(CenX-120*sin(a/2),CenY-50,10,2);
+				a++;
+			}
+		}
+
+	}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {}
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,217 @@
+
+#Title[enm7 Attack04]
+#Text[エルフィン・ミント
+通常弾幕4]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+script_enemy_main{
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= csd~".\enm7se\timer1.wav";
+	let t10			= csd~".\enm7se\timer2.wav";
+	let tan			= csd~".\enm7se\shot1.wav";
+	let kira		= csd~".\enm7se\shot2.wav";
+	let Gspel		= csd~".\enm7se\echo5.wav";
+	let laser		= csd~".\enm7se\Laser2.wav";
+	let power		= csd~".\enm7se\enemy_powereffect.wav";
+	let powerl		= csd~".\enm7se\power_logo.wav";
+	let gekiha		= csd~".\enm7se\BossEnd.wav";
+	let powerla		= csd~".\enm7se\power_logo.wav";
+	let kaku		= csd~".\enm7se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angle3		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= csd ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let S_count		= 0;
+	let endc		= 0;
+	let i			= 0;
+	let rt			= 0;
+
+	@Initialize{
+		SetLife(5000);
+		SetDamageRate(0,0);
+		SetInvincibility(120);
+		
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+
+		//弾幕削除制限　(初期値64)
+		SetShotAutoDeleteClip(30,30,30,30);
+		LoadUserShotData(shotdir);
+		SetMovePosition03(CenX,CenY-100,10,5);
+		LoadGraphic(imgEffect);
+		LoadGraphic(imgSPNB);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		hpb(0,1,0);
+		SetTimer(60);
+		Timer(2,0);
+		EnemyTexture07(true);
+		SetEffectForZeroLife(0,0,0);
+		VSname(0);
+		while(i<7){
+			VSname2(0+i*10,0);
+			i++;
+		}i=0;
+		RedMagicCircle(1,0);//1が既出 引数2はﾃﾞｨﾚｲ
+		
+		CreateEnemyFromFile(csd~"enm7_Family01_Extra.txt",0,0,0,0,0);
+	}
+
+	@MainLoop{
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		SetCollisionB(GetX, GetY, 16);
+
+		//制限時間処理
+		if(GetTimer<=10 && GetTimer>=0){T_count++;}
+		alternative(T_count)
+		case(1,60,120,180,240){PlaySE(t10);}
+		case(300,360,420,480,540){PlaySE(t5);}
+
+		//ボム中、使用後一定時間ダメージ無効処理
+		if(OnBomb==true){SetDamageRate(120,100);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRate(120,100);}
+
+		a++;	
+		frame++;
+		count++;
+		timer++;
+		alternative(frame)
+		case(100,110,120,130,140,150){
+			if(rt==0){
+					FlowerBullet(MaxX-20-angle*70,GetY+50,3,1.5,30,70-angle,kRED62);
+					FlowerBullet(MaxX-20-angle*70,GetY+50,2,1,20,70-angle,kYELLOW62);
+				loop(12){
+					FlowerBulletR(MaxX-20-angle*70,GetY+50,2,angle3,kGREEN62,2);
+					angle3+=30;
+				}
+			}else{
+					FlowerBullet(MinX+20+angle*70,GetY+50,3,1.5,30,70-angle,kRED62);
+					FlowerBullet(MinX+20+angle*70,GetY+50,2,1,20,70-angle,kYELLOW62);
+				loop(12){
+					FlowerBulletR(MinX+20+angle*70,GetY+50,2,angle3,kGREEN62,2);
+					angle3+=30;
+				}
+			}
+			angle++;
+			PlaySE(tan);
+		}
+		
+		if(timer==170){
+			SetCommonDataEx("anime","anime_flag",true);
+			Concentration(50,powerla);
+		}
+		if(timer==270){
+			SetCommonDataEx("anime","anime_flag",false);
+		}
+		alternative(count)
+		case(300){
+			if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+			else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+		}
+		if(count==300){
+			frame=0;
+			count=0;
+			//timer=50;
+			angle=0;
+			angle3=0;
+			rt++;
+			if(rt==2){rt=0;}
+		}
+
+	}//MainLoopの")"です。
+
+	@DrawLoop{}
+
+	@Finalize{}
+	
+	task FlowerBullet(x,y,dsp,sp,lp,af,dshote){
+		let angleF	= 0;
+		loop(lp){
+			CreateShotA(0,x,y,10);
+			SetShotDataA(0,0,dsp,angleF,0,-0.1,0,kGREEN62);
+			SetShotDataA(0,af,NULL,NULL,0,0.05,sp,dshote);
+			FireShot(0);
+			angleF+=360/lp;
+		}
+		angleF=0;
+	}
+	
+	task FlowerBulletR(x,y,sp,angle,dshote,count){
+		let ost		= Obj_Create(OBJ_SHOT);
+		let sp1		= 0;
+		let spA		= 0;
+		
+		Obj_SetPosition(ost,x,y);
+		Obj_SetAngle(ost,angle);
+		Obj_SetSpeed(ost,sp1);
+		ObjShot_SetBombResist(ost,true);
+		ObjShot_SetDelay(ost,10);
+		ObjShot_SetGraphic(ost,dshote);
+		Obj_SetAutoDelete(ost,true);
+		Obj_SetAlpha(ost,255);
+		
+		loop{
+			let sgx		= Obj_GetX(ost);
+			let sgy		= Obj_GetY(ost);
+			
+			if(sp1<sp){spA+=0.5;}
+			sp1=sp*sin(spA);
+			Obj_SetSpeed(ost,sp1);
+			
+			if(count!=0){
+				//左端反射
+				if(sgx<GetClipMinX-10){
+					Obj_SetX(ost, (GetClipMinX-10)*2 - sgx);
+					Obj_SetAngle(ost, 180 - Obj_GetAngle(ost));
+					count--;
+					PlaySE(kira);
+				}
+				//右端反射
+				if(sgx>GetClipMaxX+10){
+					Obj_SetX(ost, (GetClipMaxX+10)*2 - sgx);
+					Obj_SetAngle(ost, 180 - Obj_GetAngle(ost));
+					count--;
+					PlaySE(kira);
+				}
+				//上端反射
+				if(sgy<GetClipMinY-10){
+					Obj_SetY(ost, (GetClipMinY-10)*2 - sgy);
+					Obj_SetAngle(ost, 360 - Obj_GetAngle(ost));
+					count--;
+					PlaySE(kira);
+				}
+			}
+			if(sgx<MinX-20||sgx>MaxX+20||sgy<MinY-20||sgy>MaxY+20){
+				Obj_Delete(ost);
+				break;
+			}
+			yield;
+		}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

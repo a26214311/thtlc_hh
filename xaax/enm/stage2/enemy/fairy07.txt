@@ -1,0 +1,155 @@
+script_enemy_main
+{//∋�∈
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy=csd~"img\threefairys.png";
+	let imgAngle=0;
+	let shotAngle=0;
+	let ShotSE = csd ~"..\se\shot02.wav";
+	let tan       = GetCurrentScriptDirectory~".\se\shot1.wav";
+	let kira      = GetCurrentScriptDirectory~".\se\shot2.wav";
+	let Gspel     = GetCurrentScriptDirectory~".\se\echo5.wav";
+	let laser     = GetCurrentScriptDirectory~".\se\Laser2.wav";
+	let power     = GetCurrentScriptDirectory~".\se\enemy_powereffect.wav";
+	let powerl    = GetCurrentScriptDirectory~".\se\power_logo.wav";
+	let gekiha    = GetCurrentScriptDirectory~".\se\BossEnd.wav";
+	let powerla   = GetCurrentScriptDirectory~".\se\power_logo.wav";
+	let kaku      = GetCurrentScriptDirectory~".\se\核爆.wav";
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+	
+	let freeze = false;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+	let lp=0;
+
+	@Initialize
+	{
+		SetLife(1000);//
+		LoadSE(ShotSE);
+		LoadGraphic(imgEnemy);
+		SetTexture(imgEnemy);
+		SetGraphicRect(0,0,32,32);//描画元矩形を設定
+		SetLife(GetLife+100);
+		LoadUserShotData(csd~"data_usershot.txt");
+		CML(255,255,255);//敵爆発とか処理
+		Shot;
+	}
+	
+	@MainLoop
+	{		
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		alternative(tdif)
+		case("easy"){lp=64;}
+		case("normal"){lp=90;}
+		case("hard"){lp=128;}
+		case("lunatic"){lp=160;}
+		
+		if(count==0){
+			SetMovePosition03(GetX,MinY+120,10,3);
+		}
+		if(GetX<MinX-100){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100){
+		//VanishEnemy;
+		}
+		if(GetY>MaxY+100){
+		VanishEnemy;
+		}
+		if(!enmfin){
+			SetCollisionA(GetX(),GetY(),16);//当たり判定(自弾)登録
+			SetCollisionB(GetX(),GetY(),16);//当たり判定(体当たり)登録
+			}
+		if(GetCommonData("BossFlag")&&!enmfin) {
+			TrashEnemy(255,255,64);
+			enmfin=true;
+			}
+		count++;
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		if((GetSpeedX())==0){
+			SetGraphicRect(32,0,64,32);
+			SetGraphicAngle(0,0,0);
+		}
+		else if(GetSpeedX()>0.01){
+			SetGraphicRect(64,0,96,32);
+			SetGraphicAngle(0,0,0);
+		}
+		else if(GetSpeedX()<0.01){
+			SetGraphicRect(0,0,32,32);
+			SetGraphicAngle(0,0,0);
+		}
+		DrawGraphic(GetX, GetY);
+	}
+	
+	task Shot {
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		loop(90){yield;}
+		let speed = 2;
+		let angle = -5;
+		let switch = -1;
+		loop {
+			freeze = false;
+			angle = -5;
+			loop(lp){
+				if(!enmfin){
+					PlaySE(tan);
+					PerfectFreeze(GetX,GetY,rand(1,3),rand(0,360),[25,26,27,28,29][rand_int(0,4)],20);
+					}
+				loop(2){yield;}
+				angle+=10;
+				}
+			loop(90){yield;}
+			PlaySE("seSuperNaturalBorder1.wav");
+			freeze = true;
+			yield;
+		}
+	}
+	
+	task PerfectFreeze(x,y,s,a,g,d) {
+		let obj = CreateShot01(x,y,s,a,g,d);
+		loop{yield;if(freeze){break;}}
+		s = 0;
+		Obj_SetSpeed(obj,s);
+		ObjShot_SetGraphic(obj,32);
+		Obj_SetAngle(obj,rand(0,360));
+		loop(60){yield;}
+		loop(60) {
+			s+=0.03;
+			Obj_SetSpeed(obj,s);
+			yield;
+			}
+		}
+#include_function".\lib_anime_fairy.txt"
+}

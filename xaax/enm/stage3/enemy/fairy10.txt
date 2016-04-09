@@ -1,0 +1,236 @@
+script_enemy_main
+{//
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy;
+	alternative(GetArgument)
+		case(0,1,2){imgEnemy=csd~".\img\fairy_green.png";}	//青妖精
+		//case(3,4,5){imgEnemy=csd~".\img\fairy_red.png";}	//赤妖精
+	let imgEnemy2=csd~"img\threefairys.png";
+	let imgAngle=0;
+	let shotAngle=0;
+	let shotX=0;
+	let shotY=0;
+	let ShotSE = GetCurrentScriptDirectory~"se\shot1.wav";
+	let ShotSE2= GetCurrentScriptDirectory~"se\shot2.wav";
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+	let lp1=0;
+	let lp2=0;
+	let lp3=0;
+	let lp4=0;
+	let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+	@Initialize
+	{
+		SetLife(750);//
+		LoadSE(ShotSE);
+		if(tdif=="easy"||tdif=="normal"){
+			LoadGraphic(imgEnemy);
+			SetTexture(imgEnemy);
+			alternative(GetArgument)
+			case(0,1,2){Initialize_Fairy(6,100,100,255);}	//青妖精
+		}else{
+			LoadGraphic(imgEnemy2);
+			SetTexture(imgEnemy2);
+		}
+	}
+	
+	@MainLoop
+	{		
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		alternative(tdif)
+		case("easy"){
+			lp1=3;
+			lp2=6;
+			lp3=40;
+			lp4=9;
+		}
+		case("normal"){
+			lp1=3;
+			lp2=12;
+			lp3=72;
+			lp4=18;
+		}
+		case("hard"){
+			lp1=5;
+			lp2=32;
+			lp3=90;
+			lp4=32;
+		}
+		case("lunatic"){
+			lp1=18;
+			lp2=32;
+			lp3=90;
+			lp4=64;
+		}
+		
+		if(count>=0&&!enmfin){
+			alternative(GetArgument)
+			case(0){
+				if((count%150>=100)&&(count%150<150)){
+					if(count%5==0){
+						PlaySE(ShotSE);
+						ascent (i in 0..lp1) {
+							CreateShot01(GetX+rand(-30,30),GetY+rand(-30,30),1.9,GetAngleToPlayer+rand(lp1*-2,lp1*2),YELLOW04,10);
+						}
+					}
+				}
+			}
+			case(1){
+				if((count%150==30)||(count%150==35)||(count%150==40)||(count%150==45)){
+					PlaySE(ShotSE);
+					ascent (i in 0..lp2) {
+						CreateShot01(GetX,GetY,2.3,i*(360/lp2)+count,RED01,10);
+						alternative(tdif)
+						case("hard"){
+							CreateShot01(GetX,GetY,2.3,i*(360/lp2)-count,RED01,10);
+						}
+						case("lunatic"){
+							CreateShot01(GetX,GetY,2.3,i*(360/lp2)-count,RED01,10);
+						}
+					}
+				}
+			}
+			case(2){
+				if(count%150==75){
+					PlaySE(ShotSE);
+					ascent (i in 0..lp3) {
+						CreateShot01(GetX,GetY,1.1,i*(360/lp3),BLUE12,10);
+					}
+				}
+			}
+			case(3){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					CreateShot01(GetX,GetY,1.8,GetAngleToPlayer,RED11,15);
+					CreateShot01(GetX,GetY,1.7,GetAngleToPlayer+4,RED11,15);
+					CreateShot01(GetX,GetY,1.7,GetAngleToPlayer-4,RED11,15);
+					CreateShot01(GetX,GetY,1.6,GetAngleToPlayer+8,RED11,15);
+					CreateShot01(GetX,GetY,1.6,GetAngleToPlayer,RED11,15);
+					CreateShot01(GetX,GetY,1.6,GetAngleToPlayer-8,RED11,15);
+					CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+4,RED11,15);
+					CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-4,RED11,15);
+					CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+12,RED11,15);
+					CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-12,RED11,15);
+				}
+			}
+			case(4){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					loop(10){
+						CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(-20,20),RED31,10);
+					}
+				}
+			}
+			case(5){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					ascent (i in 0..lp4) {
+						CreateShot01(GetX,GetY,1.6,i*(360/lp4),RED12,10);
+					}
+				}
+			}
+
+		}
+		if(count==0){
+			SetMovePosition02(GetX,GetY+90,30);
+		}
+
+		if(GetX<MinX-100){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100){
+		//VanishEnemy;
+		}
+		if(GetY>MaxY+100){
+		VanishEnemy;
+		}
+
+		SetCollisionA(GetX(),GetY(),24);//当たり判定(自弾)登録
+		count++;
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		if(tdif=="easy"||tdif=="normal"){
+			DrawFairy(imgEnemy);
+		}else{
+			alternative(GetArgument)
+			case(0){
+				if((GetSpeedX())==0){
+					SetGraphicRect(32,96,63,127);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()>0.0){
+					SetGraphicRect(64,96,95,127);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()<0.0){
+					SetGraphicRect(0,96,31,127);
+					SetGraphicAngle(0,0,0);
+				}
+			}
+			case(1){
+				if((GetSpeedX())==0){
+					SetGraphicRect(32,64,63,95);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()>0.0){
+					SetGraphicRect(64,64,95,95);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()<0.0){
+					SetGraphicRect(0,64,31,95);
+					SetGraphicAngle(0,0,0);
+				}
+			}
+			case(2){
+				if((GetSpeedX())==0){
+					SetGraphicRect(32,128,63,159);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()>0.0){
+					SetGraphicRect(64,128,95,159);
+					SetGraphicAngle(0,0,0);
+				}
+				else if(GetSpeedX()<0.0){
+					SetGraphicRect(0,128,31,159);
+					SetGraphicAngle(0,0,0);
+				}
+			}
+			DrawGraphic(GetX, GetY);
+		}
+	}
+#include_function".\lib_anime_fairy.txt"
+}

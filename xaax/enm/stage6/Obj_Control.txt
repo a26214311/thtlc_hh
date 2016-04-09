@@ -1,0 +1,8 @@
+#include_function".\Cutin_Eff.txt"
+#include_function".\Obj_Effect.txt"
+#include_function".\Obj_Aura.txt"
+#include_function".\Obj_hpb.txt"
+#include_function".\Obj_Texture.txt"
+#include_function".\Obj_Shot.txt"
+#include_function".\Obj_Iesua.txt"
+#include_function"..\..\..\SpellTask.txt"

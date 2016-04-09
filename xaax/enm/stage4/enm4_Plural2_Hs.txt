@@ -1,0 +1,23 @@
+
+#Title[enm4_2 Plural SakuyaH]
+#Text[邪星章4面ボス　甕星 無々夢　咲夜H]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm4_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack02_Hard.txt]
+ #ScriptPath[.\enm4_SpellCard02_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack03_Hard.txt]
+ #ScriptPath[.\enm4_SpellCard03_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack04_Hard.txt]
+ #ScriptPath[.\enm4_SpellCard04_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_SpellCard05_Hard.txt]
+#ScriptNextStep
+
+#EndScriptPathData

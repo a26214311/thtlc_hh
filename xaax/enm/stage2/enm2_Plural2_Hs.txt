@@ -1,0 +1,18 @@
+
+#Title[enm2_2 Plural SakuyaN]
+#Text[邪星章2面ボス　咲夜N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm2_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack02_Hard.txt]
+ #ScriptPath[.\enm2_SpellCard02_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack03_Hard.txt]
+ #ScriptPath[.\enm2_SpellCard03_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_SpellCard04_Hard.txt]
+
+#EndScriptPathData

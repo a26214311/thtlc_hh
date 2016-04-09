@@ -1,0 +1,472 @@
+#東方弾幕風[Stage]
+#Title[東方邪星章　〜 TheLastComer]
+#Text[罪人慟哭弾幕STG　東方邪星章ver1.00a]
+#Image[.\title\pack.png]
+#Player[.\player\Reimu\Reimu.txt,.\player\Marisa\Marisa.txt,.\player\Sakuya\Sakuya.txt,.\player\ReimuHari\Reimu.txt]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_stage_main {
+	//雑多変数
+	let frame		= 0;
+	let count		= 0;
+	let timer		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angleBase	= 0;
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let a			= 0;
+	let b			= 0;
+	let c			= 0;
+	let shc			= 0;
+	//seパス
+	let gekiha		= GetCurrentScriptDirectory~".\se\BossEnd.wav";
+	let extend		= GetCurrentScriptDirectory~".\se\extend.wav";
+	let sel			= GetCurrentScriptDirectory~".\se\SELECT.wav";
+	let ket			= GetCurrentScriptDirectory~".\se\決定.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\se\BossEnd.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\se\BossEnd.wav";
+	//ﾀｲﾄﾙ系統画像パス
+	let imgw		= GetCurrentScriptDirectory~".\title\white.png";
+	let imgl		= GetCurrentScriptDirectory~".\title\loading.png";
+	let imgl2		= GetCurrentScriptDirectory~".\eff\lightc.png";
+	let imgt00		= GetCurrentScriptDirectory~".\title\load00.png";
+	let imgt01		= GetCurrentScriptDirectory~".\title\title00.png";
+	let imgt02		= GetCurrentScriptDirectory~".\title\select00.png";
+	let imgt03		= GetCurrentScriptDirectory~".\title\select01.png";
+	let imgt04		= GetCurrentScriptDirectory~".\title\select02.png";
+	let imgt05		= GetCurrentScriptDirectory~".\title\rank01.png";
+	let imgt06		= GetCurrentScriptDirectory~".\title\clear.png";
+	let imgtl00		= GetCurrentScriptDirectory~".\title\tl00.png";
+	let imgtl01		= GetCurrentScriptDirectory~".\title\tl01.png";
+	let imgtl02		= GetCurrentScriptDirectory~".\title\tl02.png";
+	let imgtl03		= GetCurrentScriptDirectory~".\title\tl03.png";
+	let imgtl04		= GetCurrentScriptDirectory~".\title\tl04.png";
+	let imgtl05		= GetCurrentScriptDirectory~".\title\tl05.png";
+	let imgco		= GetCurrentScriptDirectory~".\title\out.png";
+	let imgot00		= GetCurrentScriptDirectory~".\title\other00.png";
+	let imgot01		= GetCurrentScriptDirectory~".\title\sppl.png";
+	let imgot02		= GetCurrentScriptDirectory~".\front\menu00.png";
+	let imgot03		= GetCurrentScriptDirectory~".\front\menu01.png";
+	let ret			= 0;
+	let stg_act		= 0;
+	//背景用変数
+	let move1		= 0;
+	let moveA		= 0;
+	let move2		= 0;
+	let moveB		= 0;
+	let efcount		= 0;
+	let stg			= 0;//ステージ背景フラグ
+	let alpha		= 0;
+	let change		= 0;
+	//背景画像パス
+	let imgz01		= GetCurrentScriptDirectory~".\world\stg1a.png";
+	let imgz02		= GetCurrentScriptDirectory~".\world\stg1b.png";
+	let imgz03		= GetCurrentScriptDirectory~".\world\stg1c.png";
+	let imgz04		= GetCurrentScriptDirectory~".\world\stg2a.png";
+	let imgz05		= GetCurrentScriptDirectory~".\world\stg2b.png";
+	let imgz06		= GetCurrentScriptDirectory~".\world\stg2c.png";
+	let imgz07		= GetCurrentScriptDirectory~".\world\foga.png";
+	let imgz08		= GetCurrentScriptDirectory~".\world\stg3a.png";
+	let imgz09		= GetCurrentScriptDirectory~".\world\stg3b.png";
+	let imgz10		= GetCurrentScriptDirectory~".\world\stg4a.png";
+	let imgz11		= GetCurrentScriptDirectory~".\world\stg4b.png";
+	let imgz12		= GetCurrentScriptDirectory~".\world\stg5a.png";
+	let imgz13		= GetCurrentScriptDirectory~".\world\stg5b.png";
+	let imgz14		= GetCurrentScriptDirectory~".\world\stg5c.png";
+	let imgz15		= GetCurrentScriptDirectory~".\world\stg6a.png";
+	let imgz16		= GetCurrentScriptDirectory~".\world\stg6b.png";
+	let imgz17		= GetCurrentScriptDirectory~".\world\stg6c.png";
+	let imgz18		= GetCurrentScriptDirectory~".\world\stg7a.png";
+	let imgz19		= GetCurrentScriptDirectory~".\world\stg7b.png";
+	let d			= 0;
+	let e			= 0;
+	let gcsd		= GetCurrentScriptDirectory;
+	let ss			= 0;
+	//bgmパス
+	let csd			= GetCurrentScriptDirectory;
+	let bgmI		= [csd~".\bgm\title_intro.wav",csd~".\bgm\1road_intro.wav",
+					csd~".\bgm\1boss_intro.wav",csd~".\bgm\2road_intro.wav",
+					csd~".\bgm\2boss_intro.wav",csd~".\bgm\3road_intro.wav",
+					csd~".\bgm\3boss_intro.wav",csd~".\bgm\4road_intro.wav",
+					csd~".\bgm\4boss_intro.wav",csd~".\bgm\5road_intro.wav",
+					csd~".\bgm\5boss_intro.wav",csd~".\bgm\6road_intro.wav",
+					csd~".\bgm\6boss_intro.wav",csd~".\bgm\exroad_intro.wav",
+					csd~".\bgm\exboss_intro.wav",csd~".\bgm\ending_intro.wav",
+					csd~".\bgm\staffroll_intro.wav"];
+					
+	let bgmL		= [csd~".\bgm\title_loop.wav",csd~".\bgm\1road_loop.wav",
+					csd~".\bgm\1boss_loop.wav",csd~".\bgm\2road_loop.wav",
+					csd~".\bgm\2boss_loop.wav",csd~".\bgm\3road_loop.wav",
+					csd~".\bgm\3boss_loop.wav",csd~".\bgm\4road_loop.wav",
+					csd~".\bgm\4boss_loop.wav",csd~".\bgm\5road_loop.wav",
+					csd~".\bgm\5boss_loop.wav",csd~".\bgm\6road_loop.wav",
+					csd~".\bgm\6boss_loop.wav",csd~".\bgm\exroad_loop.wav",
+					csd~".\bgm\exboss_loop.wav",csd~".\bgm\ending_loop.wav",
+					csd~".\bgm\staffroll_loop.wav"];
+
+	@Initialize {
+		//余計なエフェクトを消す
+		SetClearFrameEffectEnable(false);
+		SetRenderFrame(false);
+		SetDefaultStatusVisible(false);
+		
+		ascent(let i in 0..17){
+			LoadMusic(bgmI[i]);
+			LoadMusic(bgmL[i]);
+		}
+		
+		//各種読み込み
+		LoadGraphic(imgw);
+		LoadGraphic(imgl);
+		LoadGraphic(imgl2);
+		LoadGraphic(imgt00);
+		LoadGraphic(imgt01);
+		LoadGraphic(imgt02);
+		LoadGraphic(imgt03);
+		LoadGraphic(imgt04);
+		LoadGraphic(imgt05);
+		LoadGraphic(imgt06);
+		LoadGraphic(imgtl00);
+		LoadGraphic(imgtl01);
+		LoadGraphic(imgtl02);
+		LoadGraphic(imgtl03);
+		LoadGraphic(imgtl04);
+		LoadGraphic(imgtl05);
+		LoadGraphic(imgco);
+		LoadGraphic(imgot00);
+		LoadGraphic(imgot01);
+		LoadGraphic(imgot02);
+		LoadGraphic(imgot03);
+		LoadGraphic(imgz01);
+		LoadGraphic(imgz02);
+		LoadGraphic(imgz03);
+		LoadGraphic(imgz04);
+		LoadGraphic(imgz05);
+		LoadGraphic(imgz06);
+		LoadGraphic(imgz07);
+		LoadGraphic(imgz08);
+		LoadGraphic(imgz09);
+		LoadGraphic(imgz10);
+		LoadGraphic(imgz11);
+		LoadGraphic(imgz12);
+		LoadGraphic(imgz13);
+		LoadGraphic(imgz14);
+		LoadGraphic(imgz15);
+		LoadGraphic(imgz16);
+		LoadGraphic(imgz17);
+		LoadGraphic(imgz18);
+		LoadGraphic(imgz19);
+		
+		//共通データの作成、読み込み
+		CreateCommonDataArea("sys");
+		SetCommonDataEx("sys","sys_gauge",0);
+		SetCommonDataEx("sys","sys_trans",0);
+		
+		CreateCommonDataArea("title");
+		LoadCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		SetCommonDataEx("title","act",0);
+		SetCommonDataEx("title","stc",0);
+		//SetCommonDataEx("title","ex",true);//EX解放 true
+		SetCommonDataEx("title","ph",false);//PH解放 true
+		SetCommonDataEx("title","practise",true);//Practice系解放 true
+		SetCommonDataEx("title","Diffi","NoData");//現行難易度の保存
+		SetCommonDataEx("title","Diffi2",0);//ｽﾃﾌﾟﾗでの選択ステージ
+		SetCommonDataEx("title","sp_stage",0);//ステージ
+		SetCommonDataEx("title","sp_spell",0);//何枚目のスペカ
+		SetCommonDataEx("title","sp_diffi","NoData");//ｽﾍﾟﾌﾟﾗ用難易度判定
+		//SetCommonDataEx("title","clear_stageE",7);//本編の進み具合easy
+		//SetCommonDataEx("title","clear_stageN",7);//本編の進み具合normal
+		//SetCommonDataEx("title","clear_stageH",7);//本編の進み具合hard
+		//SetCommonDataEx("title","clear_stageL",7);//本編の進み具合lunatic
+		//SetCommonDataEx("title","clear_stageEX_R",0);//本編の進み具合extra 霊夢
+		//SetCommonDataEx("title","clear_stageEX_M",0);//本編の進み具合extra 魔理沙
+		//SetCommonDataEx("title","clear_stageEX_S",0);//本編の進み具合extra 咲夜
+		//SetCommonDataEx("title","listen_bgm",14);//一度でも聴いたBGM(max16)
+		SetCommonDataEx("title","start_stage",false);//stage動き
+		SetCommonDataEx("title","start_stage2",false);
+		SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		
+		CreateCommonDataArea("add");
+		LoadCommonDataEx("add",GetCurrentScriptDirectory~".\Add.dat");
+		
+		CreateCommonDataArea("mss");
+		LoadCommonDataEx("mss",GetCurrentScriptDirectory~".\Mss_Option.dat");
+		SetCommonDataEx("mss","mss_frag","false");
+		SetCommonDataEx("mss","sway_frag",false);
+		/*実装時はｺﾒﾝﾄｱｳﾄか削除*/
+		//SetCommonDataEx("mss","dpla",3);//残機、ボム、ｺﾝﾃｨﾆｭｰ回数の初期化
+		//SetCommonDataEx("mss","dcon",3);
+		//SetCommonDataEx("mss","dbom",3);
+		//SetCommonDataEx("mss","high_scoreE",0);//通算ﾊｲｽｺｱEの初期化
+		//SetCommonDataEx("mss","high_scoreN",0);//通算ﾊｲｽｺｱNの初期化
+		//SetCommonDataEx("mss","high_scoreH",0);//通算ﾊｲｽｺｱHの初期化
+		//SetCommonDataEx("mss","high_scoreL",0);//通算ﾊｲｽｺｱLの初期化
+		//SetCommonDataEx("mss","high_scoreEX",0);//通算ﾊｲｽｺｱEXの初期化
+		//SetCommonDataEx("mss","high_scorePH",0);//通算ﾊｲｽｺｱPHの初期化
+		SaveCommonDataEx("mss",GetCurrentScriptDirectory~".\Mss_Option.dat");
+		
+		let pla	= GetCommonDataEx("mss","dpla");
+		let con	= GetCommonDataEx("mss","dcon");
+		let bom	= GetCommonDataEx("mss","dbom");
+		
+		CreateCommonDataArea("r");
+		LoadCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Reimu.dat");
+		CreateCommonDataArea("m");
+		LoadCommonDataEx("m",GetCurrentScriptDirectory~".\Score_Marisa.dat");
+		CreateCommonDataArea("s");
+		LoadCommonDataEx("s",GetCurrentScriptDirectory~".\Score_Sakuya.dat");
+		
+		//SpellPracticeScore();//ｽﾍﾟﾌﾟﾗｽｺｱ一括初期化
+		//SaveCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Reimu.dat");
+		
+		//オプション区画から初期設定1
+		ExpertEx(true,con,pla);
+		AddGraze(11);
+	}
+
+	@MainLoop {
+		yield;
+		
+		if(IsBossExisting==false){ss=0;}
+		if(IsBossExisting==true){ss++;}
+		if(ss==1){
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			ss=-58;
+		}
+		
+		let pla	= GetCommonDataEx("mss","dpla");
+		let con	= GetCommonDataEx("mss","dcon");
+		let bom	= GetCommonDataEx("mss","dbom");
+		
+		let mssf = GetCommonDataEx("mss","mss_frag");
+		if(OnBomb==true){SetCommonDataEx("mss","sway_frag",true);shc=0;}
+		if(OnBomb==false){shc++;}
+		if(shc==1){SetCommonDataEx("mss","sway_frag",false);}
+		
+		let tdst = GetCommonDataEx("mss","3D_back");
+		let fm   = GetCommonDataEx("add","Flat_Mode");
+		let tsst = GetCommonDataEx("title","start_stage");
+		let tsst2= GetCommonDataEx("title","start_stage2");
+		let tact = GetCommonDataEx("title","act");
+		if(tact==9||tact==2){
+			if(GetScore>0){AddScore(GetScore/-2);}
+			if(GetScore==1){AddScore(-1);}
+			SetAllowedContinueCount(con);
+			if(GetPlayerLife>pla){ExtendPlayer(-1);}
+			if(GetPlayerLife<pla){ExtendPlayer(1);}
+			if(GetPlayerBomb>bom){AddBomb(-1);}
+			if(GetPlayerBomb<bom){AddBomb(1);}
+		}
+		if(tact!=10&&tact!=11&&tact!=14){
+			SetPlayerX(CenX);
+			SetPlayerY(CenY+170);
+			ForbidShot(true);
+			ForbidBomb(true);
+		}
+		if(tsst2==true){
+			timer++;
+			a+=2;
+		}
+		if(timer==1){
+			ForbidShot(false);
+			ForbidBomb(false);
+			EnemyMarker();
+		}
+		
+		if(frame<5){frame++;}
+		if(frame==1){
+			front00();
+		}
+		if(frame==2){
+			SetTitle();
+			//Ending();
+		}
+		
+		if(tsst==true){ret=0;}
+		if(tact==11&&tsst==false){ret++;}//終了時は何らかのフラグを立てる
+		if(tact==14&&tsst==false){ret++;}//終了時は何らかのフラグを立てる
+		if(ret==180){
+			timer=0;
+			a=0;
+			moveA=0;
+			moveB=0;
+			alpha=0;
+			if(tact==11){SetMenu();}
+			if(tact==14){SetMenu2();}
+		}
+		
+		//背景エフェクトの処理
+		if(tsst==true&&tdst==false){
+			alternative(stg)
+			case(1){
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				if(efcount==30){
+					Sparks(rand(MinX,MaxX),rand(MinY,MaxY),rand(70,110),rand(1,3),rand(0.01,0.1),255,102,0,120);
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY),rand(70,110),rand(0.5,2),rand(50,150),255,255,255);
+					efcount=0;
+				}
+			}//1
+			case(2){
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				b++;
+				if(b==300){b=0;}
+				if(alpha<255){alpha+=0.05;}
+				if(efcount==10){
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY),rand(70,110),rand(0.5,2),rand(50,150),255,rand(0,200),255);
+					efcount=0;
+				}
+			}
+			case(3){
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				if(efcount==20){
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY),rand(60,120),rand(0.5,2),rand(50,150),rand(0,200),rand(0,200),255);
+					efcount=0;
+				}
+			}
+			case(4){
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				d++;
+				if(d==200){d=0;}
+				e++;
+				if(e==1350){e=0;}
+				if(efcount==20){
+					Sparks(MaxX,rand(MinY,MaxY),rand(180,135),rand(1,3),rand(0.01,0.1),255,102,0,120);
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY),rand(70,110),rand(0.5,2),rand(50,150),255,255,255);
+					efcount=0;
+				}
+			}//stg4
+			case(5){
+				a++;
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				if(efcount==30){
+					Sparks(rand(MinX,MaxX),MaxY+50,rand(250,290),rand(1,3),rand(0.01,0.1),0,255,255,60);
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY+50),rand(250,290),rand(0.5,2),rand(50,150),255,255,255);
+					efcount=0;
+				}
+			}//stg5
+			case(6){
+				a++;
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				if(efcount==40){
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY+50),rand(135,90),rand(0.5,1),rand(50,150),255,rand(100,255),255);
+					efcount=0;
+				}
+			}//stg6
+			case(7){
+				if(fm==false&&OnEnemySpell==false){efcount++;}
+				b++;
+				if(b==300){b=0;}
+				if(alpha<255){alpha+=0.05;}
+				if(efcount==5){
+					PetalofCherry(rand(MinX,MaxX),rand(MinY,MaxY),rand(70,110),rand(2,4),90+45*sin(a),255,rand(0,200),rand(0,200));
+					efcount=0;
+				}
+			}//stg7
+		}//最後の「」
+		
+		let tsps = GetCommonDataEx("title","sp_stage");
+		if(tact==10||tact==11||tact==14){
+			alternative(tsps)
+			case(1){stg=1;}
+			case(2){stg=2;}
+			case(3){stg=3;}
+			case(4){stg=4;}
+			case(5){stg=5;}
+			case(6){stg=6;}
+			case(7){stg=7;}
+			case(8){stg=8;}
+		}
+		
+		if(ret==1&&OnPlayerMissed==false){
+			WorldShake(60);
+		}
+	}
+
+	@Finalize {
+		let scoreE = GetCommonDataEx("mss","high_scoreE");
+		let scoreN = GetCommonDataEx("mss","high_scoreN");
+		let scoreH = GetCommonDataEx("mss","high_scoreH");
+		let scoreL = GetCommonDataEx("mss","high_scoreL");
+		let scoreEX= GetCommonDataEx("mss","high_scoreEX");
+		let scorePH= GetCommonDataEx("mss","high_scorePH");
+		let diffh  = GetCommonDataEx("title","Diffi");
+		
+		if(GetScore>=scoreE&&diffh=="easy"){SetCommonDataEx("mss","high_scoreE",GetScore)}
+		if(GetScore>=scoreN&&diffh=="normal"){SetCommonDataEx("mss","high_scoreN",GetScore)}
+		if(GetScore>=scoreH&&diffh=="hard"){SetCommonDataEx("mss","high_scoreH",GetScore)}
+		if(GetScore>=scoreL&&diffh=="lunatic"){SetCommonDataEx("mss","high_scoreL",GetScore)}
+		if(GetScore>=scoreEX&&diffh=="extra"){SetCommonDataEx("mss","high_scoreEX",GetScore)}
+		if(GetScore>=scorePH&&diffh=="phantasm"){SetCommonDataEx("mss","high_scorePH",GetScore)}
+		SetCommonDataEx("mss","mss_frag","false");
+		SaveCommonDataEx("mss",GetCurrentScriptDirectory~".\Mss_Option.dat");
+	}
+
+	@BackGround {
+		let tsst = GetCommonDataEx("title","start_stage2");
+		let tdst = GetCommonDataEx("mss","3D_back");
+		if(OnEnemySpell==false&&tdst==false){
+			alternative(stg)
+			case(1){World1;}
+			case(2){World2;}
+			case(3){World3;}
+			case(4){World4;}
+			case(5){World5;}
+			case(6){World6;}
+			case(7){World7;}
+		}
+	}
+
+	task SpellPracticeScore(){
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Easy)
+		SetCommonDataEx("r","sp_score_reimu_easy",[1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1]);//27
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Normal)
+		SetCommonDataEx("r","sp_score_reimu_normal",[1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1]);//28
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Hard)
+		SetCommonDataEx("r","sp_score_reimu_hard",[1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,1]);//31
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Luantic)
+		SetCommonDataEx("r","sp_score_reimu_lunatic",[1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,
+								1,1,1,1,1,1,1,1,1,1,1]);//31
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Extra)
+		SetCommonDataEx("r","sp_score_reimu_extra",[1,1,1,1,1,1,1,1,1,1,1,1]);//12
+		//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Phantasm)
+		SetCommonDataEx("r","sp_score_reimu_phantasm",[0,0,0,0,0,0,0,0,0,0,0,0,0]);//13
+		//ｽﾃﾌﾟﾗ保存領域:霊夢(Easy)
+		SetCommonDataEx("r","st_score_reimu_easy",[0,0,0,0,0,0]);//6
+		//ｽﾃﾌﾟﾗ保存領域:霊夢(Normal)
+		SetCommonDataEx("r","st_score_reimu_normal",[0,0,0,0,0,0]);//6
+		//ｽﾃﾌﾟﾗ保存領域:霊夢(Hard)
+		SetCommonDataEx("r","st_score_reimu_hard",[0,0,0,0,0,0]);//6
+		//ｽﾃﾌﾟﾗ保存領域:霊夢(Luantic)
+		SetCommonDataEx("r","st_score_reimu_lunatic",[0,0,0,0,0,0]);//6
+	}
+
+	task Default(){
+		timer=0;
+		a=0;
+		b=0;
+		d=0;
+		e=0;
+		efcount=0;
+		move1=0;
+		moveA=0;
+		move2=0;
+		moveB=0;
+		alpha=0;
+		angle=0;
+	}
+	#include_function".\Title_control.txt"
+	#include_function".\Task_world.txt"
+}

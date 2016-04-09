@@ -1,0 +1,308 @@
+script_enemy Enemy00{
+    let gcsd      = GetCurrentScriptDirectory;
+    let effimg    = gcsd ~ ".\enm6eff\bulletbreak.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6se\核爆.wav";
+    let boon      = GetCurrentScriptDirectory~".\enm6se\boon.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 1;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let count2    = 0;
+    let count3    = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let move1     = 0;
+    let moveA     = 0;
+    let alpha     = 0;
+    let ang       = [-3,3];
+    let sc        = 0;
+    let enter	  = 0;
+
+    @Initialize {
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(400);
+
+	LoadUserShotData(shotdir);
+	alternative(GetArgument)
+	case(0){
+	hpb2(2,1,0);
+	CutinSP_type2("TIREI",50,-50,GetCurrentScriptDirectory~".\enm6img\jannet00000.png",0,0,384,512);
+	CutinSP2A(-275,-10,310,GetCurrentScriptDirectory~".\enm6spell\enm6_sn06_plus01.png",0,0,384,32,255,255,255);
+	Aura(8,200,128,100);
+	EnemyTexture05a_typeB(true);
+	SetMovePosition03(CenX-150,CenY,10,5);
+	}//ジャネット
+	case(1){
+	hpb2(2,1,0);
+	Aura(8,50,50,255);
+	EnemyTexture05b(true);
+	SetMovePosition03(CenX-100,CenY-150,10,5);
+	}//ミシェル
+	case(2){
+	hpb2(2,1,0);
+	Aura(8,255,50,150);
+	EnemyTexture04(true);
+	SetMovePosition03(CenX+100,CenY,10,5);
+	}//無々夢
+	}
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	let mulf = GetCommonDataEx("ls","Mumumu_Life");
+	let jalf = GetCommonDataEx("ls","Janet_Life");
+	let milf = GetCommonDataEx("ls","Michel_Life");
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(GetArgument==2){
+	if(OnBomb==true){SetDamageRateEx(0,0,0,0);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRateEx(10,0,0,0);}
+	}else{
+	if(OnBomb==true){SetDamageRateEx(0,0,0,0);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRateEx(20,0,0,0);}
+	}
+
+	if(S_count==300&&mulf==false){
+	if(GetArgument==0||GetArgument==1){
+	Concentration2(GetX,GetY,30,powerla);}
+	}
+	if(S_count==1000){
+	if(milf==false||jalf==false){
+	if(GetArgument==2){
+	Concentration2(GetX,GetY,100,powerla);
+	PlaySE(power);
+	}
+	}
+	}
+
+	if(sc==100){
+	if(GetArgument==1){
+	CutinSP_type2("TIREI",50,-50,GetCurrentScriptDirectory~".\enm6img\michel10000.png",0,0,384,512);
+	CutinSP2A(-275,-10,280,GetCurrentScriptDirectory~".\enm6spell\enm6_sn06_plus02.png",0,0,384,32,255,255,255);
+	}}
+	if(sc==200){
+	if(GetArgument==2){
+	CutinSP_type2("TIREI",50,-50,GetCurrentScriptDirectory~".\enm6img\mmm00001.png",0,0,384,512);
+	CutinSP2A(-275,-10,250,GetCurrentScriptDirectory~".\enm6spell\enm6_sn06_plus03.png",0,0,384,32,255,255,255);
+	}}
+
+	if(enter==4780){SetLife(9);}
+
+	if(mulf==true){
+	DeleteEnemyShotToItemInCircle(ALL,CenX,CenY,500);
+	SetDamageRate(0,0);
+	a=0;
+	timer=0;
+	count=0;
+	frame=0;
+	S_count=0;
+	count3++;
+	if(count3==120){
+	alternative(GetArgument)
+	case(0){
+	SetMovePosition03(MinX-100,CenY-150,10,5);
+	}//ジャネット
+	case(1){
+	SetMovePosition03(MinX-100,CenY-150,10,5);
+	}//ミシェル
+	}
+	if(count3==180){
+	alternative(GetArgument)
+	case(0){VanishEnemy;}//ジャネット
+	case(1){VanishEnemy;}//ミシェル
+	case(2){VanishEnemy;}//無々夢
+	}
+	}
+
+	if(jalf==true&&milf==true){
+	DeleteEnemyShotToItemInCircle(ALL,CenX,CenY,500);
+	SetDamageRate(0,0);
+	a=0;
+	timer=0;
+	count=0;
+	frame=0;
+	S_count=0;
+	count3++;
+	if(count3==120){
+	alternative(GetArgument)
+	case(2){
+	SetMovePosition03(MaxX+100,CenY-150,10,5);
+	}//無々夢
+	}
+	if(count3==180){
+	alternative(GetArgument)
+	case(0){VanishEnemy;}//ジャネット
+	case(1){VanishEnemy;}//ミシェル
+	case(2){VanishEnemy;}//無々夢
+	}
+	}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	sc++;
+	enter++;
+	if(timer<=1000&&mulf==false){
+	if(frame==400&&GetArgument==0){
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,rand(-1,-2),10+45*sin(a),0,0,-5,kORANGE_F);
+	SetShotDataA(0,60,NULL,NULL,ang[angle],0,-5,kORANGE_F);
+	SetShotDataA(0,120,NULL,NULL,0,-0.03,-5,kORANGE_F);
+	FireShot(0);
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,rand(1,2),190-45*sin(a),0,0,5,kYELLOW50);
+	SetShotDataA(0,60,NULL,NULL,ang[angle],0,5,kYELLOW50);
+	SetShotDataA(0,120,NULL,NULL,0,0.03,5,kYELLOW50);
+	FireShot(0);
+	angle++;
+	if(angle==2){angle=0;}
+	frame=399;
+	}
+	if(count==400&&GetArgument==0){
+	PlaySE(kira);
+	count=395;
+	}
+	if(frame==400&&GetArgument==1){
+	LaserBlade(GetX,GetY,180,200,"+",300,30,RED21,0);
+	PlaySE(boon);
+	frame=0;
+	}
+	}
+	if(timer>=1000&&timer<=1600){
+	if(jalf==false||milf==false){
+	if(frame==1200&&GetArgument==2){
+	loop(8){
+	NuclearShot(3,GetX,GetY,rand(135,225),rand(1,4),0.7,0,0,"RED",400,true);
+	angle+=360/8;
+	}
+	loop(20){
+	CreateShotA(0,GetX,GetY,0);
+	SetShotDataA(0,0,2,GetAngleToPlayer+angle,0,0,5,kBLACK51);
+	FireShot(0);
+	angle+=18;
+	}
+	SpineLaser(rand(MinX,CenX),MaxY,270,255,0,0);
+	SpineLaser(rand(MinX,CenX),MinY,90,255,0,0);
+	PlaySE(kaku);
+	frame=1150;
+	}
+	}
+
+	}
+	if(timer==1600){
+	a=290;
+	timer=290;
+	count=290;
+	frame=290;
+	S_count=290;
+	angle=0;
+	}
+
+	if(GetLife<=10){
+	a=0;
+	timer=0;
+	count=0;
+	frame=0;
+	S_count=0;
+	count2++;
+
+	alternative(GetArgument)
+	case(0){
+	SetDamageRate(0,0);
+	}//ジャネット
+	case(1){
+	SetDamageRate(0,0);
+	}//ミシェル
+	case(2){
+	SetDamageRate(0,0);
+	}//無々夢
+
+	if(count2==1){PlaySE(gekiha);}
+	if(count2<120){
+	alternative(GetArgument)
+	case(0){
+	CherryFainal(GetX,GetY,rand(100,255),rand(100,255),rand(100,255));
+	}//ジャネット
+	case(1){
+	CherryFainal(GetX,GetY,rand(100,255),rand(100,255),rand(100,255));
+	}//ミシェル
+	case(2){
+	CherryFainal(GetX,GetY,rand(100,255),rand(100,255),rand(100,255));
+	}//無々夢
+	}
+
+	if(count2==120){
+	alternative(GetArgument)
+	case(0){
+	SetCommonDataEx("ls","Janet_Life",true);
+	SaveCommonDataEx("ls",GetCurrentScriptDirectory~".\LastSpell.dat");
+	PlaySE(gekiha);
+	loop(20){
+	CherryFainal(GetX,GetY,255,0,0);}
+	SetX(MinX-100);
+	}//ジャネット
+	case(1){
+	SetCommonDataEx("ls","Michel_Life",true);
+	SaveCommonDataEx("ls",GetCurrentScriptDirectory~".\LastSpell.dat");
+	PlaySE(gekiha);
+	loop(20){
+	CherryFainal(GetX,GetY,255,0,0);}
+	SetX(MinX-100);
+	}//ミシェル
+	case(2){
+	SetCommonDataEx("ls","Mumumu_Life",true);
+	SaveCommonDataEx("ls",GetCurrentScriptDirectory~".\LastSpell.dat");
+	PlaySE(gekiha);
+	loop(20){
+	CherryFainal(GetX,GetY,255,0,0);}
+	SetX(MaxX+100);
+	}//無々夢
+
+	if(count2==180){
+	alternative(GetArgument)
+	case(0){VanishEnemy;}//ジャネット
+	case(1){VanishEnemy;}//ミシェル
+	case(2){VanishEnemy;}//無々夢
+	}
+	}
+
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

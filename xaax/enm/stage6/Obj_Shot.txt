@@ -1,0 +1,1654 @@
+task NuclearShot(type,x,y,nangle,speed,maxscale,distance,minscale,color,kill,bomb){
+	/*引数
+	type　1:普通発射型　2:敵追従回転型　3:縮小発射型
+	xy　　設置座標or発射座標
+	nangl 発射時角度(type2の場合は初期方向)
+	speed 速度(type2の場合は回転速度。-1なら逆回転になり、少数点なら減速)
+	mxsc　最大の大きさ
+	dista 追従回転時の敵からの距離(type2以外の場合は0を指定する事)
+	misc　最小の大きさ(type3以外の場合は0を指定する事)
+	color 色指定(""を付ける事)
+	kill  出現からの消滅処理時間(マイナス指定で消滅なし)
+	bomb  ボム耐性
+	*/
+	let nuff2 = Obj_Create(OBJ_EFFECT);
+	let nuff  = Obj_Create(OBJ_EFFECT);
+	let shff  = Obj_Create(OBJ_SHOT);
+	let img   = GetCurrentScriptDirectory~".\enm6img\Nuclear.png";
+	let uv1   = [0,256,512,768,0,256,512,768];
+	let uv2   = [0,0,0,0,256,256,256,256];
+	let uv3   = [256,512,768,1024,256,512,768,1024];
+	let uv4   = [256,256,256,256,512,512,512,512];
+	//0赤1橙2黄3緑4水5青6紫7白
+	let colorC;
+	
+	let r=255;
+	let g=255;
+	let b=255;
+	let scale = 0;
+	let scp   = 0;
+	let killC = 0;
+	let distanceC = 0;
+	let grazeF = false;
+	
+	LoadGraphic(img);
+	
+	alternative(color)
+	case("RED"){colorC=0}
+	case("ORANGE"){colorC=1}
+	case("YELLOW"){colorC=2}
+	case("GREEN"){colorC=3}
+	case("AQUA"){colorC=4}
+	case("BLUE"){colorC=5}
+	case("PURPLE"){colorC=6}
+	case("WHITE"){colorC=7}
+	
+	Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+	ObjEffect_SetTexture(nuff,img);
+	ObjEffect_SetRenderState(nuff,ADD);
+	ObjEffect_SetPrimitiveType(nuff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(nuff,scale,scale);
+	Obj_SetSpeed(nuff,0);
+	Obj_SetAngle(nuff,nangle);
+	ObjEffect_SetAngle(nuff,0,0,nangle);
+	ObjEffect_SetLayer(nuff,3);
+	ObjEffect_CreateVertex(nuff,4);
+	ObjEffect_SetVertexXY(nuff,0,-128,-128);
+	ObjEffect_SetVertexXY(nuff,1,-128,128);
+	ObjEffect_SetVertexXY(nuff,2,128,-128);
+	ObjEffect_SetVertexXY(nuff,3,128,128);
+	ObjEffect_SetVertexColor(nuff,0,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff,1,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff,2,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff,3,125,r,g,b);
+	ObjEffect_SetVertexUV(nuff,0,uv1[colorC],uv2[colorC]);
+	ObjEffect_SetVertexUV(nuff,1,uv1[colorC],uv4[colorC]);
+	ObjEffect_SetVertexUV(nuff,2,uv3[colorC],uv2[colorC]);
+	ObjEffect_SetVertexUV(nuff,3,uv3[colorC],uv4[colorC]);
+	
+	Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+	ObjEffect_SetTexture(nuff2,img);
+	ObjEffect_SetRenderState(nuff2,ADD);
+	ObjEffect_SetPrimitiveType(nuff2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(nuff2,scale,scale);
+	Obj_SetSpeed(nuff2,0);
+	Obj_SetAngle(nuff2,nangle);
+	ObjEffect_SetAngle(nuff2,0,0,nangle);
+	ObjEffect_SetLayer(nuff2,3);
+	ObjEffect_CreateVertex(nuff2,4);
+	ObjEffect_SetVertexXY(nuff2,0,-128,-128);
+	ObjEffect_SetVertexXY(nuff2,1,-128,128);
+	ObjEffect_SetVertexXY(nuff2,2,128,-128);
+	ObjEffect_SetVertexXY(nuff2,3,128,128);
+	ObjEffect_SetVertexColor(nuff2,0,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff2,1,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff2,2,125,r,g,b);
+	ObjEffect_SetVertexColor(nuff2,3,125,r,g,b);
+	ObjEffect_SetVertexUV(nuff2,0,uv1[colorC],uv2[colorC]);
+	ObjEffect_SetVertexUV(nuff2,1,uv1[colorC],uv4[colorC]);
+	ObjEffect_SetVertexUV(nuff2,2,uv3[colorC],uv2[colorC]);
+	ObjEffect_SetVertexUV(nuff2,3,uv3[colorC],uv4[colorC]);
+	
+	Obj_SetPosition(shff,x,y);
+	Obj_SetSpeed(shff,speed);
+	Obj_SetAngle(shff,nangle);
+	Obj_SetAlpha(shff,0);
+	Obj_SetCollisionToPlayer(shff,false);
+	Obj_SetAutoDelete(shff,false);
+	ObjShot_SetBombResist(shff,bomb);
+	ObjShot_SetGraphic(shff,WHITE01);
+	
+	loop(15){
+		Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+		Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+		if(type!=2){
+			scale+=(maxscale/15);
+			ObjEffect_SetScale(nuff,scale,scale);
+			ObjEffect_SetScale(nuff2,scale,scale);
+		}
+		if(type==3){
+			Obj_SetSpeed(shff,speed);
+		}
+		
+		yield;
+	}
+	
+	loop{
+		let gnx = Obj_GetX(nuff);
+		let gny = Obj_GetY(nuff);
+		let gsx = Obj_GetX(shff);
+		let gsy = Obj_GetY(shff);
+		
+		Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+		Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+		
+		
+		if(type==2&&maxscale>scale){
+			scale+=(maxscale/500);
+			ObjEffect_SetScale(nuff,scale,scale);
+			ObjEffect_SetScale(nuff2,scale,scale)}
+			SetCollisionB(gsx,gsy,scale*120);
+		
+			scp++;
+			ObjEffect_SetScale(nuff,scale+0.03*sin(scp*10),scale+0.03*sin(scp*10));
+		
+			alternative(type)
+			case(1){
+				Obj_SetSpeed(shff,speed);
+				Obj_SetPosition(nuff2,gnx,gny);
+			}
+			case(2){
+				if(distance>distanceC){distanceC++}
+				Obj_SetPosition(shff,GetEnemyX+distanceC*sin((nangle+scp/2)*speed),GetEnemyY+distanceC*cos((nangle+scp/2)*speed));
+				Obj_SetPosition(nuff,gsx,gsy);
+				Obj_SetPosition(nuff2,gsx,gsy);
+			}
+			case(3){
+				Obj_SetSpeed(shff,speed);
+				Obj_SetPosition(nuff,gsx,gsy);
+				Obj_SetPosition(nuff2,gsx,gsy);
+				if(minscale<scale){scale-=0.005}
+				ObjEffect_SetScale(nuff,scale,scale);
+				ObjEffect_SetScale(nuff2,scale,scale);
+			}
+		
+			killC++;
+			if(killC>kill&&kill>=0){Obj_Delete(nuff);Obj_Delete(nuff2);Obj_Delete(shff);
+		}
+		
+		if(scale<=0){
+			Obj_Delete(nuff);
+			Obj_Delete(nuff2);
+			Obj_Delete(shff);
+			break;
+		}
+		
+		if(OnBomb==true&&bomb==false){
+			Obj_Delete(nuff);
+			Obj_Delete(nuff2);
+			Obj_Delete(shff);
+			break;
+		}
+		if(type!=2){
+			if(gny>=MaxY+250||gny<=MinY-250||gnx>=MaxX+250||gny<=MinY-250){
+				Obj_Delete(nuff);
+				Obj_Delete(nuff2);
+				Obj_Delete(shff);
+				break;
+			}
+		}
+		if(Obj_BeDeleted(nuff)==true){break;}
+		if(Obj_BeDeleted(shff)==true){
+			Obj_Delete(nuff2);
+			Obj_Delete(nuff);
+			break;
+		}
+		
+		yield;
+	}
+}
+	
+	task NuclearShot2(type,x,y,nangle,speed,maxscale,distance,minscale,color,kill,bomb){
+		/*引数
+		type　1:普通発射型　2:敵追従回転型　3:縮小発射型
+		xy　　設置座標or発射座標
+		nangl 発射時角度(type2の場合は初期方向)
+		speed 速度(type2の場合は回転速度。-1なら逆回転になり、少数点なら減速)
+		mxsc　最大の大きさ
+		dista 追従回転時の敵からの距離(type2以外の場合は0を指定する事)
+		misc　最小の大きさ(type3以外の場合は0を指定する事)
+		color 色指定(""を付ける事)
+		kill  出現からの消滅処理時間(マイナス指定で消滅なし)
+		bomb  ボム耐性
+		*/
+		let nuff  = Obj_Create(OBJ_EFFECT);
+		let nuff2 = Obj_Create(OBJ_EFFECT);
+		let shff  = Obj_Create(OBJ_SHOT);
+		let img   = GetCurrentScriptDirectory~".\enm6img\Nuclear2.png";
+		let uv1   = [0,256,512,768,0,256,512,768];
+		let uv2   = [0,0,0,0,256,256,256,256];
+		let uv3   = [256,512,768,1024,256,512,768,1024];
+		let uv4   = [256,256,256,256,512,512,512,512];
+		//0赤1橙2黄3緑4水5青6紫7白
+		let colorC;
+		
+		let r=0;
+		let g=0;
+		let b=0;
+		let scale = 0;
+		let scp   = 0;
+		let killC = 0;
+		let distanceC = 0;
+		let grazeF = false;
+		
+		LoadGraphic(img);
+		
+		alternative(color)
+		case("RED"){colorC=0}
+		case("ORANGE"){colorC=1}
+		case("YELLOW"){colorC=2}
+		case("GREEN"){colorC=3}
+		case("AQUA"){colorC=4}
+		case("BLUE"){colorC=5}
+		case("PURPLE"){colorC=6}
+		case("WHITE"){colorC=7}
+		
+		Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+		ObjEffect_SetTexture(nuff,img);
+		ObjEffect_SetRenderState(nuff,ALPHA);
+		ObjEffect_SetPrimitiveType(nuff,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(nuff,scale,scale);
+		Obj_SetSpeed(nuff,0);
+		Obj_SetAngle(nuff,nangle);
+		ObjEffect_SetAngle(nuff,0,0,nangle);
+		ObjEffect_SetLayer(nuff,3);
+		ObjEffect_CreateVertex(nuff,4);
+		ObjEffect_SetVertexXY(nuff,0,-128,-128);
+		ObjEffect_SetVertexXY(nuff,1,-128,128);
+		ObjEffect_SetVertexXY(nuff,2,128,-128);
+		ObjEffect_SetVertexXY(nuff,3,128,128);
+		ObjEffect_SetVertexColor(nuff,0,150,255,255,255);
+		ObjEffect_SetVertexColor(nuff,1,150,255,255,255);
+		ObjEffect_SetVertexColor(nuff,2,150,255,255,255);
+		ObjEffect_SetVertexColor(nuff,3,150,255,255,255);
+		ObjEffect_SetVertexUV(nuff,0,uv1[colorC],uv2[colorC]);
+		ObjEffect_SetVertexUV(nuff,1,uv1[colorC],uv4[colorC]);
+		ObjEffect_SetVertexUV(nuff,2,uv3[colorC],uv2[colorC]);
+		ObjEffect_SetVertexUV(nuff,3,uv3[colorC],uv4[colorC]);
+		
+		Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+		ObjEffect_SetTexture(nuff2,img);
+		ObjEffect_SetRenderState(nuff2,ALPHA);
+		ObjEffect_SetPrimitiveType(nuff2,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(nuff2,scale,scale);
+		Obj_SetSpeed(nuff2,0);
+		Obj_SetAngle(nuff2,nangle);
+		ObjEffect_SetLayer(nuff2,3);
+		ObjEffect_CreateVertex(nuff2,4);
+		ObjEffect_SetVertexXY(nuff2,0,-128,-128);
+		ObjEffect_SetVertexXY(nuff2,1,-128,128);
+		ObjEffect_SetVertexXY(nuff2,2,128,-128);
+		ObjEffect_SetVertexXY(nuff2,3,128,128);
+		ObjEffect_SetVertexColor(nuff2,0,255,r,g,b);
+		ObjEffect_SetVertexColor(nuff2,1,255,r,g,b);
+		ObjEffect_SetVertexColor(nuff2,2,255,r,g,b);
+		ObjEffect_SetVertexColor(nuff2,3,255,r,g,b);
+		ObjEffect_SetVertexUV(nuff2,0,uv1[7],uv2[7]);
+		ObjEffect_SetVertexUV(nuff2,1,uv1[7],uv4[7]);
+		ObjEffect_SetVertexUV(nuff2,2,uv3[7],uv2[7]);
+		ObjEffect_SetVertexUV(nuff2,3,uv3[7],uv4[7]);
+		
+		Obj_SetPosition(shff,x,y);
+		Obj_SetSpeed(shff,speed);
+		Obj_SetAngle(shff,nangle);
+		Obj_SetAlpha(shff,0);
+		Obj_SetCollisionToPlayer(shff,false);
+		Obj_SetAutoDelete(shff,false);
+		ObjShot_SetBombResist(shff,bomb);
+		ObjShot_SetGraphic(shff,WHITE01);
+		
+		loop(15){
+			Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+			Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+			if(type!=2){
+				scale+=(maxscale/15);
+				ObjEffect_SetScale(nuff,scale,scale);
+				ObjEffect_SetScale(nuff2,scale,scale);
+			}
+			if(type==3){
+				Obj_SetSpeed(shff,speed);
+			}
+			yield;
+		}
+		
+		loop{
+			let gnx = Obj_GetX(nuff);
+			let gny = Obj_GetY(nuff);
+			let gsx = Obj_GetX(shff);
+			let gsy = Obj_GetY(shff);
+			
+			Obj_SetPosition(nuff,Obj_GetX(shff),Obj_GetY(shff));
+			Obj_SetPosition(nuff2,Obj_GetX(shff),Obj_GetY(shff));
+			
+			
+			if(type==2&&maxscale>scale){
+				scale+=(maxscale/500);
+				ObjEffect_SetScale(nuff,scale,scale);
+				ObjEffect_SetScale(nuff2,scale,scale)
+			}
+			SetCollisionB(gsx,gsy,scale*120);
+			
+			scp++;
+			ObjEffect_SetScale(nuff,scale+0.02*sin(scp*10),scale+0.02*sin(scp*10));
+			ObjEffect_SetAngle(nuff,0,0,scp*-100);
+			ObjEffect_SetAngle(nuff2,0,0,scp*100);
+			
+			alternative(type)
+			case(1){
+				Obj_SetSpeed(shff,speed);
+				Obj_SetPosition(nuff2,gnx,gny);
+			}
+			case(2){
+				if(distance>distanceC){distanceC++}
+				Obj_SetPosition(shff,GetEnemyX+distanceC*sin((nangle+scp/2)*speed),GetEnemyY+distanceC*cos((nangle+scp/2)*speed));
+				Obj_SetPosition(nuff,gsx,gsy);
+				Obj_SetPosition(nuff2,gsx,gsy);
+			}
+			case(3){
+				Obj_SetSpeed(shff,speed);
+				Obj_SetPosition(nuff,gsx,gsy);
+				Obj_SetPosition(nuff2,gsx,gsy);
+				if(minscale<scale){scale-=0.005}
+				ObjEffect_SetScale(nuff,scale,scale);
+				ObjEffect_SetScale(nuff2,scale,scale);
+			}
+			
+			killC++;
+			if(killC>kill&&kill>=0){
+				Obj_Delete(nuff);
+				Obj_Delete(nuff2);
+				Obj_Delete(shff);
+				break;
+			}
+			
+			if(scale<=0){
+				Obj_Delete(nuff);
+				Obj_Delete(nuff2);
+				Obj_Delete(shff);
+				break;
+			}
+			
+			if(OnBomb==true&&bomb==false){
+				Obj_Delete(nuff);
+				Obj_Delete(nuff2);
+				Obj_Delete(shff);
+				break;
+			}
+			if(type!=2){
+				if(gny>=MaxY+250||gny<=MinY-250||gnx>=MaxX+250||gny<=MinY-250){
+					Obj_Delete(nuff);
+					Obj_Delete(nuff2);
+					Obj_Delete(shff);
+					break;
+				}
+			}
+			if(Obj_BeDeleted(nuff)==true){break;}
+			if(Obj_BeDeleted(shff)==true){
+				Obj_Delete(nuff2);
+				Obj_Delete(nuff);
+				break;
+			}
+			
+			yield;
+		}
+	}
+	
+	task CompressionLaser(x,y,angle,pla,length,width,r,g,b,delay,kill,source){
+	let se       = GetCurrentScriptDirectory~".\enm6se\CLaser.wav";
+	let img      = GetCurrentScriptDirectory~".\enm6eff\laser_eff_add.png";
+	let las      = Obj_Create(OBJ_LASER);
+	let ef1      = Obj_Create(OBJ_EFFECT);
+	let ef2      = Obj_Create(OBJ_EFFECT);
+	let delete   = false;
+	let killf    = 0;
+	let alpha    = 255;
+	let length_l = 0;
+	let length_e = 0;
+	let scax     = 0.15;
+	let delay_e  = 0;
+	let cc       = 0;
+	let pap      = 0;
+	
+	LoadGraphic(img);
+	
+	Obj_SetPosition(las,x,y);
+	Obj_SetAngle(las,angle);
+	Obj_SetAutoDelete(las,false);
+	Obj_SetAlpha(las,0);
+	ObjShot_SetDelay(las,delay);
+	ObjShot_SetBombResist(las,true);
+	ObjShot_SetGraphic(las,kRED41);
+	ObjLaser_SetWidth(las,width);
+	ObjLaser_SetSource(las,false);
+	
+	Obj_SetPosition(ef1,x,y);
+	ObjEffect_SetTexture(ef1,img);
+	ObjEffect_SetRenderState(ef1,ADD);
+	ObjEffect_SetPrimitiveType(ef1,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetAngle(ef1,0,0,angle-90);
+	ObjEffect_SetLayer(ef1,3);
+	ObjEffect_CreateVertex(ef1,4);
+	ObjEffect_SetVertexUV(ef1,0,0,0);
+	ObjEffect_SetVertexUV(ef1,1,0,20);
+	ObjEffect_SetVertexUV(ef1,2,20,0);
+	ObjEffect_SetVertexUV(ef1,3,20,20);
+	Obj_SetPosition(ef2,x,y);
+	ObjEffect_SetTexture(ef2,img);
+	ObjEffect_SetRenderState(ef2,ADD);
+	ObjEffect_SetPrimitiveType(ef2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetAngle(ef2,0,0,angle-90);
+	ObjEffect_SetLayer(ef2,3);
+	ObjEffect_CreateVertex(ef2,4);
+	ObjEffect_SetVertexUV(ef2,0,0,0);
+	ObjEffect_SetVertexUV(ef2,1,0,20);
+	ObjEffect_SetVertexUV(ef2,2,20,0);
+	ObjEffect_SetVertexUV(ef2,3,20,20);
+	
+	PlaySE(laser);
+	
+	loop{
+	pap+=pla;
+	Obj_SetAngle(las,(angle)+pap);
+	ObjEffect_SetAngle(ef1,0,0,(angle-90)+pap);
+	ObjEffect_SetAngle(ef2,0,0,(angle-90)+pap);
+	
+	cc++;
+	if(cc==5){
+	if(source==true){LightSource(x,y,angle,255,255,255)}//光源は切り替え可能
+	cc=0;
+	}
+	
+	killf++;
+	if(killf>kill&&kill>0){delete=true}
+	if(delete==true&&alpha<=0){
+		Obj_Delete(ef1);
+		Obj_Delete(ef2);
+		break;
+	}
+	
+	delay_e++;
+	if(delay_e>delay&&scax<(width/100)*2&&delete==false){scax+=0.1}
+	if(scax<(width/100)*2&&delete==false){
+	ObjEffect_SetScale(ef1,scax,1);
+	ObjEffect_SetScale(ef2,scax-0.1,1);
+	}
+	if(scax>=(width/100)*2&&delete==false){ObjEffect_SetScale(ef1,scax+0.05*sin(delay_e*50),1);}
+	if(scax>0&&delete==true){scax-=0.1}
+	if(delete==true){
+	Obj_Delete(las);
+	ObjEffect_SetScale(ef1,scax,1);
+	ObjEffect_SetScale(ef2,scax,1);
+	}
+	
+	if(length_l<length){length_l+=length/20}
+	ObjLaser_SetLength(las,length_l);
+	
+	if(length_e<length){length_e+=length/20}
+	ObjEffect_SetVertexXY(ef1,0,-20,-20);
+	ObjEffect_SetVertexXY(ef1,1,-20,length_e);
+	ObjEffect_SetVertexXY(ef1,2,20,-20);
+	ObjEffect_SetVertexXY(ef1,3,20,length_e);
+	ObjEffect_SetVertexXY(ef2,0,-20,-20);
+	ObjEffect_SetVertexXY(ef2,1,-20,length_e);
+	ObjEffect_SetVertexXY(ef2,2,20,-20);
+	ObjEffect_SetVertexXY(ef2,3,20,length_e);
+	
+	if(delete==true&&alpha>0){alpha-=15}
+	if(r==0&&g==0&&b==0){ObjEffect_SetRenderState(ef1,ALPHA)}
+	ObjEffect_SetVertexColor(ef1,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,3,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef2,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(ef2,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(ef2,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(ef2,3,alpha,255,255,255);
+	
+	if(Obj_BeDeleted(las)==true){
+		Obj_Delete(ef1);
+		Obj_Delete(ef2);
+		break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task CompressionLaser2(x,y,angle,pla,length,width,r,g,b,delay,kill,source){
+	let se       = GetCurrentScriptDirectory~".\enm6se\CLaser.wav";
+	let img      = GetCurrentScriptDirectory~".\enm6eff\laser_eff_alpha.png";
+	let las      = Obj_Create(OBJ_LASER);
+	let ef1      = Obj_Create(OBJ_EFFECT);
+	let ef2      = Obj_Create(OBJ_EFFECT);
+	let delete   = false;
+	let killf    = 0;
+	let alpha    = 255;
+	let length_l = 0;
+	let length_e = 0;
+	let scax     = 0.15;
+	let delay_e  = 0;
+	let cc       = 0;
+	let pap      = 0;
+	
+	LoadGraphic(img);
+	
+	Obj_SetPosition(las,x,y);
+	Obj_SetAngle(las,angle);
+	Obj_SetAutoDelete(las,false);
+	Obj_SetAlpha(las,0);
+	ObjShot_SetDelay(las,delay);
+	ObjShot_SetBombResist(las,true);
+	ObjShot_SetGraphic(las,kRED41);
+	ObjLaser_SetWidth(las,width);
+	ObjLaser_SetSource(las,false);
+	
+	Obj_SetPosition(ef1,x,y);
+	ObjEffect_SetTexture(ef1,img);
+	ObjEffect_SetRenderState(ef1,ALPHA);
+	ObjEffect_SetPrimitiveType(ef1,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetAngle(ef1,0,0,angle-90);
+	ObjEffect_SetLayer(ef1,3);
+	ObjEffect_CreateVertex(ef1,4);
+	ObjEffect_SetVertexUV(ef1,0,0,0);
+	ObjEffect_SetVertexUV(ef1,1,0,20);
+	ObjEffect_SetVertexUV(ef1,2,20,0);
+	ObjEffect_SetVertexUV(ef1,3,20,20);
+	Obj_SetPosition(ef2,x,y);
+	ObjEffect_SetTexture(ef2,img);
+	ObjEffect_SetRenderState(ef2,ALPHA);
+	ObjEffect_SetPrimitiveType(ef2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetAngle(ef2,0,0,angle-90);
+	ObjEffect_SetLayer(ef2,3);
+	ObjEffect_CreateVertex(ef2,4);
+	ObjEffect_SetVertexUV(ef2,0,0,0);
+	ObjEffect_SetVertexUV(ef2,1,0,20);
+	ObjEffect_SetVertexUV(ef2,2,20,0);
+	ObjEffect_SetVertexUV(ef2,3,20,20);
+	
+	//PlaySE(laser);
+	
+	loop{
+	pap+=pla;
+	Obj_SetAngle(las,(angle)+pap);
+	ObjEffect_SetAngle(ef1,0,0,(angle-90)+pap);
+	ObjEffect_SetAngle(ef2,0,0,(angle-90)+pap);
+	
+	cc++;
+	if(cc==5){
+	if(source==true){LightSource(x,y,angle,255,255,255)}//光源は切り替え可能
+	cc=0;
+	}
+	
+	killf++;
+	if(killf>kill&&kill>0){delete=true}
+	if(delete==true&&alpha<=0){Obj_Delete(ef1);Obj_Delete(ef2);break}
+	
+	delay_e++;
+	if(delay_e>delay&&scax<(width/100)*2&&delete==false){scax+=0.1}
+	if(scax<(width/100)*2&&delete==false){
+	ObjEffect_SetScale(ef1,scax,1);
+	ObjEffect_SetScale(ef2,scax-0.1,1);
+	}
+	if(scax>=(width/100)*2&&delete==false){ObjEffect_SetScale(ef1,scax+0.05*sin(delay_e*50),1);}
+	if(scax>0&&delete==true){scax-=0.1}
+	if(delete==true){
+	Obj_Delete(las);
+	ObjEffect_SetScale(ef1,scax,1);
+	ObjEffect_SetScale(ef2,scax,1);
+	}
+	
+	
+	if(length_l<length){length_l+=length/20}
+	ObjLaser_SetLength(las,length_l);
+	
+	if(length_e<length){length_e+=length/20}
+	ObjEffect_SetVertexXY(ef1,0,-20,-20);
+	ObjEffect_SetVertexXY(ef1,1,-20,length_e);
+	ObjEffect_SetVertexXY(ef1,2,20,-20);
+	ObjEffect_SetVertexXY(ef1,3,20,length_e);
+	ObjEffect_SetVertexXY(ef2,0,-20,-20);
+	ObjEffect_SetVertexXY(ef2,1,-20,length_e);
+	ObjEffect_SetVertexXY(ef2,2,20,-20);
+	ObjEffect_SetVertexXY(ef2,3,20,length_e);
+	
+	if(delete==true&&alpha>0){alpha-=15}
+	if(r==0&&g==0&&b==0){ObjEffect_SetRenderState(ef1,ALPHA)}
+	ObjEffect_SetVertexColor(ef1,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef1,3,alpha,r,g,b);
+	ObjEffect_SetVertexColor(ef2,0,alpha,0,0,0);
+	ObjEffect_SetVertexColor(ef2,1,alpha,0,0,0);
+	ObjEffect_SetVertexColor(ef2,2,alpha,0,0,0);
+	ObjEffect_SetVertexColor(ef2,3,alpha,0,0,0);
+	
+	if(Obj_BeDeleted(las)==true){
+	Obj_Delete(ef1);
+	Obj_Delete(ef2);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task SpineLaser(x,y,angle,r,g,b){
+		CompressionLaserS(x-5,y-70,angle-10,0,100,20,r,g,b,0,120,false);
+		CompressionLaserS(x+5,y-50,angle+10,0,150,20,r,g,b,0,120,false);
+		CompressionLaserS(x,y,angle-20,0,150,30,r,g,b,0,120,false);
+		CompressionLaserS(x,y,angle,0,300,30,r,g,b,0,120,false);
+	}
+	
+	task CompressionLaserS(x,y,angle,pla,length,width,r,g,b,delay,kill,source){
+		let se       = GetCurrentScriptDirectory~".\enm6se\CLaser.wav";
+		let img      = GetCurrentScriptDirectory~".\enm6eff\laser_eff_alpha.png";
+		let img2     = GetCurrentScriptDirectory~".\enm6eff\laser_eff_add.png";
+		let las      = Obj_Create(OBJ_LASER);
+		let ef1      = Obj_Create(OBJ_EFFECT);
+		let ef2      = Obj_Create(OBJ_EFFECT);
+		let delete   = false;
+		let killf    = 0;
+		let alpha    = 255;
+		let length_l = 0;
+		let length_e = 0;
+		let scax     = 0.15;
+		let delay_e  = 0;
+		let cc       = 0;
+		let pap      = 0;
+		
+		LoadGraphic(img);
+		LoadGraphic(img2);
+		
+		Obj_SetPosition(las,x,y);
+		Obj_SetAngle(las,angle);
+		Obj_SetAutoDelete(las,false);
+		Obj_SetAlpha(las,0);
+		ObjShot_SetDelay(las,delay);
+		ObjShot_SetBombResist(las,true);
+		ObjShot_SetGraphic(las,kRED41);
+		ObjLaser_SetWidth(las,width);
+		ObjLaser_SetSource(las,false);
+		
+		Obj_SetPosition(ef1,x,y);
+		ObjEffect_SetTexture(ef1,img2);
+		ObjEffect_SetRenderState(ef1,ADD);
+		ObjEffect_SetPrimitiveType(ef1,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(ef1,0,0,angle-90);
+		ObjEffect_SetLayer(ef1,3);
+		ObjEffect_CreateVertex(ef1,4);
+		ObjEffect_SetVertexUV(ef1,0,0,0);
+		ObjEffect_SetVertexUV(ef1,1,0,20);
+		ObjEffect_SetVertexUV(ef1,2,20,0);
+		ObjEffect_SetVertexUV(ef1,3,20,20);
+		Obj_SetPosition(ef2,x,y);
+		ObjEffect_SetTexture(ef2,img);
+		ObjEffect_SetRenderState(ef2,ALPHA);
+		ObjEffect_SetPrimitiveType(ef2,PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(ef2,0,0,angle-90);
+		ObjEffect_SetLayer(ef2,3);
+		ObjEffect_CreateVertex(ef2,4);
+		ObjEffect_SetVertexUV(ef2,0,0,0);
+		ObjEffect_SetVertexUV(ef2,1,0,20);
+		ObjEffect_SetVertexUV(ef2,2,20,0);
+		ObjEffect_SetVertexUV(ef2,3,20,20);
+		
+		PlaySE(laser);
+		
+		loop{
+			pap+=pla;
+			Obj_SetAngle(las,(angle)+pap);
+			ObjEffect_SetAngle(ef1,0,0,(angle-90)+pap);
+			ObjEffect_SetAngle(ef2,0,0,(angle-90)+pap);
+			
+			cc++;
+			if(cc==5){
+				if(source==true){
+					LightSource(x,y,angle,255,255,255);
+				}//光源は切り替え可能
+				cc=0;
+			}
+			
+			killf++;
+			if(killf>kill&&kill>0){delete=true}
+			if(delete==true&&alpha<=0){
+				Obj_Delete(ef1);
+				Obj_Delete(ef2);
+				break;
+			}
+			
+			delay_e++;
+			if(delay_e>delay&&scax<(width/100)*2&&delete==false){scax+=0.1}
+			if(scax<(width/100)*2&&delete==false){
+			ObjEffect_SetScale(ef1,scax,1);
+			ObjEffect_SetScale(ef2,scax-0.1,1);
+			}
+			if(scax>=(width/100)*2&&delete==false){
+				ObjEffect_SetScale(ef1,scax+0.05*sin(delay_e*50),1);
+			}
+			if(scax>0&&delete==true){scax-=0.1}
+			if(delete==true){
+				Obj_Delete(las);
+				ObjEffect_SetScale(ef1,scax,1);
+				ObjEffect_SetScale(ef2,scax,1);
+			}
+			
+			if(length_l<length){length_l+=length/10}
+			ObjLaser_SetLength(las,length_l);
+			
+			if(length_e<length){length_e+=length/10}
+			ObjEffect_SetVertexXY(ef1,0,-20,-20);
+			ObjEffect_SetVertexXY(ef1,1,-5,length_e);
+			ObjEffect_SetVertexXY(ef1,2,20,-20);
+			ObjEffect_SetVertexXY(ef1,3,5,length_e);
+			ObjEffect_SetVertexXY(ef2,0,-20,-20);
+			ObjEffect_SetVertexXY(ef2,1,-5,length_e);
+			ObjEffect_SetVertexXY(ef2,2,20,-20);
+			ObjEffect_SetVertexXY(ef2,3,5,length_e);
+			
+			if(delete==true&&alpha>0){alpha-=15}
+			if(r==0&&g==0&&b==0){ObjEffect_SetRenderState(ef1,ALPHA)}
+			ObjEffect_SetVertexColor(ef1,0,alpha,r,g,b);
+			ObjEffect_SetVertexColor(ef1,1,alpha,r,g,b);
+			ObjEffect_SetVertexColor(ef1,2,alpha,r,g,b);
+			ObjEffect_SetVertexColor(ef1,3,alpha,r,g,b);
+			ObjEffect_SetVertexColor(ef2,0,alpha,0,0,0);
+			ObjEffect_SetVertexColor(ef2,1,alpha,0,0,0);
+			ObjEffect_SetVertexColor(ef2,2,alpha,0,0,0);
+			ObjEffect_SetVertexColor(ef2,3,alpha,0,0,0);
+			
+			if(Obj_BeDeleted(las)==true){
+				Obj_Delete(ef1);
+				Obj_Delete(ef2);
+				break;
+			}
+			
+			yield;
+		}
+	}
+	
+	task LightSource(x,y,angle,r,g,b){
+	let img      = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+	let cor      = Obj_Create(OBJ_EFFECT);
+	let alpha    = 0;
+	let sca      = rand(1,1.5);
+	
+	LoadGraphic(img);
+	
+	Obj_SetPosition(cor,x,y);
+	ObjEffect_SetTexture(cor,img);
+	ObjEffect_SetRenderState(cor,ADD);
+	ObjEffect_SetPrimitiveType(cor,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetAngle(cor,0,0,rand(0,360));
+	ObjEffect_SetLayer(cor,5);
+	Obj_SetAngle(cor,angle);
+	Obj_SetSpeed(cor,rand(1,2));
+	ObjEffect_CreateVertex(cor,4);
+	ObjEffect_SetVertexXY(cor,0,-18,-17);
+	ObjEffect_SetVertexXY(cor,1,-18,17);
+	ObjEffect_SetVertexXY(cor,2,18,-17);
+	ObjEffect_SetVertexXY(cor,3,18,17);
+	ObjEffect_SetVertexUV(cor,0,53,136);
+	ObjEffect_SetVertexUV(cor,1,53,170);
+	ObjEffect_SetVertexUV(cor,2,89,136);
+	ObjEffect_SetVertexUV(cor,3,89,170);
+	
+	loop{
+	if(sca<=0){Obj_Delete(cor);break}
+	
+	if(alpha<255){alpha+=15}
+	if(alpha>=255&&sca>0){sca-=0.1}
+	ObjEffect_SetScale(cor,sca,sca);
+	ObjEffect_SetVertexColor(cor,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(cor,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(cor,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(cor,3,alpha,r,g,b);
+	
+	yield;
+	}
+	}
+	
+	task Tlaser(x,y,speed,angle,move,hex,shot,length,width,kill){
+	let Leff     = Obj_Create(OBJ_SHOT);
+	let Leff2    = Obj_Create(OBJ_SINUATE_LASER);
+	let la=0;
+	let lap=1;
+	let die=0;
+	
+	SetShotColor(255,255,255);
+	
+	Obj_SetPosition(Leff,x,y);
+	Obj_SetAlpha(Leff,0);
+	Obj_SetAngle(Leff,angle);
+	ObjShot_SetBombResist(Leff,false);
+	Obj_SetAutoDelete(Leff,false);
+	ObjShot_SetGraphic(Leff,WHITE05);
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff2),Obj_GetY(Leff2));
+	Obj_SetCollisionToObject(Leff2,true);
+	ObjShot_SetBombResist(Leff2,false);
+	Obj_SetAutoDelete(Leff2,false);
+	ObjShot_SetGraphic(Leff2,shot);
+	Obj_SetAlpha(Leff2,255);
+	
+	loop{
+	if(Obj_BeDeleted(Leff)==true){break}
+	
+	if(kill>0){die++;}
+	if(die>kill){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	la+=lap;
+	
+	Obj_SetCollisionToObject(Leff,false);
+	Obj_SetSpeed(Leff,speed);
+	Obj_SetAngle(Leff,Obj_GetAngle(Leff)+move*sin(la*hex));
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff),Obj_GetY(Leff));
+	ObjSinuateLaser_SetLength(Leff2,length);
+	ObjSinuateLaser_SetWidth(Leff2,width);
+	Obj_SetAngle(Leff2,Obj_GetAngle(Leff));
+	
+	if(Obj_GetX(Leff)>MaxX+300||Obj_GetX(Leff)<MinX-300
+	||Obj_GetY(Leff)>MaxY+300||Obj_GetY(Leff)<MinY-300){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	yield;
+	}
+	}
+	
+	task Tlaser2(x,y,speed,move,hex,shot,length,width,kill){
+	let Leff     = Obj_Create(OBJ_SHOT);
+	let Leff2    = Obj_Create(OBJ_SINUATE_LASER);
+	let la=0;
+	let lap=1;
+	let die=0;
+	
+	SetShotColor(255,255,255);
+	
+	Obj_SetPosition(Leff,x,y);
+	Obj_SetAlpha(Leff,0);
+	ObjShot_SetBombResist(Leff,false);
+	Obj_SetAutoDelete(Leff,false);
+	ObjShot_SetGraphic(Leff,WHITE05);
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff2),Obj_GetY(Leff2));
+	Obj_SetCollisionToObject(Leff2,true);
+	ObjShot_SetBombResist(Leff2,false);
+	Obj_SetAutoDelete(Leff2,false);
+	ObjShot_SetGraphic(Leff2,shot);
+	Obj_SetAlpha(Leff2,255);
+	
+	loop{
+	if(Obj_BeDeleted(Leff)==true){break}
+	
+	let ea = atan2(GetEnemyY-Obj_GetY(Leff),GetEnemyX-Obj_GetX(Leff));
+	
+	if(kill>0){die++;}
+	if(die>kill){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	la+=lap;
+	
+	Obj_SetCollisionToObject(Leff,false);
+	Obj_SetSpeed(Leff,speed);
+	Obj_SetAngle(Leff,ea+move*sin(la*hex));
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff),Obj_GetY(Leff));
+	ObjSinuateLaser_SetLength(Leff2,length);
+	ObjSinuateLaser_SetWidth(Leff2,width);
+	Obj_SetAngle(Leff2,Obj_GetAngle(Leff));
+	
+	if(Obj_GetX(Leff)>MaxX+300||Obj_GetX(Leff)<MinX-300
+	||Obj_GetY(Leff)>MaxY+300||Obj_GetY(Leff)<MinY-300){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	yield;
+	}
+	}
+	
+	task Tlaser3(x,y,speed,move,hex,shot,length,width,kill,long){
+	let Leff     = Obj_Create(OBJ_SHOT);
+	let Leff2    = Obj_Create(OBJ_SINUATE_LASER);
+	let la=0;
+	let lap=1;
+	let die=0;
+	let frame=0;
+	let move1=0;
+	let moveA=0;
+	
+	SetShotColor(255,255,255);
+	
+	Obj_SetPosition(Leff,x,y);
+	Obj_SetAlpha(Leff,0);
+	ObjShot_SetBombResist(Leff,false);
+	Obj_SetAutoDelete(Leff,false);
+	ObjShot_SetGraphic(Leff,WHITE05);
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff2),Obj_GetY(Leff2));
+	Obj_SetCollisionToObject(Leff2,true);
+	ObjShot_SetBombResist(Leff2,false);
+	Obj_SetAutoDelete(Leff2,false);
+	ObjShot_SetGraphic(Leff2,shot);
+	Obj_SetAlpha(Leff2,255);
+	
+	loop{
+	if(Obj_BeDeleted(Leff)==true){break}
+	
+	let ea = atan2(GetEnemyY-Obj_GetY(Leff),GetEnemyX-Obj_GetX(Leff));
+	
+	frame++;
+	if(long<frame){
+	if(move1<180){moveA+=1;}
+	move1=180*sin(moveA);
+	}
+	
+	if(kill>0){die++;}
+	if(die>kill){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	la+=lap;
+	
+	Obj_SetCollisionToObject(Leff,false);
+	Obj_SetSpeed(Leff,speed);
+	Obj_SetAngle(Leff,ea+move*sin(la*hex)+move1);
+	
+	Obj_SetPosition(Leff2,Obj_GetX(Leff),Obj_GetY(Leff));
+	ObjSinuateLaser_SetLength(Leff2,length);
+	ObjSinuateLaser_SetWidth(Leff2,width);
+	Obj_SetAngle(Leff2,Obj_GetAngle(Leff));
+	
+	if(Obj_GetX(Leff)>MaxX+300||Obj_GetX(Leff)<MinX-300
+	||Obj_GetY(Leff)>MaxY+300||Obj_GetY(Leff)<MinY-300){
+	Obj_Delete(Leff);
+	Obj_Delete(Leff2)}
+	
+	yield;
+	}
+	}
+	
+	task FishShot(x,y,angle,speed,color,kill,bomb){
+	let id        = Obj_Create(OBJ_SHOT);
+	let id2       = Obj_Create(OBJ_EFFECT);
+	let img00     = GetCurrentScriptDirectory~".\enm6img\fish_bullet.png";
+	let die       = 0;
+	let alpha     = 0;
+	let rgb       = [255,255,255];
+	let sca1      = 0;
+	let scaA      = 0;
+	
+	LoadGraphic(img00);
+	
+	Obj_SetPosition(id,x,y);
+	Obj_SetAngle(id,angle);
+	Obj_SetAlpha(id,0);
+	Obj_SetCollisionToPlayer(id,true);
+	Obj_SetAutoDelete(id,false);
+	ObjShot_SetBombResist(id,bomb);
+	ObjShot_SetGraphic(id,WHITE01);
+	
+	ObjEffect_SetTexture(id2,img00);
+	ObjEffect_SetRenderState(id2,ALPHA);
+	ObjEffect_SetPrimitiveType(id2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id2,5);
+	ObjEffect_CreateVertex(id2,4);
+	ObjEffect_SetVertexXY(id2,0,-18,-11);
+	ObjEffect_SetVertexXY(id2,1,-18,11);
+	ObjEffect_SetVertexXY(id2,2,18,-11);
+	ObjEffect_SetVertexXY(id2,3,18,11);
+	
+	alternative(color)
+	case("RED"){
+	ObjEffect_SetVertexUV(id2,0,0,0);
+	ObjEffect_SetVertexUV(id2,1,0,22);
+	ObjEffect_SetVertexUV(id2,2,35,0);
+	ObjEffect_SetVertexUV(id2,3,35,22);}
+	case("ORANGE"){
+	ObjEffect_SetVertexUV(id2,0,36,0);
+	ObjEffect_SetVertexUV(id2,1,36,22);
+	ObjEffect_SetVertexUV(id2,2,71,0);
+	ObjEffect_SetVertexUV(id2,3,71,22);}
+	case("YELLOW"){
+	ObjEffect_SetVertexUV(id2,0,72,0);
+	ObjEffect_SetVertexUV(id2,1,72,22);
+	ObjEffect_SetVertexUV(id2,2,107,0);
+	ObjEffect_SetVertexUV(id2,3,107,22);}
+	case("GREEN"){
+	ObjEffect_SetVertexUV(id2,0,108,0);
+	ObjEffect_SetVertexUV(id2,1,108,22);
+	ObjEffect_SetVertexUV(id2,2,143,0);
+	ObjEffect_SetVertexUV(id2,3,143,22);}
+	case("BLUE"){
+	ObjEffect_SetVertexUV(id2,0,0,25);
+	ObjEffect_SetVertexUV(id2,1,0,47);
+	ObjEffect_SetVertexUV(id2,2,35,25);
+	ObjEffect_SetVertexUV(id2,3,35,47);}
+	case("AQUA"){
+	ObjEffect_SetVertexUV(id2,0,36,25);
+	ObjEffect_SetVertexUV(id2,1,36,47);
+	ObjEffect_SetVertexUV(id2,2,71,25);
+	ObjEffect_SetVertexUV(id2,3,71,47);}
+	case("PURPLE"){
+	ObjEffect_SetVertexUV(id2,0,72,25);
+	ObjEffect_SetVertexUV(id2,1,72,47);
+	ObjEffect_SetVertexUV(id2,2,107,25);
+	ObjEffect_SetVertexUV(id2,3,107,47);}
+	case("WHITE"){
+	ObjEffect_SetVertexUV(id2,0,108,25);
+	ObjEffect_SetVertexUV(id2,1,108,47);
+	ObjEffect_SetVertexUV(id2,2,143,25);
+	ObjEffect_SetVertexUV(id2,3,143,47);}
+	
+	loop{
+	if(kill>0){die++;}
+	if(kill>0&&die>kill||
+	Obj_GetX(id)<MinX-150||Obj_GetX(id)>MaxX+150||
+	Obj_GetY(id)<MinY-150||Obj_GetY(id)>MaxY+150){
+	Obj_Delete(id);
+	Obj_Delete(id2);
+	break;
+	}
+	
+	if(sca1<1){scaA+=3;}
+	sca1=1*sin(scaA);
+	ObjEffect_SetScale(id2,2-sca1,2-sca1);
+	if(alpha>=255){
+	Obj_SetSpeed(id,speed);}
+	
+	Obj_SetPosition(id2,Obj_GetX(id),Obj_GetY(id));
+	ObjEffect_SetAngle(id2,0,0,Obj_GetAngle(id));
+	if(alpha<255){alpha+=15;}
+	ObjEffect_SetVertexColor(id2,0,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,1,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,2,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,3,alpha,rgb[0],rgb[1],rgb[2]);
+	
+	yield;
+	}
+	}
+	
+	task FishShot2(x,y,angle,speed,color,kill,bomb){
+	let id        = Obj_Create(OBJ_SHOT);
+	let id2       = Obj_Create(OBJ_EFFECT);
+	let img00     = GetCurrentScriptDirectory~".\enm6img\fish_bullet.png";
+	let die       = 0;
+	let alpha     = 0;
+	let rgb       = [255,255,255];
+	let sca1      = 0;
+	let scaA      = 0;
+	
+	LoadGraphic(img00);
+	
+	Obj_SetPosition(id,x,y);
+	Obj_SetAngle(id,angle);
+	Obj_SetAlpha(id,0);
+	Obj_SetCollisionToPlayer(id,true);
+	Obj_SetAutoDelete(id,false);
+	ObjShot_SetBombResist(id,bomb);
+	ObjShot_SetGraphic(id,WHITE01);
+	
+	ObjEffect_SetTexture(id2,img00);
+	ObjEffect_SetRenderState(id2,ADD);
+	ObjEffect_SetPrimitiveType(id2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id2,5);
+	ObjEffect_CreateVertex(id2,4);
+	ObjEffect_SetVertexXY(id2,0,-18,-11);
+	ObjEffect_SetVertexXY(id2,1,-18,11);
+	ObjEffect_SetVertexXY(id2,2,18,-11);
+	ObjEffect_SetVertexXY(id2,3,18,11);
+	
+	alternative(color)
+	case("RED"){
+	ObjEffect_SetVertexUV(id2,0,0,47);
+	ObjEffect_SetVertexUV(id2,1,0,69);
+	ObjEffect_SetVertexUV(id2,2,35,47);
+	ObjEffect_SetVertexUV(id2,3,35,69);}
+	case("ORANGE"){
+	ObjEffect_SetVertexUV(id2,0,36,47);
+	ObjEffect_SetVertexUV(id2,1,36,69);
+	ObjEffect_SetVertexUV(id2,2,71,47);
+	ObjEffect_SetVertexUV(id2,3,71,69);}
+	case("YELLOW"){
+	ObjEffect_SetVertexUV(id2,0,72,47);
+	ObjEffect_SetVertexUV(id2,1,72,69);
+	ObjEffect_SetVertexUV(id2,2,107,47);
+	ObjEffect_SetVertexUV(id2,3,107,69);}
+	case("GREEN"){
+	ObjEffect_SetVertexUV(id2,0,108,47);
+	ObjEffect_SetVertexUV(id2,1,108,69);
+	ObjEffect_SetVertexUV(id2,2,143,47);
+	ObjEffect_SetVertexUV(id2,3,143,69);}
+	case("BLUE"){
+	ObjEffect_SetVertexUV(id2,0,0,72);
+	ObjEffect_SetVertexUV(id2,1,0,92);
+	ObjEffect_SetVertexUV(id2,2,35,72);
+	ObjEffect_SetVertexUV(id2,3,35,92);}
+	case("AQUA"){
+	ObjEffect_SetVertexUV(id2,0,36,72);
+	ObjEffect_SetVertexUV(id2,1,36,92);
+	ObjEffect_SetVertexUV(id2,2,71,72);
+	ObjEffect_SetVertexUV(id2,3,71,92);}
+	case("PURPLE"){
+	ObjEffect_SetVertexUV(id2,0,72,72);
+	ObjEffect_SetVertexUV(id2,1,72,92);
+	ObjEffect_SetVertexUV(id2,2,107,72);
+	ObjEffect_SetVertexUV(id2,3,107,92);}
+	case("WHITE"){
+	ObjEffect_SetVertexUV(id2,0,108,72);
+	ObjEffect_SetVertexUV(id2,1,108,92);
+	ObjEffect_SetVertexUV(id2,2,143,72);
+	ObjEffect_SetVertexUV(id2,3,143,92);}
+	
+	loop{
+	if(kill>0){die++;}
+	if(kill>0&&die>kill||
+	Obj_GetX(id)<MinX-150||Obj_GetX(id)>MaxX+150||
+	Obj_GetY(id)<MinY-150||Obj_GetY(id)>MaxY+150){
+	Obj_Delete(id);
+	Obj_Delete(id2);
+	break;
+	}
+	
+	if(sca1<1){scaA+=3;}
+	sca1=1*sin(scaA);
+	ObjEffect_SetScale(id2,2-sca1,2-sca1);
+	if(alpha>=255){
+	Obj_SetSpeed(id,speed);}
+	
+	Obj_SetPosition(id2,Obj_GetX(id),Obj_GetY(id));
+	ObjEffect_SetAngle(id2,0,0,Obj_GetAngle(id));
+	if(alpha<255){alpha+=15;}
+	ObjEffect_SetVertexColor(id2,0,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,1,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,2,alpha,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id2,3,alpha,rgb[0],rgb[1],rgb[2]);
+	
+	yield;
+	}
+	}
+	
+	task InvisibleShot(x,y,angle,speed,color,delay,kill,bomb,alpha,cp){
+	let id        = Obj_Create(OBJ_SHOT);
+	let die       = 0;
+	let rgb       = [255,255,255];
+	
+	Obj_SetPosition(id,x,y);
+	Obj_SetAngle(id,angle);
+	Obj_SetSpeed(id,speed);
+	Obj_SetAlpha(id,alpha);
+	Obj_SetCollisionToPlayer(id,cp);
+	Obj_SetAutoDelete(id,false);
+	ObjShot_SetBombResist(id,bomb);
+	ObjShot_SetGraphic(id,color);
+	ObjShot_SetDelay(id,delay);
+	
+	loop{
+	if(kill>0){die++;}
+	if(kill>0&&die>kill||
+	Obj_GetX(id)<MinX-150||Obj_GetX(id)>MaxX+150||
+	Obj_GetY(id)<MinY-150||Obj_GetY(id)>MaxY+150){
+	Obj_Delete(id);
+	break;
+	}
+	
+	
+	yield;
+	}
+	}
+	
+	task DivisionBullet(x,y,angle,speed,speed2,shot,shot2,delay,delay2,lp,r,g,b){
+		let ost = Obj_Create(OBJ_SHOT);
+		let ang = 0;
+		let frame = 0;
+		
+		Obj_SetPosition(ost,x,y);
+		Obj_SetAngle(ost,angle);
+		Obj_SetSpeed(ost,speed);
+		ObjShot_SetBombResist(ost,true);
+		ObjShot_SetDelay(ost,delay);
+		ObjShot_SetGraphic(ost,shot);
+		Obj_SetAutoDelete(ost,true);
+		
+		loop{
+			if(Obj_BeDeleted(ost)){return;}
+			
+			let sgx = Obj_GetX(ost);
+			let sgy = Obj_GetY(ost);
+			
+			if(Obj_GetSpeed(ost)>0){
+				Obj_SetSpeed(ost,Obj_GetSpeed(ost)-0.05);
+			}
+			if(Obj_GetSpeed(ost)<=0){frame++;}
+			
+			if(frame==20){
+				loop(lp){
+					CreateShotA(1,sgx,sgy,delay2);
+					SetShotDataA(1,0,speed2,ang,0,-0.02,0.7,shot2);
+					FireShot(1);
+					ang+=360/lp;
+				}
+				PlaySE(kira);
+				BulletBreak(sgx,sgy,r,g,b);
+				Obj_SetCollisionToPlayer(ost,false);
+				Obj_SetAlpha(ost,0);
+				loop(40){yield;}
+				Obj_Delete(ost);
+				break;
+			}
+			
+			yield;
+		}
+	}
+	
+	task DivisionBullet2(x,y,angle,speed,speed2,shot,shot2,delay,delay2,lp,r,g,b){
+	let ost = Obj_Create(OBJ_SHOT);
+	let ang = 0;
+	let frame = 0;
+	
+	Obj_SetPosition(ost,x,y);
+	Obj_SetAngle(ost,angle);
+	Obj_SetSpeed(ost,speed);
+	ObjShot_SetBombResist(ost,true);
+	ObjShot_SetDelay(ost,delay);
+	ObjShot_SetGraphic(ost,shot);
+	Obj_SetAutoDelete(ost,true);
+	
+	loop{
+		if(Obj_BeDeleted(ost)){return;}
+	let sgx = Obj_GetX(ost);
+	let sgy = Obj_GetY(ost);
+	
+	if(Obj_GetSpeed(ost)>0){
+	Obj_SetSpeed(ost,Obj_GetSpeed(ost)-0.05);}
+	if(Obj_GetSpeed(ost)<=0){frame++;}
+	
+	if(frame==20){
+	loop(lp){
+	DivisionBullet(sgx,sgy,ang,3,speed2,kORANGE01,kORANGE06,delay,delay2,lp,r,g,b);
+	ang+=360/lp;
+	}
+	PlaySE(kira);
+	BulletBreak(sgx,sgy,r,g,b);
+	Obj_SetCollisionToPlayer(ost,false);
+	Obj_SetAlpha(ost,0);
+	loop(40){yield;}
+	Obj_Delete(ost);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task DivisionBullet3(x,y,angle,speed,speed2,shot,shot2,delay,delay2,lp,r,g,b){
+	let ost = Obj_Create(OBJ_SHOT);
+	let ang = 0;
+	let frame = 0;
+	
+	Obj_SetPosition(ost,x,y);
+	Obj_SetAngle(ost,angle);
+	Obj_SetSpeed(ost,speed);
+	ObjShot_SetBombResist(ost,true);
+	ObjShot_SetDelay(ost,delay);
+	ObjShot_SetGraphic(ost,shot);
+	Obj_SetAutoDelete(ost,true);
+	
+	loop{
+		if(Obj_BeDeleted(ost)){return;}
+	let sgx = Obj_GetX(ost);
+	let sgy = Obj_GetY(ost);
+	
+	if(Obj_GetSpeed(ost)>0){
+	Obj_SetSpeed(ost,Obj_GetSpeed(ost)-0.05);}
+	if(Obj_GetSpeed(ost)<=0){frame++;}
+	
+	if(frame==20){
+	loop(lp){
+	DivisionBullet2(sgx,sgy,ang,3,speed2,shot2,kORANGE01,delay,delay2,lp,r,g,b);
+	ang+=360/lp;
+	}
+	PlaySE(kira);
+	BulletBreak(sgx,sgy,r,g,b);
+	Obj_SetCollisionToPlayer(ost,false);
+	Obj_SetAlpha(ost,0);
+	loop(40){yield;}
+	Obj_Delete(ost);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task DivisionBullet4(x,y,angle,speed,speed2,shot,shot2,delay,delay2,lp,r,g,b){
+	let ost = Obj_Create(OBJ_SHOT);
+	let ang = 0;
+	let frame = 0;
+	
+	Obj_SetPosition(ost,x,y);
+	Obj_SetAngle(ost,angle);
+	Obj_SetSpeed(ost,speed);
+	ObjShot_SetBombResist(ost,true);
+	ObjShot_SetDelay(ost,delay);
+	ObjShot_SetGraphic(ost,shot);
+	Obj_SetAutoDelete(ost,true);
+	
+	loop{
+		if(Obj_BeDeleted(ost)){return;}
+	let sgx = Obj_GetX(ost);
+	let sgy = Obj_GetY(ost);
+	
+	if(Obj_GetSpeed(ost)>0){
+	Obj_SetSpeed(ost,Obj_GetSpeed(ost)-0.05);}
+	if(Obj_GetSpeed(ost)<=0){frame++;}
+	
+	if(frame==20){
+	loop(lp){
+	DivisionBullet3(sgx,sgy,ang,2,speed2,kYELLOW51,kORANGE01,delay,delay2,lp,r,g,b);
+	ang+=360/lp;
+	}
+	PlaySE(kira);
+	BulletBreak(sgx,sgy,r,g,b);
+	Obj_SetCollisionToPlayer(ost,false);
+	Obj_SetAlpha(ost,0);
+	loop(40){yield;}
+	Obj_Delete(ost);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task DivisionBullet5(x,y,angle,speed,speed2,shot,shot2,delay,delay2,lp,r,g,b){
+	let ost = Obj_Create(OBJ_SHOT);
+	let ang = 0;
+	let frame = 0;
+	
+	Obj_SetPosition(ost,x,y);
+	Obj_SetAngle(ost,angle);
+	Obj_SetSpeed(ost,speed);
+	ObjShot_SetBombResist(ost,true);
+	ObjShot_SetDelay(ost,delay);
+	ObjShot_SetGraphic(ost,shot);
+	Obj_SetAutoDelete(ost,true);
+	
+	loop{
+		if(Obj_BeDeleted(ost)){return;}
+	let sgx = Obj_GetX(ost);
+	let sgy = Obj_GetY(ost);
+	
+	if(Obj_GetSpeed(ost)>0){
+	Obj_SetSpeed(ost,Obj_GetSpeed(ost)-0.05);}
+	if(Obj_GetSpeed(ost)<=0){frame++;}
+	
+	if(frame==20){
+	loop(lp){
+	DivisionBullet4(sgx,sgy,ang,3,speed2,kORANGE03,kORANGE01,delay,delay2,lp,r,g,b);
+	ang+=360/lp;
+	}
+	PlaySE(kira);
+	BulletBreak(sgx,sgy,r,g,b);
+	Obj_SetCollisionToPlayer(ost,false);
+	Obj_SetAlpha(ost,0);
+	loop(40){yield;}
+	Obj_Delete(ost);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task BulletBreak(ex,ey,r,g,b){
+	let Anime      = 0;
+	let id         = Obj_Create(OBJ_EFFECT);
+		
+	ObjEffect_SetTexture(id,effimg);
+	ObjEffect_SetRenderState(id,ADD);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,7);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,32/-2,32/-2);
+	ObjEffect_SetVertexXY(id,1,32/-2,32/2);
+	ObjEffect_SetVertexXY(id,2,32/2,32/-2);
+	ObjEffect_SetVertexXY(id,3,32/2,32/2);
+	ObjEffect_SetVertexColor(id,0,255,r,g,b);
+	ObjEffect_SetVertexColor(id,1,255,r,g,b);
+	ObjEffect_SetVertexColor(id,2,255,r,g,b);
+	ObjEffect_SetVertexColor(id,3,255,r,g,b);
+	
+	ObjEffect_SetAngle(id,0,0,rand(0,360));
+	
+	loop{
+	Anime++;
+	if(Anime>=0&&Anime<=5){
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,32);
+	ObjEffect_SetVertexUV(id,2,32,0);
+	ObjEffect_SetVertexUV(id,3,32,32);}
+	if(Anime>=5&&Anime<=10){
+	ObjEffect_SetVertexUV(id,0,32,0);
+	ObjEffect_SetVertexUV(id,1,32,32);
+	ObjEffect_SetVertexUV(id,2,64,0);
+	ObjEffect_SetVertexUV(id,3,64,32);}
+	if(Anime>=10&&Anime<=15){
+	ObjEffect_SetVertexUV(id,0,64,0);
+	ObjEffect_SetVertexUV(id,1,64,32);
+	ObjEffect_SetVertexUV(id,2,96,0);
+	ObjEffect_SetVertexUV(id,3,96,32);}
+	if(Anime>=15&&Anime<=20){
+	ObjEffect_SetVertexUV(id,0,96,0);
+	ObjEffect_SetVertexUV(id,1,96,32);
+	ObjEffect_SetVertexUV(id,2,128,0);
+	ObjEffect_SetVertexUV(id,3,128,32);}
+	if(Anime>=20&&Anime<=25){
+	ObjEffect_SetVertexUV(id,0,128,0);
+	ObjEffect_SetVertexUV(id,1,128,32);
+	ObjEffect_SetVertexUV(id,2,160,0);
+	ObjEffect_SetVertexUV(id,3,160,32);}
+	if(Anime>=25&&Anime<=30){
+	ObjEffect_SetVertexUV(id,0,160,0);
+	ObjEffect_SetVertexUV(id,1,160,32);
+	ObjEffect_SetVertexUV(id,2,192,0);
+	ObjEffect_SetVertexUV(id,3,192,32);}
+	if(Anime>=30&&Anime<=35){
+	ObjEffect_SetVertexUV(id,0,192,0);
+	ObjEffect_SetVertexUV(id,1,192,32);
+	ObjEffect_SetVertexUV(id,2,224,0);
+	ObjEffect_SetVertexUV(id,3,224,32);}
+	if(Anime>=35&&Anime<=40){
+	ObjEffect_SetVertexUV(id,0,224,0);
+	ObjEffect_SetVertexUV(id,1,224,32);
+	ObjEffect_SetVertexUV(id,2,256,0);
+	ObjEffect_SetVertexUV(id,3,256,32);}
+	if(Anime>=40){
+	Obj_Delete(id);
+	break;
+	}
+	
+	Obj_SetPosition(id,ex,ey);
+	
+	yield;
+	}
+	}
+	
+	task LaserBlade(x,y,angle,spinamount,spinangle,length,width,texture,shot){
+	let id		= Obj_Create(OBJ_LASER);
+	let move1	= 0;
+	let moveA	= 0;
+	let frame	= 0;
+	let count       = 0;
+	
+	Obj_SetPosition(id,x,y);
+	Obj_SetAngle(id,angle);
+	Obj_SetAutoDelete(id,false);
+	ObjShot_SetBombResist(id,true);
+	ObjShot_SetGraphic(id,texture);
+	ObjLaser_SetLength(id,length);
+	ObjLaser_SetWidth(id,width);
+	ObjLaser_SetSource(id,false);
+	
+	loop{
+	frame++;
+	if(frame>60){
+	if(move1<spinamount){moveA+=0.5;}
+	move1=spinamount*sin(moveA);
+	alternative(spinangle)
+	case("-"){Obj_SetAngle(id,angle-move1);}
+	case("+"){Obj_SetAngle(id,angle+move1);}
+	}
+	let mulf = GetCommonDataEx("ls","Mumumu_Life");
+	let glx = ObjLaser_GetEndX(id);
+	let gly = ObjLaser_GetEndY(id);
+	count++;
+	if(count==60){
+	CreateShotA(0,rand(GetX,glx),rand(GetY,gly),20);
+	SetShotDataA(0,0,0,Obj_GetAngle(id),0,0.02,5,kRED51);
+	FireShot(0);
+	CreateShotA(0,rand(GetX,glx),rand(GetY,gly+100),20);
+	SetShotDataA(0,0,0,Obj_GetAngle(id)+rand(45,-45),0,0.02,5,kRED51);
+	FireShot(0);
+	CreateShotA(0,rand(GetX,glx),rand(GetY,gly),20);
+	SetShotDataA(0,0,0,Obj_GetAngle(id)*-1,0,-0.02,-5,kRED_F);
+	FireShot(0);
+	PlaySE(tan);
+	count=55;
+	}
+	
+	if(move1>=spinamount||GetLife<10||mulf==true){
+	ObjShot_FadeDelete(id);
+	break;
+	}
+	
+	yield;
+	}
+	}
+	
+	task CreateReflectShot01(x,y,speed,angle,count,shote){
+	let obj		= Obj_Create(OBJ_SHOT);
+	let gcsd	= GetCurrentScriptDirectory;
+	let ss		= 0;
+	
+	Obj_SetPosition(obj, x, y);
+	Obj_SetAlpha(obj,255);
+	ObjShot_SetGraphic(obj, shote);
+	ObjShot_SetBombResist(obj,true);
+	Obj_SetSpeed(obj, speed);
+	Obj_SetAngle(obj, angle);
+	
+	loop{
+	if(count!=0){
+	    //左端反射
+	    if(Obj_GetX(obj)<GetClipMinX){
+	        Obj_SetX(obj, GetClipMinX*2 - Obj_GetX(obj));
+	        Obj_SetAngle(obj, 180 - Obj_GetAngle(obj));
+	        count--;
+	    PlaySE(kira);
+	    }
+	    //右端反射
+	    if(Obj_GetX(obj)>GetClipMaxX){
+	        Obj_SetX(obj, GetClipMaxX*2 - Obj_GetX(obj));
+	        Obj_SetAngle(obj, 180 - Obj_GetAngle(obj));
+	        count--;
+	    PlaySE(kira);
+	    }
+	    //上端反射
+	    if(Obj_GetY(obj)<GetClipMinY){
+	        Obj_SetY(obj, GetClipMinY*2 - Obj_GetY(obj));
+	        Obj_SetAngle(obj, 360 - Obj_GetAngle(obj));
+	        count--;
+	    PlaySE(kira);
+	    }
+	    //下端反射
+	    if(Obj_GetY(obj)>GetClipMaxY){
+	        Obj_SetY(obj, GetClipMaxY*2 - Obj_GetY(obj));
+	        Obj_SetAngle(obj, 360 - Obj_GetAngle(obj));
+	        count--;
+	    PlaySE(kira);
+	    }
+	}
+	if(Obj_BeDeleted(obj)==true){
+	break;
+	}
+	
+	    yield;
+	}
+	}
+	
+	task HolyLaser(x,y,angle,speed,shote,fr,w,delay){
+	let ost		= Obj_Create(OBJ_SHOT);
+	let ang		= 0;
+	let frame	= 0;
+	let cc1		= 0;
+	let cc2		= 0;
+	let cc3		= 0;
+	let color	= truncate(rand(0,5));
+	color	= 5;
+	let r		= [255,0,255,255,0,255];
+	let g		= [0,255,0,255,0,255];
+	let b		= [0,0,255,0,255,255];
+	
+	Obj_SetPosition(ost,x,y);
+	Obj_SetAngle(ost,angle);
+	Obj_SetSpeed(ost,speed);
+	ObjShot_SetBombResist(ost,true);
+	ObjShot_SetDelay(ost,delay);
+	ObjShot_SetGraphic(ost,shote);
+	Obj_SetAutoDelete(ost,true);
+	
+	loop{
+	let sgx = Obj_GetX(ost);
+	let sgy = Obj_GetY(ost);
+	let pa	= atan2(GetPlayerY-sgy,GetPlayerX-sgx);
+	
+	if(sgy<GetClipMinY){
+	cc1++;
+	}
+	if(sgx<GetClipMinX){
+	cc2++;
+	}
+	if(sgx>GetClipMaxX){
+	cc3++;
+	}
+	
+	if(cc1==1){
+	CompressionLaser2(sgx,sgy,90,0,500,20,r[color],g[color],b[color],60,120,true);
+	let angle = 0;
+	loop(40){
+		CreateShotA(0,sgx,sgy,20);
+		SetShotDataA(0,0,10,Obj_GetAngle(ost)+angle,0,-0.3,2,kWHITE50);
+		FireShot(0);
+		angle+=9;
+	}
+	Obj_Delete(ost);
+	}
+	if(cc2==1){
+	//CompressionLaser2(sgx,sgy,45,0,600,15,r[color],g[color],b[color],60,120,true);
+	Obj_Delete(ost);
+	}
+	if(cc3==1){
+	//CompressionLaser2(sgx,sgy,135,0,600,15,r[color],g[color],b[color],60,120,true);
+	Obj_Delete(ost);
+	}
+	
+	ang++;
+	if(fr=="+"){
+	Obj_SetAngle(ost,angle+w*sin(ang*10));
+	}
+	else{
+	Obj_SetAngle(ost,angle-w*sin(ang*10));
+	}
+	
+	frame++;
+	if(frame==1){
+	CreateShotA(0,sgx,sgy,0);
+	SetShotDataA(0,0,0,Obj_GetAngle(ost),0,0,10,shote);
+	SetShotKillTime(0,30);
+	FireShot(0);
+	ang+=0.1;
+	frame=-4;
+	}
+	
+	if(Obj_BeDeleted(ost)==true||GetEnemyLife<=10){
+	Obj_Delete(ost);
+	break;
+	}
+	
+	yield;
+	}
+	}

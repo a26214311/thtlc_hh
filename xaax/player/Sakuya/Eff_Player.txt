@@ -1,0 +1,173 @@
+task SlowEffect(r,g,b){
+let leff     = Obj_Create(OBJ_EFFECT);
+let effb     = Obj_Create(OBJ_EFFECT);
+let eff      = Obj_Create(OBJ_EFFECT);
+let alpha    = 0;
+let slowf    = false;
+let cc       = 0;
+let move1    = 90;
+let moveA    = 0;
+let sca      = 0;
+let sca1     = 0;
+
+ObjEffect_SetTexture(leff,img3);
+ObjEffect_SetRenderState(leff,ALPHA);
+ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(leff,4);
+ObjEffect_CreateVertex(leff,4);
+ObjEffect_SetVertexXY(leff,0,8/-2,8/-2);
+ObjEffect_SetVertexXY(leff,1,8/-2,8/2);
+ObjEffect_SetVertexXY(leff,2,8/2,8/-2);
+ObjEffect_SetVertexXY(leff,3,8/2,8/2);
+ObjEffect_SetVertexUV(leff,0,220,49);
+ObjEffect_SetVertexUV(leff,1,220,57);
+ObjEffect_SetVertexUV(leff,2,228,49);
+ObjEffect_SetVertexUV(leff,3,228,57);
+
+ObjEffect_SetTexture(effb,img3);
+ObjEffect_SetRenderState(effb,ALPHA);
+ObjEffect_SetPrimitiveType(effb,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(effb,3);
+ObjEffect_CreateVertex(effb,4);
+ObjEffect_SetVertexXY(effb,0,64/-2,64/-2);
+ObjEffect_SetVertexXY(effb,1,64/-2,64/2);
+ObjEffect_SetVertexXY(effb,2,64/2,64/-2);
+ObjEffect_SetVertexXY(effb,3,64/2,64/2);
+ObjEffect_SetVertexUV(effb,0,193,65);
+ObjEffect_SetVertexUV(effb,1,193,128);
+ObjEffect_SetVertexUV(effb,2,256,65);
+ObjEffect_SetVertexUV(effb,3,256,128);
+
+ObjEffect_SetTexture(eff,img3);
+ObjEffect_SetRenderState(eff,ALPHA);
+ObjEffect_SetPrimitiveType(eff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(eff,3);
+ObjEffect_CreateVertex(eff,4);
+ObjEffect_SetVertexXY(eff,0,64/-2,64/-2);
+ObjEffect_SetVertexXY(eff,1,64/-2,64/2);
+ObjEffect_SetVertexXY(eff,2,64/2,64/-2);
+ObjEffect_SetVertexXY(eff,3,64/2,64/2);
+ObjEffect_SetVertexUV(eff,0,193,65);
+ObjEffect_SetVertexUV(eff,1,193,128);
+ObjEffect_SetVertexUV(eff,2,256,65);
+ObjEffect_SetVertexUV(eff,3,256,128);
+
+loop{
+Obj_SetPosition(leff,GetPlayerX,GetPlayerY);
+Obj_SetPosition(effb,GetPlayerX,GetPlayerY);
+Obj_SetPosition(eff,GetPlayerX,GetPlayerY);
+if(GetKeyState(VK_SLOWMOVE)==KEY_HOLD){slowf=true}
+if(GetKeyState(VK_SLOWMOVE)==KEY_PULL){slowf=false}
+if(alpha<150&&slowf==true){alpha+=150/10}
+if(alpha>0&&slowf==false){alpha-=150/3}
+ObjEffect_SetVertexColor(leff,0,alpha*1.5,255,100,100);
+ObjEffect_SetVertexColor(leff,1,alpha*1.5,255,100,100);
+ObjEffect_SetVertexColor(leff,2,alpha*1.5,255,100,100);
+ObjEffect_SetVertexColor(leff,3,alpha*1.5,255,100,100);
+ObjEffect_SetVertexColor(effb,0,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(effb,1,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(effb,2,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(effb,3,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(eff,0,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(eff,1,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(eff,2,alpha*1.5,r,g,b);
+ObjEffect_SetVertexColor(eff,3,alpha*1.5,r,g,b);
+
+if(slowf==true){
+ObjEffect_SetAngle(leff,0,0,cc);
+ObjEffect_SetAngle(effb,0,0,20+move1+cc);
+ObjEffect_SetAngle(eff,0,0,20-cc);
+ObjEffect_SetScale(eff,2-sca,2-sca);
+}
+if(slowf==true){
+if(move1<270){moveA+=5}
+move1=270.0*sin(moveA);
+if(move1>=270){cc++}
+if(sca<1){sca1+=5}
+sca=1.0*sin(sca1);
+}
+
+if(slowf==false){
+ObjEffect_SetAngle(effb,0,0,20);
+ObjEffect_SetAngle(eff,0,0,20);
+ObjEffect_SetScale(eff,sca,sca);
+move1=90;moveA=0;cc=0;sca=0;sca1=0;}
+
+if(OnMissed==true){alpha=0}
+
+yield;
+}
+}
+
+task BitEffect{
+let eff      = Obj_Create(OBJ_EFFECT);
+let eff2     = Obj_Create(OBJ_EFFECT);
+let eff3     = Obj_Create(OBJ_EFFECT);
+let eff4     = Obj_Create(OBJ_EFFECT);
+let alpha    = 255;
+let slowf    = false;
+let cc       = 0;
+let move1    = 0;
+let moveA    = 0;
+let move2    = 0;
+let moveB    = 0;
+let sca      = 0;
+let i        = 0;
+let dis      = 0;
+
+loop(4){
+ObjEffect_SetTexture(eff+i,img4);
+ObjEffect_SetRenderState(eff+i,ALPHA);
+ObjEffect_SetPrimitiveType(eff+i,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(eff+i,3);
+ObjEffect_CreateVertex(eff+i,4);
+ObjEffect_SetVertexXY(eff+i,0,32/-2,32/-2);
+ObjEffect_SetVertexXY(eff+i,1,32/-2,32/2);
+ObjEffect_SetVertexXY(eff+i,2,32/2,32/-2);
+ObjEffect_SetVertexXY(eff+i,3,32/2,32/2);
+ObjEffect_SetVertexUV(eff+i,0,64,96);
+ObjEffect_SetVertexUV(eff+i,1,64,128);
+ObjEffect_SetVertexUV(eff+i,2,96,96);
+ObjEffect_SetVertexUV(eff+i,3,96,128);
+i++;
+}
+
+loop{
+if(OnBomb==true){dis=3;sc++;}
+if(OnBomb==false){dis=0}
+ObjEffect_SetAngle(eff,0,0,sca*2);
+ObjEffect_SetAngle(eff2,0,0,-sca*2);
+ObjEffect_SetAngle(eff3,0,0,sca*2);
+ObjEffect_SetAngle(eff4,0,0,-sca*2);
+
+sca+=10;
+if(move1<20&&GetKeyState(VK_SLOWMOVE)==KEY_HOLD){moveA+=10}
+if(move1>0&&GetKeyState(VK_SLOWMOVE)==KEY_FREE){moveA-=10}
+move1=20.0*sin(moveA);
+if(move2<50&&GetKeyState(VK_SLOWMOVE)==KEY_HOLD){moveB+=10}
+if(move2>0&&GetKeyState(VK_SLOWMOVE)==KEY_FREE){moveB-=10}
+move2=50.0*sin(moveB);
+Obj_SetPosition(eff,(GetPlayerX+dis*sin(sca*10))+30-move1*0,(GetPlayerY+dis*sin(sca*10))+20-move2/2);
+Obj_SetPosition(eff2,(GetPlayerX+dis*sin(sca*10))-30+move1*0,(GetPlayerY+dis*sin(sca*10))+20-move2/2);
+Obj_SetPosition(eff3,(GetPlayerX+dis*sin(sca*10))+10+move1/4,(GetPlayerY+dis*sin(sca*10))-25-move2/5);
+Obj_SetPosition(eff4,(GetPlayerX+dis*sin(sca*10))-10-move1/4,(GetPlayerY+dis*sin(sca*10))-25-move2/5);
+ObjEffect_SetScale(eff,0.7+0.1*sin(sca),0.7+0.1*sin(sca));
+ObjEffect_SetScale(eff2,0.7+0.1*sin(sca),0.7+0.1*sin(sca));
+ObjEffect_SetScale(eff3,0.7+0.1*sin(sca),0.7+0.1*sin(sca));
+ObjEffect_SetScale(eff4,0.7+0.1*sin(sca),0.7+0.1*sin(sca));
+
+ObjEffect_SetVertexColor(eff,0,alpha,255,255,255);ObjEffect_SetVertexColor(eff,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff,2,alpha,255,255,255);ObjEffect_SetVertexColor(eff,3,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff2,0,alpha,255,255,255);ObjEffect_SetVertexColor(eff2,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff2,2,alpha,255,255,255);ObjEffect_SetVertexColor(eff2,3,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff3,0,alpha,255,255,255);ObjEffect_SetVertexColor(eff3,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff3,2,alpha,255,255,255);ObjEffect_SetVertexColor(eff3,3,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff4,0,alpha,255,255,255);ObjEffect_SetVertexColor(eff4,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(eff4,2,alpha,255,255,255);ObjEffect_SetVertexColor(eff4,3,alpha,255,255,255);
+
+if(OnMissed==true){alpha=0}
+if(OnMissed==false){alpha=255}
+
+yield;
+}
+}

@@ -1,0 +1,85 @@
+script_enemy_main {
+	let imgEffect	= GetCurrentScriptDirectory~".\enm7eff\bossEfect.png";
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm7eff\spellEfect.png";
+	let t5			= GetCurrentScriptDirectory~".\enm7se\timer1.wav";
+	let t10			= GetCurrentScriptDirectory~".\enm7se\timer2.wav";
+	let tan			= GetCurrentScriptDirectory~".\enm7se\shot1.wav";
+	let kira		= GetCurrentScriptDirectory~".\enm7se\shot2.wav";
+	let Gspel		= GetCurrentScriptDirectory~".\enm7se\echo5.wav";
+	let laser		= GetCurrentScriptDirectory~".\enm7se\Laser2.wav";
+	let power		= GetCurrentScriptDirectory~".\enm7se\enemy_powereffect.wav";
+	let powerl		= GetCurrentScriptDirectory~".\enm7se\power_logo.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\enm7se\BossEnd.wav";
+	let powerla		= GetCurrentScriptDirectory~".\enm7se\power_logo.wav";
+	let kaku		= GetCurrentScriptDirectory~".\enm7se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= GetCurrentScriptDirectory ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let S_count		= 0;
+	let endc		= 0;
+
+	@Initialize {
+		SetX(GetEnemyX);
+		SetY(GetEnemyY);
+		SetLife(1000);
+		SetDamageRate(0,0);
+		SetInvincibility(120);
+
+		SetMovePosition03(MinX,MinY-100,10,5);
+
+		SetShotAutoDeleteClip(30,30,30,30);
+		LoadUserShotData(shotdir);
+		LoadGraphic(imgEffect);
+		LoadGraphic(imgSPNB);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		hpbs(2,0,0);
+		EnemyTexture07_2(true);
+    }
+
+    @MainLoop {
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		//SetCollisionB(GetX, GetY, 16);
+
+		//ボム中、使用後一定時間ダメージ無効処理
+		if(OnBomb==true){SetDamageRate(20,0);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRate(20,0);}
+
+		a++;	
+		frame++;
+		count++;
+		S_count++;
+		timer++;
+		if(frame==70){
+			//Concentration(50,powerla);
+		}
+
+		if(GetLife<=10){
+			SetDamageRate(0,0);
+		}
+
+	}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {}
+	#include_function".\Obj_hpb_s.txt"
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

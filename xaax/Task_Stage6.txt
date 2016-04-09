@@ -1,0 +1,360 @@
+	task StageTask6(){
+		let count	= 0;
+		let frame	= 0;
+		let timer	= 0;
+		let csd		= GetCurrentScriptDirectory;
+		let when	= 0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		function Wait(frame){
+			loop(frame*60){yield};
+		}
+		function WaitE(){
+			while(GetEnemyNum()!=0){yield;}
+		}
+		function WaitU(num){
+			while(GetEnemyNum()<num){yield;}
+		}
+		function Counts(cc){
+			while(frame<cc*60){
+				frame++;
+				if(GetEnemyNum==0){
+					CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy05.txt",0,0,0,0,7);
+				}
+				yield;
+			}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(12);
+				PlayMusicName(60,11);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+		
+		//此処から道中の処理
+		Wait(3);
+		PlayMusicSP(11);
+		PlayMusicName(0,10);
+		Wait(5);
+		StageLogo(6,360,0);
+		Wait(5);
+		ProtectionOfTheStarItem(2,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(count in 0..3){
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy01.txt",0,0,0,0,7);
+			
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,0);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,1);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,2);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,3);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,4);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,5);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,6);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,7);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,8);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,9);
+			Wait(6);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy01.txt",0,0,0,0,7);
+			
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,10);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,11);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,12);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,13);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,14);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,15);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,16);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,17);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,18);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,19);
+			Wait(6);
+		}
+		WaitE();
+		Wait(1);
+		//中ボス
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(6);
+		WaitE();
+		Wait(3);
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(7);
+		StartMusic();
+		WaitE();
+	
+	}
+
+	task StageTask6ns(){
+		let count	= 0;
+		let frame	= 0;
+		let timer	= 0;
+		let csd		= GetCurrentScriptDirectory;
+		let when	= 0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		let tcse	= GetCommonDataEx("title","clear_stageE");
+		let tcsn	= GetCommonDataEx("title","clear_stageN");
+		let tcsh	= GetCommonDataEx("title","clear_stageH");
+		let tcsl	= GetCommonDataEx("title","clear_stageL");
+		
+		function Wait(frame){
+			loop(frame*60){yield};
+		}
+		function WaitE(){
+			while(GetEnemyNum()!=0){yield;}
+		}
+		function WaitU(num){
+			while(GetEnemyNum()<num){yield;}
+		}
+		function Counts(cc){
+			while(frame<cc*60){
+				frame++;
+				if(GetEnemyNum==0){
+					CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy05.txt",0,0,0,0,7);
+				}
+				yield;
+			}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(12);
+				PlayMusicName(60,11);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+
+		//此処から道中の処理
+		Wait(3);
+		PlayMusicSP(11);
+		PlayMusicName(0,10);
+		Wait(5);
+		StageLogo(6,360,0);
+		Wait(5);
+		ProtectionOfTheStarItem(2,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ascent(count in 0..3){
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy01.txt",0,0,0,0,7);
+			
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,0);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,1);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,2);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,3);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,4);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,5);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,6);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,7);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,8);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,9);
+			Wait(6);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy01.txt",0,0,0,0,7);
+			
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,10);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,11);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,12);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,13);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,14);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,15);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,16);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,17);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,18);
+			CreateEnemyFromFile(csd~".\enm\stage6\enemy\fairy02.txt",0,0,0,0,19);
+			Wait(6);
+		}
+		WaitE();
+		Wait(1);
+		//中ボス
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6_2\enm6_Plural_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(6);
+		WaitE();
+		Wait(3);
+		SetCommonDataEx("title","listen_bgm",12);
+		SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage6\enm6_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(7);
+		StartMusic();
+		WaitE();
+
+		Wait(2);
+
+		Ending();
+		break;
+	
+	}

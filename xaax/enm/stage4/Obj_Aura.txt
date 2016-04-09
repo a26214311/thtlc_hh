@@ -1,0 +1,170 @@
+task Aura(control,r,g,b){
+	/*本家東方のオーラ*/
+	let count = 0;
+	
+	loop{
+		count++;
+		if(count==control){
+			Aura_Source1(r,g,b);
+			count=0;
+		}
+			Aura_Source2(r,g,b);
+		yield;
+	}
+}
+
+task Aura_Source1(r,g,b){
+	let imgSpellEfect = GetCurrentScriptDirectory~".\enm4eff\bossEfect.png";
+	let aeffu		= Obj_Create(OBJ_EFFECT);
+	let aeff		= Obj_Create(OBJ_EFFECT);
+	let delete		= false;
+	let a			= 0;
+	let r1			= 0;
+	let g1			= 0;
+	let b1			= 0;
+	let i			= 0;
+	let alpha		= 0;
+	let scax1		= 0;
+	let scaxA		= 0;
+	let scay1		= rand(1,2);
+	let scayA		= 0;
+	let ang			= rand(-16,16);
+	
+	LoadGraphic(imgSpellEfect);
+	
+	Obj_SetPosition(aeffu,GetEnemyX,GetEnemyY);
+	ObjEffect_SetTexture(aeffu,imgSpellEfect);
+	ObjEffect_SetRenderState(aeffu,SUBTRACT);
+	ObjEffect_SetPrimitiveType(aeffu,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(aeffu,scax1,scay1);
+	ObjEffect_SetAngle(aeffu,0,0,180+ang*-2);
+	ObjEffect_SetLayer(aeffu,2);
+	ObjEffect_CreateVertex(aeffu,4);
+	ObjEffect_SetVertexXY(aeffu,0,-18,-21);
+	ObjEffect_SetVertexXY(aeffu,1,-18,21);
+	ObjEffect_SetVertexXY(aeffu,2,18,-21);
+	ObjEffect_SetVertexXY(aeffu,3,18,21);
+	ObjEffect_SetVertexUV(aeffu,0,7,131);
+	ObjEffect_SetVertexUV(aeffu,1,7,173);
+	ObjEffect_SetVertexUV(aeffu,2,43,131);
+	ObjEffect_SetVertexUV(aeffu,3,43,173);
+	ObjEffect_SetVertexColor(aeffu,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeffu,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeffu,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeffu,3,alpha,r,g,b);
+	
+	Obj_SetPosition(aeff,GetEnemyX,GetEnemyY);
+	ObjEffect_SetTexture(aeff,imgSpellEfect);
+	ObjEffect_SetRenderState(aeff,ADD);
+	ObjEffect_SetPrimitiveType(aeff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(aeff,scax1,scay1);
+	ObjEffect_SetAngle(aeff,0,0,ang);
+	ObjEffect_SetLayer(aeff,2);
+	ObjEffect_CreateVertex(aeff,4);
+	ObjEffect_SetVertexXY(aeff,0,-18,-21);
+	ObjEffect_SetVertexXY(aeff,1,-18,21);
+	ObjEffect_SetVertexXY(aeff,2,18,-21);
+	ObjEffect_SetVertexXY(aeff,3,18,21);
+	ObjEffect_SetVertexUV(aeff,0,7,131);
+	ObjEffect_SetVertexUV(aeff,1,7,173);
+	ObjEffect_SetVertexUV(aeff,2,43,131);
+	ObjEffect_SetVertexUV(aeff,3,43,173);
+	ObjEffect_SetVertexColor(aeff,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff,3,alpha,r,g,b);
+	
+	loop{
+		if(scax1<1){scaxA+=10;}
+		scax1=1*sin(scaxA);
+		if(scay1<1.5){scayA+=10;}
+		scay1=1.5*sin(scayA);
+		ObjEffect_SetScale(aeffu,2.25-scax1,scay1);
+		ObjEffect_SetScale(aeff,2.5-scax1,scay1);
+		
+		if(delete==false&&alpha<255){alpha+=360/10;}
+		if(delete==false&&alpha>=255){delete=true;}
+		if(delete==true&&alpha>0){alpha-=15;}
+		ObjEffect_SetVertexColor(aeffu,0,alpha,r,g,0);
+		ObjEffect_SetVertexColor(aeffu,1,alpha,r,g,0);
+		ObjEffect_SetVertexColor(aeffu,2,alpha,r,g,0);
+		ObjEffect_SetVertexColor(aeffu,3,alpha,r,g,0);
+		ObjEffect_SetVertexColor(aeff,0,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff,1,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff,2,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff,3,alpha,r,g,b);
+		
+		a+=3;
+		Obj_SetPosition(aeffu,GetEnemyX,GetEnemyY+16-a);
+		Obj_SetPosition(aeff,GetEnemyX,GetEnemyY-a);
+		
+		if(delete==true&&alpha<=0){
+			Obj_Delete(aeff);
+			Obj_Delete(aeffu);
+			break;
+		}
+		yield;
+	}
+}
+
+task Aura_Source2(r,g,b){
+	let imgSpellEfect = GetCurrentScriptDirectory~".\enm4eff\bossEfect.png";
+	let aeff2		= Obj_Create(OBJ_EFFECT);
+	let alpha		= 0;
+	let delete		= false;
+	let r1			= 0;
+	let g1			= 0;
+	let b1			= 0;
+	let scaxmx		= truncate(rand(1,5));
+	let scaymx		= scaxmx;
+	let scax1		= 6;
+	let scaxA		= 0;
+	let scay1		= 6;
+	let scayA		= 0;
+	
+	LoadGraphic(imgSpellEfect);
+	
+	Obj_SetPosition(aeff2,GetEnemyX,GetEnemyY);
+	ObjEffect_SetTexture(aeff2,imgSpellEfect);
+	ObjEffect_SetRenderState(aeff2,ADD);
+	ObjEffect_SetPrimitiveType(aeff2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(aeff2,scax1,scay1);
+	ObjEffect_SetAngle(aeff2,0,0,rand(0,360));
+	ObjEffect_SetLayer(aeff2,2);
+	ObjEffect_CreateVertex(aeff2,4);
+	ObjEffect_SetVertexXY(aeff2,0,-18,-17);
+	ObjEffect_SetVertexXY(aeff2,1,-18,17);
+	ObjEffect_SetVertexXY(aeff2,2,18,-17);
+	ObjEffect_SetVertexXY(aeff2,3,18,17);
+	ObjEffect_SetVertexUV(aeff2,0,53,136);
+	ObjEffect_SetVertexUV(aeff2,1,53,170);
+	ObjEffect_SetVertexUV(aeff2,2,89,136);
+	ObjEffect_SetVertexUV(aeff2,3,89,170);
+	ObjEffect_SetVertexColor(aeff2,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff2,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff2,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(aeff2,3,alpha,r,g,b);
+	
+	loop{
+		Obj_SetPosition(aeff2,GetX,GetY);
+		
+		if(scaxA<5){scaxA+=1;}
+		if(scayA<5){scayA+=1;}
+		
+		ObjEffect_SetScale(aeff2,scax1-scaxA,scay1-scayA);
+		
+		if(delete==false&&alpha<150){alpha+=360/10;}
+		if(delete==false&&alpha>=150){delete=true;}
+		if(delete==true&&alpha>0){alpha-=5;}
+		ObjEffect_SetVertexColor(aeff2,0,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff2,1,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff2,2,alpha,r,g,b);
+		ObjEffect_SetVertexColor(aeff2,3,alpha,r,g,b);
+		
+		if(delete==true&&r1<=0&&g1<=0&&b1<=0){
+			Obj_Delete(aeff2);
+			break;
+		}
+		yield;
+	}
+}

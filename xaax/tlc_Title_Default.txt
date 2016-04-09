@@ -1,0 +1,188 @@
+#東方弾幕風[Stage]
+#Title[東方邪星章　〜 TheLastComer (初期化スクリプトG)]
+#Text[全てのデータを消去します]
+#Image[.\title\pack.png]
+#Player[.\player\Reimu\Reimu.txt,.\player\Marisa\Marisa.txt,.\player\Sakuya\Sakuya.txt,.\player\ReimuHari\Reimu.txt]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_stage_main {
+    let frame     = 0;
+
+    @Initialize {
+	SetClearFrameEffectEnable(false);
+
+	CreateCommonDataArea("sys");
+	SetCommonDataEx("sys","sys_gauge",0);
+	SetCommonDataEx("sys","sys_trans",0);
+
+	CreateCommonDataArea("title");
+	LoadCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+	SetCommonDataEx("title","act",0);
+	SetCommonDataEx("title","stc",0);
+	SetCommonDataEx("title","ex",false);//EX解放 true
+	SetCommonDataEx("title","ph",false);//PH解放 true
+	SetCommonDataEx("title","practise",false);//Practice系解放 true
+	SetCommonDataEx("title","Diffi","NoData");//現行難易度の保存
+	SetCommonDataEx("title","Diffi2",0);//ｽﾃﾌﾟﾗでの選択ステージ
+	SetCommonDataEx("title","sp_stage",0);//ステージ
+	SetCommonDataEx("title","sp_spell",0);//何枚目のスペカ
+	SetCommonDataEx("title","sp_diffi","NoData");//ｽﾍﾟﾌﾟﾗ用難易度判定
+	SetCommonDataEx("title","clear_stageE",0);//本編の進み具合easy
+	SetCommonDataEx("title","clear_stageN",0);//本編の進み具合normal
+	SetCommonDataEx("title","clear_stageH",0);//本編の進み具合hard
+	SetCommonDataEx("title","clear_stageL",0);//本編の進み具合lunatic
+	SetCommonDataEx("title","clear_stageEX_R",0);//本編の進み具合extra 霊夢
+	SetCommonDataEx("title","clear_stageEX_M",0);//本編の進み具合extra 魔理沙
+	SetCommonDataEx("title","clear_stageEX_S",0);//本編の進み具合extra 咲夜
+	SetCommonDataEx("title","listen_bgm",0);//一度でも聴いたBGM(max13)
+	SetCommonDataEx("title","start_stage",false);
+	SetCommonDataEx("title","start_stage2",false);
+	SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+
+	CreateCommonDataArea("add");
+	SetCommonDataEx("add","Flat_Mode",false);
+	LoadCommonDataEx("add",GetCurrentScriptDirectory~".\Add.dat");
+	
+	SaveCommonDataEx("add",GetCurrentScriptDirectory~".\Add.dat");
+
+	CreateCommonDataArea("mss");
+	LoadCommonDataEx("mss",GetCurrentScriptDirectory~".\Mss_Option.dat");
+	SetCommonDataEx("mss","mss_frag","false");
+	SetCommonDataEx("mss","sway_frag",false);
+	SetCommonDataEx("mss","3D_back",false);
+	/*実装時はｺﾒﾝﾄｱｳﾄか削除*/
+	SetCommonDataEx("mss","dpla",3);//残機、ボム、ｺﾝﾃｨﾆｭｰ回数の初期化
+	SetCommonDataEx("mss","dcon",3);
+	SetCommonDataEx("mss","dbom",3);
+	SetCommonDataEx("mss","high_scoreE",0);//通算ﾊｲｽｺｱEの初期化
+	SetCommonDataEx("mss","high_scoreN",0);//通算ﾊｲｽｺｱNの初期化
+	SetCommonDataEx("mss","high_scoreH",0);//通算ﾊｲｽｺｱHの初期化
+	SetCommonDataEx("mss","high_scoreL",0);//通算ﾊｲｽｺｱLの初期化
+	SetCommonDataEx("mss","high_scoreEX",0);//通算ﾊｲｽｺｱEXの初期化
+	SetCommonDataEx("mss","high_scorePH",0);//通算ﾊｲｽｺｱPHの初期化
+	SaveCommonDataEx("mss",GetCurrentScriptDirectory~".\Mss_Option.dat");
+
+	let pla	= GetCommonDataEx("mss","dpla");
+	let con	= GetCommonDataEx("mss","dcon");
+	let bom	= GetCommonDataEx("mss","dbom");
+
+	CreateCommonDataArea("r");
+	LoadCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Reimu.dat");
+	CreateCommonDataArea("m");
+	LoadCommonDataEx("m",GetCurrentScriptDirectory~".\Score_Marisa.dat");
+	CreateCommonDataArea("s");
+	LoadCommonDataEx("s",GetCurrentScriptDirectory~".\Score_Sakuya.dat");
+
+	SpellPracticeScore();//ｽﾍﾟﾌﾟﾗｽｺｱ一括初期化
+
+	SaveCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Reimu.dat");
+	SaveCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Marisa.dat");
+	SaveCommonDataEx("r",GetCurrentScriptDirectory~".\Score_Sakuya.dat");
+
+	}
+    @MainLoop {
+	yield;
+	frame++;
+
+	if(frame==1){
+		RaiseError("おきのどくですが ぼうけんのしょ1ばんは きえてしまいました","tlc");
+		ClearStage();
+	}
+
+}//MainLoopの")"です。
+
+    @Finalize {}
+
+    @BackGround {}
+
+	task SpellPracticeScore{
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Easy)
+	SetCommonDataEx("r","sp_score_reimu_easy",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0]);//27
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Normal)
+	SetCommonDataEx("r","sp_score_reimu_normal",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0]);//28
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Hard)
+	SetCommonDataEx("r","sp_score_reimu_hard",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Luantic)
+	SetCommonDataEx("r","sp_score_reimu_lunatic",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Extra)
+	SetCommonDataEx("r","sp_score_reimu_extra",[0,0,0,0,0,0,0,0,0,0,0,0]);//12
+	//ｽﾍﾟﾌﾟﾗ保存領域:霊夢(Phantasm)
+	SetCommonDataEx("r","sp_score_reimu_phantasm",[0,0,0,0,0,0,0,0,0,0,0,0,0]);//13
+	//ｽﾃﾌﾟﾗ保存領域:霊夢(Easy)
+	SetCommonDataEx("r","st_score_reimu_easy",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:霊夢(Normal)
+	SetCommonDataEx("r","st_score_reimu_normal",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:霊夢(Hard)
+	SetCommonDataEx("r","st_score_reimu_hard",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:霊夢(Luantic)
+	SetCommonDataEx("r","st_score_reimu_lunatic",[0,0,0,0,0,0]);//6
+
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Easy)
+	SetCommonDataEx("m","sp_score_marisa_easy",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0]);//27
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Normal)
+	SetCommonDataEx("m","sp_score_marisa_normal",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0]);//28
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Hard)
+	SetCommonDataEx("m","sp_score_marisa_hard",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Luantic)
+	SetCommonDataEx("m","sp_score_marisa_lunatic",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Extra)
+	SetCommonDataEx("m","sp_score_marisa_extra",[0,0,0,0,0,0,0,0,0,0,0,0]);//12
+	//ｽﾍﾟﾌﾟﾗ保存領域:魔理沙(Phantasm)
+	SetCommonDataEx("m","sp_score_marisa_phantasm",[0,0,0,0,0,0,0,0,0,0,0,0,0]);//13
+	//ｽﾃﾌﾟﾗ保存領域:魔理沙(Easy)
+	SetCommonDataEx("m","st_score_marisa_easy",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:魔理沙(Normal)
+	SetCommonDataEx("m","st_score_marisa_normal",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:魔理沙(Hard)
+	SetCommonDataEx("m","st_score_marisa_hard",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:魔理沙(Luantic)
+	SetCommonDataEx("m","st_score_marisa_lunatic",[0,0,0,0,0,0]);//6
+
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Easy)
+	SetCommonDataEx("s","sp_score_sakuya_easy",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0]);//27
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Normal)
+	SetCommonDataEx("s","sp_score_sakuya_normal",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0]);//28
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Hard)
+	SetCommonDataEx("s","sp_score_sakuya_hard",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Luantic)
+	SetCommonDataEx("s","sp_score_sakuya_lunatic",[0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,
+							0,0,0,0,0,0,0,0,0,0,0]);//31
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Extra)
+	SetCommonDataEx("s","sp_score_sakuya_extra",[0,0,0,0,0,0,0,0,0,0,0,0]);//12
+	//ｽﾍﾟﾌﾟﾗ保存領域:咲夜(Phantasm)
+	SetCommonDataEx("s","sp_score_sakuya_phantasm",[0,0,0,0,0,0,0,0,0,0,0,0,0]);//13
+	//ｽﾃﾌﾟﾗ保存領域:咲夜(Easy)
+	SetCommonDataEx("s","st_score_sakuya_easy",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:咲夜(Normal)
+	SetCommonDataEx("s","st_score_sakuya_normal",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:咲夜(Hard)
+	SetCommonDataEx("s","st_score_sakuya_hard",[0,0,0,0,0,0]);//6
+	//ｽﾃﾌﾟﾗ保存領域:咲夜(Luantic)
+	SetCommonDataEx("s","st_score_sakuya_lunatic",[0,0,0,0,0,0]);//6
+	}
+
+}

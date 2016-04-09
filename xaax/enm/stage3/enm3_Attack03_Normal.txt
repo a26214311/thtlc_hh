@@ -1,0 +1,136 @@
+
+#Title[enm3 Attack03 normal]
+#Text[ピアシテ・パスカル　通常03
+モチーフ　タロット≪月≫]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+    let imgEffect2= GetCurrentScriptDirectory~".\enm3eff\wave.png";
+    let imgSPNB	  = GetCurrentScriptDirectory~".\enm3eff\spellEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(5000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(100,100,100,100);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,CenY-50,10,5);
+	LoadGraphic(imgSPNB);
+        LoadGraphic(imgEffect);
+        LoadGraphic(imgEffect2);
+	Aura(8,255,255,0);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(0,1,0);
+	SetTimer(60);
+	Timer(2,0);
+	EnemyTexture03_typeB(true);
+	VSname(0);
+	VSname2(0,0);
+	RedMagicCircle(0,60);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(120,100);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(120,100);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,0,0,0,0,0);
+	CutinSP2(-120,-10,GetCurrentScriptDirectory~".\enm3spell\enm3_sn01_normal.png",0,0,300,30,255,255,255);
+	BackGroundEffect03;
+	}
+	if(S_count==50){
+	}
+	
+
+	a++;	
+	frame++;
+	count++;
+	//S_count++;
+	timer++;
+	if(frame==60){Concentration(50,powerla);}
+	if(frame==120){
+	loop(10){
+	TarotBullet03(GetX,GetY,angle,90,10,kBLUE41,10,255,255,0);
+	angle+=36;
+	}
+	angle+=rand(0,360);
+	PlaySE(tan);
+	frame=100;
+	}
+	alternative(count)
+	case(2000){
+	if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+        else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}}
+	if(count==200){
+	frame=-50;
+	count=-50;
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

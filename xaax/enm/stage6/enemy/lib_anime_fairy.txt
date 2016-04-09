@@ -1,0 +1,134 @@
+//////////////////////////////////////////////////////////////////////
+//===================================================================
+//貴方が作る東方STG〜東方弾幕風 8の880氏作成妖精ドット絵用アニメライブラリ
+//===================================================================
+//////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////
+//定数、変数定義
+//////////////////////////////////////////////////////////////////////
+/**
+*	グローバル変数設定
+*/
+let enmfin = false;//敵撃破後にtrue
+
+/**
+*	妖精種類定数
+*/
+let VERYSMALL		= 0;	//最小
+let VERYSMALL_FLUFF	= 1;	//最小（綿毛）
+let SMALL		= 2;	//小
+let SMALL_CAP		= 3;	//小（帽子）
+let MIDDLE		= 4;	//中
+let MIDDLE_RIBBON	= 5;	//中（リボン）
+let LARGE		= 6;	//大
+let LARGE_FLOWER	= 7;	//大（向日葵）
+
+/**
+*	矩形座標定数（左上）
+*	n = neutral
+*	r = right
+*	l = left
+*/
+let aRECT_VS		= [ 0, 0 ];
+let aRECT_VS_F		= [ 224, 0 ];
+let aRECT_S		= [ 0, 32 ];
+let aRECT_S_C		= [ 0, 80 ];
+let aRECT_M		= [ 0, 128 ];
+let aRECT_M_R		= [ 0, 176 ];
+let aRECT_L		= [ 0, 224 ];
+let aRECT_L_F		= [ 0, 288 ];
+
+/**
+*	その他
+*/
+let m_aRect = [];		//矩形初期座標
+let m_Rect_Length = 0;		//矩形一辺の長さ
+let m_Delay = 8;		//格コマ間のディレイ
+let m_Count = 0;
+let m_Rect_Number = 0;		//コマ番号
+let m_aNum_Rotation_Stand = [ 0, 1, 2, 1 ];
+let m_aNum_Rotation_Right = [ 4, 5, 6, 5 ];
+let m_Connection = true;	//左右の繋ぎのコマであるか
+
+//////////////////////////////////////////////////////////////////////
+//関数
+//////////////////////////////////////////////////////////////////////
+/**
+*	矩形一辺の長さを設定
+*/
+function SetRectLength( let Type ){
+	let Rect_Length;
+	alternative( Type )
+	case( VERYSMALL , VERYSMALL_FLUFF )	{ Rect_Length = 32; }
+	case( SMALL		, SMALL_CAP )		{ Rect_Length = 48; }
+	case( MIDDLE	, MIDDLE_RIBBON )	{ Rect_Length = 48; }
+	case( LARGE		, LARGE_FLOWER )	{ Rect_Length = 64; }
+	others								{ assert( 0, "妖精の指定が間違っています" );}
+	return( Rect_Length );
+}
+
+/**
+*	初期座標設定
+*/
+function SetRectFirst( let Type ){
+	let aRect = [];
+	alternative( Type )
+	case( VERYSMALL )	{ aRect = aRECT_VS; }
+	case( VERYSMALL_FLUFF )	{ aRect = aRECT_VS_F; }
+	case( SMALL )		{ aRect = aRECT_S; }
+	case( SMALL_CAP )	{ aRect = aRECT_S_C; }
+	case( MIDDLE )		{ aRect = aRECT_M; }
+	case( MIDDLE_RIBBON )	{ aRect = aRECT_M_R; }
+	case( LARGE )		{ aRect = aRECT_L; }
+	case( LARGE_FLOWER )	{ aRect = aRECT_L_F; }
+	others			{ assert( 0, "妖精の指定が間違っています" ); }
+	return( aRect );
+}
+
+/**
+*	初期設定（@Initializeで呼び出す）
+*/
+function Initialize_Fairy( let Type ,r,g,b){
+	m_Rect_Length = SetRectLength( Type );
+	m_aRect = SetRectFirst( Type );
+	SetLife(GetLife+100);
+	CML(r,g,b);//敵爆発とか処理
+}
+
+/**
+*	描画（@DrawLoopで毎回呼び出す）
+*/			//FIXME：SetMovePosition03()での縦移動時に横を向くバグ
+function DrawFairy( let szImage ){
+	let DirectionState = trunc( GetSpeedX() );
+//	DrawText(GetLife,GetX-16,GetY-24,12,255);
+	//立ち
+	if( DirectionState == 0 ){
+		m_Rect_Number = m_aNum_Rotation_Stand[ trunc( m_Count % ( 4 * m_Delay ) / m_Delay ) ];
+		m_Connection = true;
+	}
+	//左右
+	else{
+		if( m_Connection ){
+			m_Rect_Number = 3;	//StandからRight・Leftへの繋ぎコマ番号 = 3
+			m_Connection = false;
+		}
+		else { m_Rect_Number = m_aNum_Rotation_Right[ trunc( m_Count % ( 4 * m_Delay ) / m_Delay ) ]; }
+	}
+	//描画
+	SetTexture( szImage );
+	SetGraphicRect(
+		m_aRect[ 0 ] + m_Rect_Length * m_Rect_Number,
+		m_aRect[ 1 ],
+		m_aRect[ 0 ] + m_Rect_Length * ( m_Rect_Number + 1 ),
+		m_aRect[ 1 ] + m_Rect_Length
+	);
+	//左なら反転
+	if( DirectionState < 0 ){ SetGraphicAngle( 180, 0, 0 ); }
+	DrawGraphic( GetX(), GetY() );
+	//反転後元に戻す
+	if( DirectionState < 0 ){ SetGraphicAngle( 0, 0, 0 ); }
+	m_Count ++;
+}
+#include_function".\common.txt"

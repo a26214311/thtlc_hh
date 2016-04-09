@@ -1,0 +1,284 @@
+script_enemy_main
+{//逃げながら撃つ、いや、撃って逃げるだ！
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy;
+	alternative(GetArgument)
+		case(0,1,2){imgEnemy=csd~".\img\fairy_blue.png";}	//青妖精
+		case(3,4,5){imgEnemy=csd~".\img\fairy_red.png";}	//赤妖精
+	let imgAngle=0;
+	let shotAngle=0;
+	let ShotSE2= GetCurrentScriptDirectory~"se\shot1.wav";
+	let ShotSE= GetCurrentScriptDirectory~"se\shot2.wav";
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+	let lp=0;
+
+	@Initialize
+	{
+		SetLife(80);//
+		LoadSE(ShotSE);
+		LoadGraphic(imgEnemy);
+		SetTexture(imgEnemy);
+		alternative(GetArgument)
+		case(0,1,2){Initialize_Fairy(4,100,100,255);}	//青妖精
+		case(3,4,5){Initialize_Fairy(4,255,100,100);}	//赤妖精
+	}
+	
+	@MainLoop
+	{		
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		alternative(tdif)
+		case("easy"){
+			lp=9;
+		}
+		case("normal"){
+			lp=18;
+		}
+		case("hard"){
+			lp=27;
+		}
+		case("lunatic"){
+			lp=40;
+		}
+		
+		if(count>=40&&count<=550&&!enmfin){
+			alternative(GetArgument)
+			case(0){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					alternative(tdif)
+					case("easy"){
+						CreateShot01(GetX,GetY,1.8,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer+6,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer-6,BLUE11,15);
+
+					}
+					case("normal"){
+						CreateShot01(GetX,GetY,1.8,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer+6,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer-6,BLUE11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+9,BLUE11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-9,BLUE11,15);
+
+					}
+					case("hard"){
+						CreateShot01(GetX,GetY,2.8,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer+6,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer-6,BLUE11,15);
+					}
+					case("lunatic"){
+						CreateShot01(GetX,GetY,2.8,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer+6,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer,BLUE11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer-6,BLUE11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer+3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer-3,BLUE11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer+9,BLUE11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer-9,BLUE11,15);
+						
+						CreateShot01(GetX,GetY,3.8,GetAngleToPlayer,BLUE21,15);
+						CreateShot01(GetX,GetY,3.7,GetAngleToPlayer+6,BLUE21,15);
+						CreateShot01(GetX,GetY,3.7,GetAngleToPlayer-6,BLUE21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer+9,BLUE21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer,BLUE21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer-9,BLUE21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer+6,BLUE21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer-6,BLUE21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer+12,BLUE21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer-12,BLUE21,15);
+					}
+				}
+			}
+			case(1){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					alternative(tdif)
+					case("easy"){
+						loop(8){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(lp*-2,lp*2),BLUE31,10);
+						}
+					}
+					case("normal"){
+						loop(10){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(lp*-2,lp*2),BLUE31,10);
+						}
+					}
+					case("hard"){
+						loop(32){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(lp*-2,lp*2),BLUE31,10);
+						}
+					}
+					case("lunatic"){
+						loop(64){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(lp*-2,lp*2),BLUE31,10);
+						}
+					}
+				}
+			}
+			case(2){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					ascent(i in 0..lp){
+						CreateShot01(GetX,GetY,1.6,i*(360/lp),BLUE12,10);
+					}
+				}
+			}
+			case(3){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					alternative(tdif)
+					case("easy"){
+						CreateShot01(GetX,GetY,1.8,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer+8,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer-8,RED11,15);
+					}
+					case("normal"){
+						CreateShot01(GetX,GetY,1.8,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,1.7,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer+8,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,1.6,GetAngleToPlayer-8,RED11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer+12,RED11,15);
+						CreateShot01(GetX,GetY,1.5,GetAngleToPlayer-12,RED11,15);
+					}
+					case("hard"){
+						CreateShot01(GetX,GetY,2.8,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer+8,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer-8,RED11,15);
+					}
+					case("lunatic"){
+						CreateShot01(GetX,GetY,2.8,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,2.7,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer+8,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer,RED11,15);
+						CreateShot01(GetX,GetY,2.6,GetAngleToPlayer-8,RED11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer+4,RED11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer-4,RED11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer+12,RED11,15);
+						CreateShot01(GetX,GetY,2.5,GetAngleToPlayer-12,RED11,15);
+						
+						CreateShot01(GetX,GetY,3.8,GetAngleToPlayer,RED21,15);
+						CreateShot01(GetX,GetY,3.7,GetAngleToPlayer+6,RED21,15);
+						CreateShot01(GetX,GetY,3.7,GetAngleToPlayer-6,RED21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer+9,RED21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer,RED21,15);
+						CreateShot01(GetX,GetY,3.6,GetAngleToPlayer-9,RED21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer+6,RED21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer-6,RED21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer+12,RED21,15);
+						CreateShot01(GetX,GetY,3.5,GetAngleToPlayer-12,RED21,15);
+					}
+				}
+			}
+			case(4){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					alternative(tdif)
+					case("easy"){
+						loop(8){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(-20,20),RED31,10);
+						}
+					}
+					case("normal"){
+						loop(10){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(-20,20),RED31,10);
+						}
+					}
+					case("hard"){
+						loop(32){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(-20,20),RED31,10);
+						}
+					}
+					case("lunatic"){
+						loop(64){
+							CreateShot01(GetX,GetY,0.6+rand(0.5,1.2),GetAngleToPlayer+rand(-20,20),RED31,10);
+						}
+					}
+				}
+			}
+			case(5){
+				if(count%120==80){
+					PlaySE(ShotSE);
+					ascent (i in 0..lp) {
+						CreateShot01(GetX,GetY,1.6,i*(360/lp),RED12,10);
+					}
+				}
+			}
+		}
+
+		if(count==0){
+			SetMovePosition02(GetX,MaxY+120,540);
+		}
+		if(GetX<MinX-100){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100){
+		//VanishEnemy;
+		}
+		if(GetY>MaxY+100){
+		VanishEnemy;
+		}
+		SetCollisionA(GetX(),GetY(),16);//当たり判定(自弾)登録
+		count++;
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		DrawFairy(imgEnemy);
+	}
+#include_function".\lib_anime_fairy.txt"
+}

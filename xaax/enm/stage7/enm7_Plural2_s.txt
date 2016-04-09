@@ -1,0 +1,41 @@
+
+#Title[enm7 Plural Extra]
+#Text[邪星章Extra Plural]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+
+#ScriptNextStep
+ #ScriptPath[.\enm7_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack01_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard01_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack02_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard02_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack03_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard03_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack04_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard04_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack05_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard05_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack06_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard06_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack07_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard07_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_Attack08_Extra.txt]
+ #ScriptPath[.\enm7_SpellCard08_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_SpellCard09_Extra.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm7_SpellCard10_Extra.txt]
+
+#EndScriptPathData

@@ -1,0 +1,1053 @@
+task StarHoleED(x,y,dis,xa,ya,za,spa,delay,kill){
+		/*
+		引数9
+		x	Ｘ座標
+		y	Ｙ座標
+		dis	星のデカさ(あんまり大きくしたらダメよ。50~100がおすすめ。)
+		xa	Ｘ座標傾き
+		ya	Ｙ座標傾き
+		za	Ｚ座標傾き
+		spa	回転関数(0で停止、1とか-2とかで向きや早さの変更可能)
+		delay	延滞時間
+		kill	消滅時間(このフレームから消滅までに1~2秒掛かる)
+		*/
+		let id 	     = [Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT)];
+		let img00    = GetCurrentScriptDirectory~".\front\str00.png";
+		let img01    = GetCurrentScriptDirectory~".\front\str01.png";
+		let i        = 0;
+		let i2       = 1;
+		let i3       = 0;
+		let pc       = 0;
+		let pc2      = 36;
+		let move1    = 0;
+		let moveA    = 0;
+		let move1a   = 0;
+		let moveA1   = 0;
+		let move2    = 0;
+		let moveB    = 0;
+		let move2b   = 0;
+		let moveB2   = 0;
+		let cc       = 0;
+		let rgb      = [200,255,255];
+		let sca      = 1;
+		let die      = 0;
+		let dl       = false;
+		let angle    = 0;
+		let dis1     = 0;
+		let disA     = 0;
+		let rc       = trunc(rand(2,3));
+		let rang     = rand(0,360);
+		
+		LoadGraphic(img00);
+		LoadGraphic(img01);
+		
+		loop(delay){yield;}
+		
+		Obj_SetPosition(id[0],x,y);
+		ObjEffect_SetTexture(id[0],img00);
+		ObjEffect_SetRenderState(id[0],ALPHA);
+		ObjEffect_SetPrimitiveType(id[0],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(id[0],sca,sca);
+		ObjEffect_SetLayer(id[0],8);
+		ObjEffect_CreateVertex(id[0],22);//Ｎ角形＋１＊２を入力
+		Obj_SetPosition(id[1],x,y);
+		ObjEffect_SetTexture(id[1],img01);
+		ObjEffect_SetRenderState(id[1],ADD);
+		ObjEffect_SetPrimitiveType(id[1],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(id[1],sca,sca);
+		ObjEffect_SetLayer(id[1],8);
+		ObjEffect_CreateVertex(id[1],22);//Ｎ角形＋１＊２を入力
+		loop(22){
+		ObjEffect_SetVertexXY(id[0],i,70*sin(pc),70*cos(pc));//内側に表示する異空間。
+		ObjEffect_SetVertexXY(id[0],i2,0*sin(pc2),0*cos(pc2));//0から70まで伸ばす。
+		ObjEffect_SetVertexUV(id[0],i,0,0+pc);
+		ObjEffect_SetVertexUV(id[0],i2,400,0+pc2);
+		ObjEffect_SetVertexColor(id[0],i,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],i2,255,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexXY(id[1],i,70*sin(pc),70*cos(pc));//仮に中心点から70の円型とする。
+		ObjEffect_SetVertexXY(id[1],i2,60*sin(pc2),60*cos(pc2));//外円-10が内円の頂点。
+		ObjEffect_SetVertexUV(id[1],i,0,0+pc);
+		ObjEffect_SetVertexUV(id[1],i2,20,0+pc2);
+		ObjEffect_SetVertexColor(id[1],i,255,rgb[0],rgb[1],rgb[2]);//色が決められる！
+		ObjEffect_SetVertexColor(id[1],i2,255,rgb[0],rgb[1],rgb[2]);
+		pc+=36;
+		pc2+=36;
+		i+=2;
+		i2+=2;
+		}
+		pc=0;
+		pc2=36;
+		i=0;
+		i2=1;
+		
+		loop{
+			die++;
+			if(die<kill){//出力処理
+			if(move2<dis){moveB+=3;}
+			move2=dis*sin(moveB);
+			if(move2b<dis){moveB2+=rc;}
+			move2b=dis*sin(moveB2);
+			if(move2>=(dis-10)&&move1<(dis-30)){moveA+=3;}
+			move1=(dis-30)*sin(moveA);
+			if(move2>=(dis-10)&&move1a<(dis-30)){moveA1+=rc;}
+			move1a=(dis-30)*sin(moveA1);
+			}
+			
+			if(die>kill){//消滅処理
+			if(move1<=-5&&move2>-5){moveB-=3;}
+			move2=dis*sin(moveB);
+			if(move1<=-5&&move2b>-5){moveB2-=3;}
+			move2b=dis*sin(moveB2);
+			if(move1>-5){moveA-=3;}
+			move1=(dis-30)*sin(moveA);
+			if(move1a>-5){moveA1-=2;}
+			move1a=(dis-30)*sin(moveA1);
+			if(move2<=0&&sca>0){sca-=0.05;}
+			angle+=5;
+			if(dis1<30){disA+=1;}
+			dis1=30.0*sin(disA);
+			}
+			
+			loop(22){//異空間のデラデラ。
+			ObjEffect_SetVertexUV(id[0],i,0+cc/2,0+pc);
+			ObjEffect_SetVertexUV(id[0],i2,300+cc/2,0+pc2);
+			pc+=20;
+			pc2+=20;
+			i++;
+			i2++;
+			}
+			pc=0;
+			pc2=36;
+			i=0;
+			i2=1;
+			
+			//ここから星型変形の処理
+			//異空間。
+			ObjEffect_SetVertexXY(id[0],0,(move2+10)*sin(0),(move2+10)*cos(0));
+			ObjEffect_SetVertexXY(id[0],1,0*sin(36),0*cos(36));
+			ObjEffect_SetVertexXY(id[0],2,(move1+10)*sin(36),(move1+10)*cos(36));
+			ObjEffect_SetVertexXY(id[0],3,0*sin(36*2),0*cos(36*2));
+			ObjEffect_SetVertexXY(id[0],4,(move2+10)*sin(36*2),(move2+10)*cos(36*2));
+			ObjEffect_SetVertexXY(id[0],5,0*sin(36*3),0*cos(36*3));
+			ObjEffect_SetVertexXY(id[0],6,(move1a+10)*sin(36*3),(move1a+10)*cos(36*3));
+			ObjEffect_SetVertexXY(id[0],7,0*sin(36*4),0*cos(36*4));
+			ObjEffect_SetVertexXY(id[0],8,(move2b+10)*sin(36*4),(move2b+10)*cos(36*4));
+			ObjEffect_SetVertexXY(id[0],9,0*sin(36*5),0*cos(36*5));
+			ObjEffect_SetVertexXY(id[0],10,(move1+10)*sin(36*5),(move1+10)*cos(36*5));
+			ObjEffect_SetVertexXY(id[0],11,0*sin(36*6),0*cos(36*6));
+			ObjEffect_SetVertexXY(id[0],12,(move2b+10)*sin(36*6),(move2b+10)*cos(36*6));
+			ObjEffect_SetVertexXY(id[0],13,0*sin(36*7),0*cos(36*7));
+			ObjEffect_SetVertexXY(id[0],14,(move1+10)*sin(36*7),(move1+10)*cos(36*7));
+			ObjEffect_SetVertexXY(id[0],15,0*sin(36*8),0*cos(36*8));
+			ObjEffect_SetVertexXY(id[0],16,(move2+10)*sin(36*8),(move2+10)*cos(36*8));
+			ObjEffect_SetVertexXY(id[0],17,0*sin(36*9),0*cos(36*9));
+			ObjEffect_SetVertexXY(id[0],18,(move1a+10)*sin(36*9),(move1a+10)*cos(36*9));
+			ObjEffect_SetVertexXY(id[0],19,0*sin(36*10),0*cos(36*10));
+			ObjEffect_SetVertexXY(id[0],20,(move2b+10)*sin(36*10),(move2b+10)*cos(36*10));
+			ObjEffect_SetVertexXY(id[0],21,0*sin(36),0*cos(36));
+			//星型
+			ObjEffect_SetVertexXY(id[1],0,(move2+10)*sin(0),(move2+10)*cos(0));
+			ObjEffect_SetVertexXY(id[1],1,(move1)*sin(36),(move1)*cos(36));
+			ObjEffect_SetVertexXY(id[1],2,(move1+10)*sin(36),(move1+10)*cos(36));
+			ObjEffect_SetVertexXY(id[1],3,(move2)*sin(36*2),(move2)*cos(36*2));
+			ObjEffect_SetVertexXY(id[1],4,(move2+10)*sin(36*2),(move2+10)*cos(36*2));
+			ObjEffect_SetVertexXY(id[1],5,(move1a)*sin(36*3),(move1a)*cos(36*3));
+			ObjEffect_SetVertexXY(id[1],6,(move1a+10)*sin(36*3),(move1a+10)*cos(36*3));
+			ObjEffect_SetVertexXY(id[1],7,(move2b)*sin(36*4),(move2b)*cos(36*4));
+			ObjEffect_SetVertexXY(id[1],8,(move2b+10)*sin(36*4),(move2b+10)*cos(36*4));
+			ObjEffect_SetVertexXY(id[1],9,(move1)*sin(36*5),(move1)*cos(36*5));
+			ObjEffect_SetVertexXY(id[1],10,(move1+10)*sin(36*5),(move1+10)*cos(36*5));
+			ObjEffect_SetVertexXY(id[1],11,(move2b)*sin(36*6),(move2b)*cos(36*6));
+			ObjEffect_SetVertexXY(id[1],12,(move2b+10)*sin(36*6),(move2b+10)*cos(36*6));
+			ObjEffect_SetVertexXY(id[1],13,(move1)*sin(36*7),(move1)*cos(36*7));
+			ObjEffect_SetVertexXY(id[1],14,(move1+10)*sin(36*7),(move1+10)*cos(36*7));
+			ObjEffect_SetVertexXY(id[1],15,(move2)*sin(36*8),(move2)*cos(36*8));
+			ObjEffect_SetVertexXY(id[1],16,(move2+10)*sin(36*8),(move2+10)*cos(36*8));
+			ObjEffect_SetVertexXY(id[1],17,(move1a)*sin(36*9),(move1a)*cos(36*9));
+			ObjEffect_SetVertexXY(id[1],18,(move1a+10)*sin(36*9),(move1a+10)*cos(36*9));
+			ObjEffect_SetVertexXY(id[1],19,(move2)*sin(36*10),(move2)*cos(36*10));
+			ObjEffect_SetVertexXY(id[1],20,(move2+10)*sin(36*10),(move2+10)*cos(36*10));
+			ObjEffect_SetVertexXY(id[1],21,(move1)*sin(36),(move1)*cos(36));
+			
+			//回転とかその他
+			cc++;
+			ObjEffect_SetAngle(id[0],xa,ya,za+cc*spa);
+			ObjEffect_SetAngle(id[1],xa,ya,za+cc*spa);
+			ObjEffect_SetScale(id[0],sca+rand(0.01,0.05),sca+rand(0.01,0.05));
+			ObjEffect_SetScale(id[1],sca+rand(0.01,0.05),sca+rand(0.01,0.05));
+			
+			if(die>kill&&sca<=0){//メモリリークしないように！
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(id[2]);
+			break;
+			}
+			
+			yield;
+		}
+}
+
+task BlackHoleED(x,y,dis,spa,delay,kill){
+	/*
+	ブラックホール。完全に俺得です＾ｐ＾
+	以下、引数と簡単な利用方法。
+	x	Ｘ座標
+	y	Ｙ座標
+	dis	星のデカさ(あんまり大きくしたらダメよ。50~100がおすすめ。)
+	spa	回転関数(0で停止、1とか-2とかで向きや早さの変更可能)
+	delay	延滞時間
+	kill	消滅時間(このフレームから消滅までに1~2秒掛かる)
+	*/
+	let id 	     = [Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT),
+			Obj_Create(OBJ_EFFECT)];
+	let img00    = GetCurrentScriptDirectory~".\front\str00.png";
+	let img01    = GetCurrentScriptDirectory~".\front\str01a.png";
+	let i        = 0;
+	let i2       = 1;
+	let i3       = 0;
+	let pc       = 0;
+	let pc2      = 36;
+	let move1    = 0;
+	let moveA    = 0;
+	let move1a   = 0;
+	let moveA1   = 0;
+	let move2    = 0;
+	let moveB    = 0;
+	let move2b   = 0;
+	let moveB2   = 0;
+	let cc       = 0;
+	let rgb      = [0,0,0];
+	let sca      = 1;
+	let die      = 0;
+	let dl       = false;
+	let angle    = 0;
+	let dis1     = 0;
+	let disA     = 0;
+	let rc       = trunc(rand(2,3));
+	let rang     = rand(0,360);
+	
+	LoadGraphic(img00);
+	LoadGraphic(img01);
+	
+	loop(delay){yield;}
+	
+	Obj_SetPosition(id[0],x,y);
+	ObjEffect_SetTexture(id[0],img00);
+	ObjEffect_SetRenderState(id[0],ALPHA);
+	ObjEffect_SetPrimitiveType(id[0],PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(id[0],sca,sca);
+	ObjEffect_SetLayer(id[0],8);
+	ObjEffect_CreateVertex(id[0],22);//Ｎ角形＋１＊２を入力
+	Obj_SetPosition(id[1],x,y);
+	ObjEffect_SetTexture(id[1],img01);
+	ObjEffect_SetRenderState(id[1],ALPHA);
+	ObjEffect_SetPrimitiveType(id[1],PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(id[1],sca,sca);
+	ObjEffect_SetLayer(id[1],8);
+	ObjEffect_CreateVertex(id[1],22);//Ｎ角形＋１＊２を入力
+	loop(22){
+	ObjEffect_SetVertexXY(id[0],i,70*sin(pc),70*cos(pc));//内側に表示する異空間。
+	ObjEffect_SetVertexXY(id[0],i2,0*sin(pc2),0*cos(pc2));//0から70まで伸ばす。
+	ObjEffect_SetVertexUV(id[0],i,0,0+pc);
+	ObjEffect_SetVertexUV(id[0],i2,400,0+pc2);
+	ObjEffect_SetVertexColor(id[0],i,255,100,100,100);
+	ObjEffect_SetVertexColor(id[0],i2,255,0,0,0);
+	ObjEffect_SetVertexXY(id[1],i,70*sin(pc),70*cos(pc));//仮に中心点から70の円型とする。
+	ObjEffect_SetVertexXY(id[1],i2,60*sin(pc2),60*cos(pc2));//外円-10が内円の頂点。
+	ObjEffect_SetVertexUV(id[1],i,0,0+pc);
+	ObjEffect_SetVertexUV(id[1],i2,20,0+pc2);
+	ObjEffect_SetVertexColor(id[1],i,255,rgb[0],rgb[1],rgb[2]);//色が決められる！
+	ObjEffect_SetVertexColor(id[1],i2,255,rgb[0],rgb[1],rgb[2]);
+	pc+=36;
+	pc2+=36;
+	i+=2;
+	i2+=2;
+	}
+	pc=0;
+	pc2=36;
+	i=0;
+	i2=1;
+	
+	loop{
+		let gpx = GetPlayerX;
+		let gpy = GetPlayerY;
+		let ogx = Obj_GetX(id[1]);
+		let ogy = Obj_GetY(id[1]);
+		
+		die++;
+		if(die<kill){//出力処理
+		if(move2<dis){moveB+=3;}
+		move2=dis*sin(moveB);
+		if(move2b<dis){moveB2+=rc;ConcentrationLightRED(x,y,100,255,0,255);}
+		move2b=dis*sin(moveB2);
+		if(move2>=(dis-10)&&move1<(dis-30)){moveA+=3;}
+		move1=(dis-30)*sin(moveA);
+		if(move2>=(dis-10)&&move1a<(dis-30)){moveA1+=rc;}
+		move1a=(dis-30)*sin(moveA1);
+		if(move1a>=(dis-30)){
+		sca+=0.001;
+		ConcentrationLightED(x,y,250,255,255,0);
+		ConcentrationLight2ED(x,y,400,0,0,0);
+		if(ogx+5<gpx){SetPlayerX(gpx-1-sca/4);}
+		if(ogx-5>gpx){SetPlayerX(gpx+1+sca/4);}
+		if(ogy+5<gpy){SetPlayerY(gpy-1-sca/4);}
+		if(ogy-5>gpy){SetPlayerY(gpy+1+sca/4);}
+		}
+		}
+		
+		if(die>kill){//消滅処理
+		if(move1<=-5&&move2>-5){moveB-=3;}
+		move2=dis*sin(moveB);
+		if(move1<=-5&&move2b>-5){moveB2-=3;}
+		move2b=dis*sin(moveB2);
+		if(move1>-5){moveA-=3;}
+		move1=(dis-30)*sin(moveA);
+		if(move1a>-5){moveA1-=2;}
+		move1a=(dis-30)*sin(moveA1);
+		if(move2<=0&&sca>0){sca-=0.05;}
+		loop(3){
+		DarkEffectED(x+(20+dis1)*sin(angle+60),y+(20+dis1)*cos(angle+60),rgb[0],rgb[1],rgb[2]);
+		DarkEffectED(x+(50)*sin(angle),y+(50)*cos(angle),rgb[0],rgb[1],rgb[2]);
+		angle+=120;
+		}
+		angle+=5;
+		if(dis1<30){disA+=1;}
+		dis1=30.0*sin(disA);
+		}
+		
+		loop(22){//異空間のデラデラ。
+		ObjEffect_SetVertexUV(id[0],i,0+cc/2,0+pc);
+		ObjEffect_SetVertexUV(id[0],i2,300+cc/2,0+pc2);
+		pc+=20;
+		pc2+=20;
+		i++;
+		i2++;
+		}
+		pc=0;
+		pc2=36;
+		i=0;
+		i2=1;
+		
+		//ここから星型変形の処理
+		//異空間。
+		ObjEffect_SetVertexXY(id[0],0,(move2+10)*sin(0),(move2+10)*cos(0));
+		ObjEffect_SetVertexXY(id[0],1,0*sin(36),0*cos(36));
+		ObjEffect_SetVertexXY(id[0],2,(move1+10)*sin(36),(move1+10)*cos(36));
+		ObjEffect_SetVertexXY(id[0],3,0*sin(36*2),0*cos(36*2));
+		ObjEffect_SetVertexXY(id[0],4,(move2+10)*sin(36*2),(move2+10)*cos(36*2));
+		ObjEffect_SetVertexXY(id[0],5,0*sin(36*3),0*cos(36*3));
+		ObjEffect_SetVertexXY(id[0],6,(move1a+10)*sin(36*3),(move1a+10)*cos(36*3));
+		ObjEffect_SetVertexXY(id[0],7,0*sin(36*4),0*cos(36*4));
+		ObjEffect_SetVertexXY(id[0],8,(move2b+10)*sin(36*4),(move2b+10)*cos(36*4));
+		ObjEffect_SetVertexXY(id[0],9,0*sin(36*5),0*cos(36*5));
+		ObjEffect_SetVertexXY(id[0],10,(move1+10)*sin(36*5),(move1+10)*cos(36*5));
+		ObjEffect_SetVertexXY(id[0],11,0*sin(36*6),0*cos(36*6));
+		ObjEffect_SetVertexXY(id[0],12,(move2b+10)*sin(36*6),(move2b+10)*cos(36*6));
+		ObjEffect_SetVertexXY(id[0],13,0*sin(36*7),0*cos(36*7));
+		ObjEffect_SetVertexXY(id[0],14,(move1+10)*sin(36*7),(move1+10)*cos(36*7));
+		ObjEffect_SetVertexXY(id[0],15,0*sin(36*8),0*cos(36*8));
+		ObjEffect_SetVertexXY(id[0],16,(move2+10)*sin(36*8),(move2+10)*cos(36*8));
+		ObjEffect_SetVertexXY(id[0],17,0*sin(36*9),0*cos(36*9));
+		ObjEffect_SetVertexXY(id[0],18,(move1a+10)*sin(36*9),(move1a+10)*cos(36*9));
+		ObjEffect_SetVertexXY(id[0],19,0*sin(36*10),0*cos(36*10));
+		ObjEffect_SetVertexXY(id[0],20,(move2b+10)*sin(36*10),(move2b+10)*cos(36*10));
+		ObjEffect_SetVertexXY(id[0],21,0*sin(36),0*cos(36));
+		//星型
+		ObjEffect_SetVertexXY(id[1],0,(move2+10)*sin(0),(move2+10)*cos(0));
+		ObjEffect_SetVertexXY(id[1],1,(move1)*sin(36),(move1)*cos(36));
+		ObjEffect_SetVertexXY(id[1],2,(move1+10)*sin(36),(move1+10)*cos(36));
+		ObjEffect_SetVertexXY(id[1],3,(move2)*sin(36*2),(move2)*cos(36*2));
+		ObjEffect_SetVertexXY(id[1],4,(move2+10)*sin(36*2),(move2+10)*cos(36*2));
+		ObjEffect_SetVertexXY(id[1],5,(move1a)*sin(36*3),(move1a)*cos(36*3));
+		ObjEffect_SetVertexXY(id[1],6,(move1a+10)*sin(36*3),(move1a+10)*cos(36*3));
+		ObjEffect_SetVertexXY(id[1],7,(move2b)*sin(36*4),(move2b)*cos(36*4));
+		ObjEffect_SetVertexXY(id[1],8,(move2b+10)*sin(36*4),(move2b+10)*cos(36*4));
+		ObjEffect_SetVertexXY(id[1],9,(move1)*sin(36*5),(move1)*cos(36*5));
+		ObjEffect_SetVertexXY(id[1],10,(move1+10)*sin(36*5),(move1+10)*cos(36*5));
+		ObjEffect_SetVertexXY(id[1],11,(move2b)*sin(36*6),(move2b)*cos(36*6));
+		ObjEffect_SetVertexXY(id[1],12,(move2b+10)*sin(36*6),(move2b+10)*cos(36*6));
+		ObjEffect_SetVertexXY(id[1],13,(move1)*sin(36*7),(move1)*cos(36*7));
+		ObjEffect_SetVertexXY(id[1],14,(move1+10)*sin(36*7),(move1+10)*cos(36*7));
+		ObjEffect_SetVertexXY(id[1],15,(move2)*sin(36*8),(move2)*cos(36*8));
+		ObjEffect_SetVertexXY(id[1],16,(move2+10)*sin(36*8),(move2+10)*cos(36*8));
+		ObjEffect_SetVertexXY(id[1],17,(move1a)*sin(36*9),(move1a)*cos(36*9));
+		ObjEffect_SetVertexXY(id[1],18,(move1a+10)*sin(36*9),(move1a+10)*cos(36*9));
+		ObjEffect_SetVertexXY(id[1],19,(move2)*sin(36*10),(move2)*cos(36*10));
+		ObjEffect_SetVertexXY(id[1],20,(move2+10)*sin(36*10),(move2+10)*cos(36*10));
+		ObjEffect_SetVertexXY(id[1],21,(move1)*sin(36),(move1)*cos(36));
+		
+		//回転とかその他
+		cc++;
+		ObjEffect_SetAngle(id[0],0,0,180+cc*spa);
+		ObjEffect_SetAngle(id[1],0,0,180+cc*spa);
+		ObjEffect_SetScale(id[0],sca+rand(0.01,0.05),sca+rand(0.01,0.05));
+		ObjEffect_SetScale(id[1],sca+rand(0.01,0.05),sca+rand(0.01,0.05));
+		
+		if(die>kill&&sca<=0){//メモリリークしないように！
+		Obj_Delete(id[0]);
+		Obj_Delete(id[1]);
+		Obj_Delete(id[2]);
+		break;
+		}
+		
+		yield;
+	}
+}
+
+task ThunderEffectED(x,y,hard,long,r,g,b){
+	loop(hard){
+		ThunderEffectCoreED(x,y,long,r,g,b);
+	}
+}
+
+task ThunderEffectCoreED(x,y,long,r,g,b){
+	let id 	     = Obj_Create(OBJ_EFFECT);
+	let img00    = GetCurrentScriptDirectory~".\front\str03.png";
+	let cc       = 0;
+	let rgb      = [r,g,b];
+	let scaR     = rand(0.5,1); 
+	let sca1     = 0;
+	let scaA     = 0;
+	let die      = 0;
+	let dl       = false;
+	
+	LoadGraphic(img00);
+	
+	Obj_SetPosition(id,x,y);
+	ObjEffect_SetTexture(id,img00);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,8);
+	ObjEffect_SetAngle(id,0,0,rand(0,360));
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,-600,16/-2);
+	ObjEffect_SetVertexXY(id,1,-600,16/2);
+	ObjEffect_SetVertexXY(id,2,0,16/-2);
+	ObjEffect_SetVertexXY(id,3,0,16/2);
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,16);
+	ObjEffect_SetVertexUV(id,2,128,0);
+	ObjEffect_SetVertexUV(id,3,128,16);
+	ObjEffect_SetVertexColor(id,0,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,1,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,2,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,3,255,rgb[0],rgb[1],rgb[2]);
+	
+	loop{
+		cc-=5;
+		die++;
+		if(die<long){dl=false;}
+		if(die>long){dl=true;}
+		
+		if(dl==false){
+		if(sca1<0.5){scaA+=5;}
+		sca1=0.50*sin(scaA);
+		}
+		if(dl==true){
+		if(sca1>0){scaA-=3;}
+		sca1=0.50*sin(scaA);
+		}
+		
+		if(dl==true&&sca1<=0){
+		Obj_Delete(id);
+		break;
+		}
+		ObjEffect_SetScale(id,scaR,sca1);
+		ObjEffect_SetVertexUV(id,0,0+cc,0);
+		ObjEffect_SetVertexUV(id,1,0+cc,16);
+		ObjEffect_SetVertexUV(id,2,600+cc,0);
+		ObjEffect_SetVertexUV(id,3,600+cc,16);
+		
+		yield;
+	}
+}
+
+task DarkEffectED(x,y,r,g,b){
+	let id       = Obj_Create(OBJ_EFFECT);
+	let img00    = GetCurrentScriptDirectory~".\eff\01.png";
+	let rgb      = [0,0,0];
+	let alpha    = 255;
+	let spin     = 0;
+	let sca1     = rand(0.01,0.06);
+	let sca2     = rand(0.01,0.06);
+	
+	LoadGraphic(img00);
+	
+	Obj_SetPosition(id,x,y);
+	ObjEffect_SetTexture(id,img00);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(id,sca1,sca1);
+	ObjEffect_SetAngle(id,0,0,0);
+	ObjEffect_SetLayer(id,8);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,300/-2,300/-2);
+	ObjEffect_SetVertexXY(id,1,300/-2,300/2);
+	ObjEffect_SetVertexXY(id,2,300/2,300/-2);
+	ObjEffect_SetVertexXY(id,3,300/2,300/2);
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,300);
+	ObjEffect_SetVertexUV(id,2,300,0);
+	ObjEffect_SetVertexUV(id,3,300,300);
+	
+	loop{
+		ObjEffect_SetScale(id,sca1,sca2);
+		
+		if(alpha>0){alpha-=255/20;}
+		ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+		
+		if(alpha<=0){
+		Obj_Delete(id);
+		break;
+		}
+		
+		yield;
+	}
+}
+
+task ConcentrationLightED(x,y,dis,r,g,b){
+let id       = Obj_Create(OBJ_EFFECT);
+let img00    = GetCurrentScriptDirectory~".\eff\light.png";
+let rgb      = [r,g,b];
+let alpha    = 255;
+let scax     = 0.15;
+let scax1    = 0;
+let scaxa    = 0;
+let scay     = 0.5;
+let angle    = rand(0,360);
+let alpha    = 0;
+let dis1     = 0;
+let disA     = 0;
+
+LoadGraphic(img00);
+
+ObjEffect_SetTexture(id,img00);
+ObjEffect_SetRenderState(id,ADD);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetAngle(id,0,0,angle*-1);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,50/-2,50/-2);
+ObjEffect_SetVertexXY(id,1,50/-2,50/2);
+ObjEffect_SetVertexXY(id,2,50/2,50/-2);
+ObjEffect_SetVertexXY(id,3,50/2,50/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,50);
+ObjEffect_SetVertexUV(id,2,50,0);
+ObjEffect_SetVertexUV(id,3,50,50);
+
+loop{
+if(alpha<255){alpha+=15;}
+ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+
+if(dis1<dis){disA+=3;}
+dis1=dis*sin(disA);
+Obj_SetPosition(id,x+(dis-dis1)*sin(angle),y+(dis-dis1)*cos(angle));
+
+if(scax1<0.15){scaxa+=2;}
+scax1=0.25*sin(scaxa);
+ObjEffect_SetScale(id,scax-scax1,scay);
+
+if(scax1>=0.15){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task ConcentrationLightRED(x,y,dis,r,g,b){
+let id       = Obj_Create(OBJ_EFFECT);
+let img00    = GetCurrentScriptDirectory~".\eff\lightb.png";
+let rgb      = [r,g,b];
+let alpha    = 255;
+let scax     = 1;
+let scax1    = 0;
+let scaxa    = 0;
+let scay     = 1;
+let angle    = rand(0,360);
+let angle2   = rand(-10,10);
+let alpha    = 0;
+let dis1     = 0;
+let disA     = 0;
+let cc       = 0;
+
+LoadGraphic(img00);
+
+ObjEffect_SetTexture(id,img00);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,50/-2,50/-2);
+ObjEffect_SetVertexXY(id,1,50/-2,50/2);
+ObjEffect_SetVertexXY(id,2,50/2,50/-2);
+ObjEffect_SetVertexXY(id,3,50/2,50/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,50);
+ObjEffect_SetVertexUV(id,2,50,0);
+ObjEffect_SetVertexUV(id,3,50,50);
+
+loop{
+if(alpha<255){alpha+=15;}
+ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+
+if(dis1<dis){disA+=1;}
+dis1=dis*sin(disA);
+Obj_SetPosition(id,x+dis1*sin(angle),y+dis1*cos(angle));
+
+if(scax1<1){scaxa+=1;}
+scax1=1*sin(scaxa);
+ObjEffect_SetScale(id,scax-scax1,scay-scax1);
+
+cc++;
+ObjEffect_SetAngle(id,0,0,cc*angle2);
+
+if(scax1>=1){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task ConcentrationLight2ED(x,y,dist,r,g,b){
+let id       = Obj_Create(OBJ_EFFECT);
+let img00    = GetCurrentScriptDirectory~".\eff\lightb.png";
+let rgb      = [r,g,b];
+let alpha    = 255;
+let scax     = 1;
+let scax1    = 0;
+let scaxa    = 0;
+let scay     = 1;
+let angle    = rand(-10,10);
+let angle2   = rand(0,360);
+let alpha    = 0;
+let dis1     = 0;
+let disA     = 0;
+let cc       = 0;
+
+LoadGraphic(img00);
+
+ObjEffect_SetTexture(id,img00);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,50/-2,50/-2);
+ObjEffect_SetVertexXY(id,1,50/-2,50/2);
+ObjEffect_SetVertexXY(id,2,50/2,50/-2);
+ObjEffect_SetVertexXY(id,3,50/2,50/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,50);
+ObjEffect_SetVertexUV(id,2,50,0);
+ObjEffect_SetVertexUV(id,3,50,50);
+
+loop{
+if(alpha<255){alpha+=15;}
+ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+
+if(dis1<dist){disA+=1;}
+dis1=dist*sin(disA);
+Obj_SetPosition(id,x+(dist-dis1)*sin(angle2),y+(dist-dis1)*cos(angle2));
+
+if(scax1<1){scaxa+=1;}
+scax1=1*sin(scaxa);
+ObjEffect_SetScale(id,scax-scax1,scay-scax1);
+
+cc++;
+ObjEffect_SetAngle(id,0,0,cc*angle);
+
+if(scax1>=1){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task ConcentrationLightRL8ED(x,y,dis,r,g,b){
+let id       = Obj_Create(OBJ_EFFECT);
+let img00    = GetCurrentScriptDirectory~".\eff\lightb.png";
+let rgb      = [r,g,b];
+let alpha    = 255;
+let scax     = 1;
+let scax1    = 0;
+let scaxa    = 0;
+let scay     = 1;
+let angle    = rand(0,360);
+let angle2   = rand(-10,10);
+let alpha    = 0;
+let dis1     = 0;
+let disA     = 0;
+let cc       = 0;
+
+LoadGraphic(img00);
+
+ObjEffect_SetTexture(id,img00);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,50/-2,50/-2);
+ObjEffect_SetVertexXY(id,1,50/-2,50/2);
+ObjEffect_SetVertexXY(id,2,50/2,50/-2);
+ObjEffect_SetVertexXY(id,3,50/2,50/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,50);
+ObjEffect_SetVertexUV(id,2,50,0);
+ObjEffect_SetVertexUV(id,3,50,50);
+
+loop{
+if(alpha<255){alpha+=15;}
+ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+
+if(dis1<dis){disA+=1;}
+dis1=dis*sin(disA);
+Obj_SetPosition(id,x+dis1*sin(angle),y+dis1*cos(angle));
+
+if(scax1<1){scaxa+=1;}
+scax1=1*sin(scaxa);
+ObjEffect_SetScale(id,scax-scax1,scay-scax1);
+
+cc++;
+ObjEffect_SetAngle(id,0,0,cc*angle2);
+
+if(scax1>=1){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task ConcentrationLight2L8ED(x,y,dist,r,g,b){
+let id       = Obj_Create(OBJ_EFFECT);
+let img00    = GetCurrentScriptDirectory~".\eff\lightb.png";
+let rgb      = [r,g,b];
+let alpha    = 255;
+let scax     = 1;
+let scax1    = 0;
+let scaxa    = 0;
+let scay     = 1;
+let angle    = rand(-10,10);
+let angle2   = rand(0,360);
+let alpha    = 0;
+let dis1     = 0;
+let disA     = 0;
+let cc       = 0;
+
+LoadGraphic(img00);
+
+ObjEffect_SetTexture(id,img00);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,50/-2,50/-2);
+ObjEffect_SetVertexXY(id,1,50/-2,50/2);
+ObjEffect_SetVertexXY(id,2,50/2,50/-2);
+ObjEffect_SetVertexXY(id,3,50/2,50/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,50);
+ObjEffect_SetVertexUV(id,2,50,0);
+ObjEffect_SetVertexUV(id,3,50,50);
+
+loop{
+if(alpha<255){alpha+=15;}
+ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+
+if(dis1<dist){disA+=1;}
+dis1=dist*sin(disA);
+Obj_SetPosition(id,x+(dist-dis1)*sin(angle2),y+(dist-dis1)*cos(angle2));
+
+if(scax1<1){scaxa+=1;}
+scax1=1*sin(scaxa);
+ObjEffect_SetScale(id,scax-scax1,scay-scax1);
+
+cc++;
+ObjEffect_SetAngle(id,0,0,cc*angle);
+
+if(scax1>=1){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task BlackOutED(long){
+let id		= Obj_Create(OBJ_EFFECT);
+let rgb		= [0,0,0];
+let i		= 0;
+let dis		= 0;
+let cc		= 0;
+let alpha1	= 0;
+let alpha2	= 0;
+
+Obj_SetPosition(id,CenX+96,CenY);
+ObjEffect_SetTexture(id,imgw);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(id,1,1);
+ObjEffect_SetAngle(id,0,0,0);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,640/-2,480/-2);
+ObjEffect_SetVertexXY(id,1,640/-2,480/2);
+ObjEffect_SetVertexXY(id,2,640/2,480/-2);
+ObjEffect_SetVertexXY(id,3,640/2,480/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,480);
+ObjEffect_SetVertexUV(id,2,640,0);
+ObjEffect_SetVertexUV(id,3,640,480);
+
+loop{
+
+if(alpha1<255&&cc<=0){alpha1+=1;}
+if(alpha1>150&&alpha2<255&&cc<=0){alpha2+=1;}
+
+ObjEffect_SetVertexColor(id,0,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha1,rgb[0],rgb[1],rgb[2]);
+
+if(alpha1>=255){cc++;}
+if(cc==1){
+loop(long){yield;}
+}
+if(cc>1&&alpha1>0){
+alpha1-=5;
+}
+if(cc>1&&alpha1<=0){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task OutED(long){
+let id		= Obj_Create(OBJ_EFFECT);
+let rgb		= [255,255,255];
+let i		= 0;
+let dis		= 0;
+let cc		= 0;
+let alpha1	= 0;
+let alpha2	= 0;
+
+Obj_SetPosition(id,CenX+96,CenY);
+ObjEffect_SetTexture(id,imgw);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(id,1,1);
+ObjEffect_SetAngle(id,0,0,0);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,640/-2,480/-2);
+ObjEffect_SetVertexXY(id,1,640/-2,480/2);
+ObjEffect_SetVertexXY(id,2,640/2,480/-2);
+ObjEffect_SetVertexXY(id,3,640/2,480/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,480);
+ObjEffect_SetVertexUV(id,2,640,0);
+ObjEffect_SetVertexUV(id,3,640,480);
+
+loop{
+
+if(alpha1<255&&cc<=0){alpha1+=2;}
+if(alpha1>150&&alpha2<255&&cc<=0){alpha2+=2;}
+
+ObjEffect_SetVertexColor(id,0,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha2,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha2,rgb[0],rgb[1],rgb[2]);
+
+if(alpha2>=255){cc++;}
+if(cc==1){
+loop(long){yield;}
+}
+if(cc>1&&alpha2>0){
+alpha2-=5;
+}
+if(cc>1&&alpha1>0&&alpha2<150){
+alpha1-=5;
+}
+if(cc>1&&alpha1<=0){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task EnemyNameED(x,y,img1,scau){
+	let def0	= Obj_Create(OBJ_EFFECT);
+	let def		= Obj_Create(OBJ_EFFECT);
+	let csd		= GetCurrentScriptDirectory;
+	let img2	= csd~".\front\enamebk.png";
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let cc		= 0;
+	let alpha	= 0;
+	let alpha2	= 0;
+	let scay	= 0;
+	let sca		= 0;
+	
+	LoadGraphic(img1);
+	LoadGraphic(img2);
+	
+	ObjEffect_SetTexture(def,img1);
+	ObjEffect_SetRenderState(def,ALPHA);
+	ObjEffect_SetPrimitiveType(def,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(def,8);
+	ObjEffect_CreateVertex(def,4);
+	ObjEffect_SetScale(def,scau,scay);
+	ObjEffect_SetVertexXY(def,0,640/-2,134/-2);
+	ObjEffect_SetVertexXY(def,1,640/-2,134/2);
+	ObjEffect_SetVertexXY(def,2,640/2,134/-2);
+	ObjEffect_SetVertexXY(def,3,640/2,134/2);
+	ObjEffect_SetVertexUV(def,0,0,0);
+	ObjEffect_SetVertexUV(def,1,0,134);
+	ObjEffect_SetVertexUV(def,2,640,0);
+	ObjEffect_SetVertexUV(def,3,640,134);
+	
+	ObjEffect_SetTexture(def0,img2);
+	ObjEffect_SetRenderState(def0,ALPHA);
+	ObjEffect_SetPrimitiveType(def0,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(def0,8);
+	ObjEffect_CreateVertex(def0,4);
+	ObjEffect_SetVertexXY(def0,0,64/-2,64/-2);
+	ObjEffect_SetVertexXY(def0,1,64/-2,64/2);
+	ObjEffect_SetVertexXY(def0,2,64/2,64/-2);
+	ObjEffect_SetVertexXY(def0,3,64/2,64/2);
+	ObjEffect_SetVertexUV(def0,0,0,0);
+	ObjEffect_SetVertexUV(def0,1,0,64);
+	ObjEffect_SetVertexUV(def0,2,64,0);
+	ObjEffect_SetVertexUV(def0,3,64,64);
+	
+	loop{
+		let gx = Obj_GetX(def);
+		let gy = Obj_GetY(def);
+		
+		if(scay<scau){sca+=3}
+		scay=scau*sin(sca);
+		ObjEffect_SetScale(def,scau,scay);
+		ObjEffect_SetScale(def0,scau*2,scay*2);
+		
+		if(move1<100&&alpha<255){alpha+=5}
+		if(move1>100&&alpha>0){alpha-=5}
+		ObjEffect_SetVertexColor(def,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,3,alpha,255,255,255);
+		if(move1<110&&alpha2<255){alpha2+=2.5}
+		if(move1>110&&alpha2>0){alpha2-=5}
+		ObjEffect_SetVertexColor(def0,0,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,1,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,2,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,3,alpha2,255,255,255);
+		
+		cc++;
+		Obj_SetPosition(def,x-move2,y);
+		Obj_SetPosition(def0,x-100+move1,y);
+		ObjEffect_SetAngle(def0,0,0,cc);
+		move1+=0.5;
+		move2+=moveA;
+		if(move1>100&&moveA<0.5){moveA+=0.01}
+		if(move1>110&&alpha<0){
+			Obj_Delete(def);
+			Obj_Delete(def0);
+			break;
+		}
+		yield;
+	}
+}
+
+task OutEDEX(long){
+let id		= Obj_Create(OBJ_EFFECT);
+let rgb		= [255,255,255];
+let i		= 0;
+let dis		= 0;
+let cc		= 0;
+let alpha1	= 0;
+let alpha2	= 0;
+
+Obj_SetPosition(id,CenX+96,CenY);
+ObjEffect_SetTexture(id,imgw);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(id,1,1);
+ObjEffect_SetAngle(id,0,0,0);
+ObjEffect_SetLayer(id,8);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,640/-2,480/-2);
+ObjEffect_SetVertexXY(id,1,640/-2,480/2);
+ObjEffect_SetVertexXY(id,2,640/2,480/-2);
+ObjEffect_SetVertexXY(id,3,640/2,480/2);
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,480);
+ObjEffect_SetVertexUV(id,2,640,0);
+ObjEffect_SetVertexUV(id,3,640,480);
+
+loop{
+
+if(alpha1<255&&cc<=0){alpha1+=2;}
+if(alpha1>150&&alpha2<255&&cc<=0){alpha2+=2;}
+
+ObjEffect_SetVertexColor(id,0,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,1,alpha2,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,2,alpha1,rgb[0],rgb[1],rgb[2]);
+ObjEffect_SetVertexColor(id,3,alpha2,rgb[0],rgb[1],rgb[2]);
+
+if(alpha2>=255){
+	cc++;
+	ClearStage;
+}
+if(cc==1){
+loop(long){yield;}
+}
+if(cc>1&&alpha2>0){
+alpha2-=5;
+}
+if(cc>1&&alpha1>0&&alpha2<150){
+alpha1-=5;
+}
+if(cc>1&&alpha1<=0){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}

@@ -1,0 +1,148 @@
+task PlayerShot01(x,y,speed,angle,r,g,b,damage){
+	let eff      = Obj_Create(OBJ_EFFECT);
+	let obj      = Obj_Create(OBJ_SHOT);
+	let alpha    = 150;
+	let frame    = 0;
+	let sp       = 0;
+	let limit    = 60;
+	let ea0		= atan2(GetEnemyY-Obj_GetY(obj),GetEnemyX-Obj_GetX(obj));
+	
+	ObjEffect_SetTexture(eff,img2);
+	ObjEffect_SetRenderState(eff,ALPHA);
+	ObjEffect_SetPrimitiveType(eff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(eff,2);
+	ObjEffect_CreateVertex(eff,4);
+	ObjEffect_SetVertexXY(eff,0,20/-2,20/-2);
+	ObjEffect_SetVertexXY(eff,1,20/-2,20/2);
+	ObjEffect_SetVertexXY(eff,2,20/2,20/-2);
+	ObjEffect_SetVertexXY(eff,3,20/2,20/2);
+	ObjEffect_SetVertexUV(eff,0,30,3);
+	ObjEffect_SetVertexUV(eff,1,30,23);
+	ObjEffect_SetVertexUV(eff,2,50,3);
+	ObjEffect_SetVertexUV(eff,3,50,23);
+	ObjEffect_SetVertexColor(eff,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,3,alpha,r,g,b);
+	    
+	Obj_SetPosition(obj,x,y);
+	Obj_SetSpeed(obj,speed);
+	Obj_SetAngle(obj,angle);
+	Obj_SetAlpha(obj,0);
+	ObjShot_SetBombResist(obj,true);
+	ObjShot_SetGraphic(obj,1);
+	ObjShot_SetDamage(obj,damage);
+	ObjShot_SetPenetration(obj,1);
+	ObjShot_ToItem(obj,false);
+	
+	loop{
+		let exy = LockTarget(Obj_GetX(obj),Obj_GetY(obj),Obj_GetAngle(obj));
+		let ea = atan2(GetEnemyY-Obj_GetY(obj),GetEnemyX-Obj_GetX(obj));
+		
+		Obj_SetPosition(eff,Obj_GetX(obj),Obj_GetY(obj));
+		ObjEffect_SetAngle(eff,0,0,90+Obj_GetAngle(obj));
+		if(Obj_BeDeleted(obj)==true){
+			Obj_Delete(eff);
+			break;
+		}
+		if(limit>0&&exy[0]!=0&&exy[1]!=0){
+			if(sin(ea - Obj_GetAngle(obj))>0){
+				Obj_SetAngle(obj, Obj_GetAngle(obj) + 3);
+			}else{
+				Obj_SetAngle(obj, Obj_GetAngle(obj) - 3);
+			}
+		}
+		if(sp<speed){sp+=0.5;}
+		Obj_SetSpeed(obj,sp);
+		
+		if(limit>0){limit--;}
+			if(OnMissed==true){
+			Obj_Delete(obj);
+			Obj_Delete(eff);
+			break;
+		}
+		yield;
+	}
+}
+
+task PlayerShot02(x,y,speed,angle,r,g,b,damage){
+	let eff      = Obj_Create(OBJ_EFFECT);
+	let obj      = Obj_Create(OBJ_SHOT);
+	let alpha    = 200;
+	let sp       = 0;
+	
+	ObjEffect_SetTexture(eff,img2);
+	ObjEffect_SetRenderState(eff,ALPHA);
+	ObjEffect_SetPrimitiveType(eff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(eff,2);
+	ObjEffect_CreateVertex(eff,4);
+	ObjEffect_SetVertexXY(eff,0,10/-2,28/-2);
+	ObjEffect_SetVertexXY(eff,1,10/-2,28/2);
+	ObjEffect_SetVertexXY(eff,2,10/2,28/-2);
+	ObjEffect_SetVertexXY(eff,3,10/2,28/2);
+	ObjEffect_SetVertexUV(eff,0,12,2);
+	ObjEffect_SetVertexUV(eff,1,12,30);
+	ObjEffect_SetVertexUV(eff,2,21,2);
+	ObjEffect_SetVertexUV(eff,3,21,30);
+	ObjEffect_SetVertexColor(eff,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(eff,3,alpha,r,g,b);
+	    
+	Obj_SetPosition(obj,x,y);
+	Obj_SetSpeed(obj,speed);
+	Obj_SetAngle(obj,angle);
+	Obj_SetAlpha(obj,0);
+	ObjShot_SetBombResist(obj,true);
+	ObjShot_SetGraphic(obj,1);
+	ObjShot_SetDamage(obj,damage);
+	ObjShot_SetPenetration(obj,1);
+	ObjShot_ToItem(obj,false);
+	
+	loop{
+		Obj_SetPosition(eff,Obj_GetX(obj),Obj_GetY(obj));
+		ObjEffect_SetAngle(eff,0,0,90+Obj_GetAngle(obj));
+		if(Obj_BeDeleted(obj)==true){
+			Obj_Delete(eff);
+			break;
+		}
+		
+		if(OnMissed==true){
+			Obj_Delete(obj);
+			Obj_Delete(eff);
+			break;
+		}
+		
+		yield;
+	}
+}
+
+function LockTarget(sx,sy,sa){
+	let EnemyID = 0;
+	let TargetX = 0;
+	let TargetY = 0;
+	let MinAngle = 0;
+	let AngleD = 0;
+	if( GetEnemyNum == 0 ){
+		TargetX = 0;
+		TargetY = 0;
+	}
+	ascent(let enemy in EnumEnemyBegin..EnumEnemyEnd){
+		let EnemyID = EnumEnemyGetID(enemy);
+		let ex = GetEnemyInfo(EnemyID, ENEMY_X);
+		let ey = GetEnemyInfo(EnemyID, ENEMY_Y);
+		if( ey >= GetClipMinY ){
+			if( ex >= GetClipMinX && ex <= GetClipMaxX && ey <= GetClipMaxY ){
+				TargetX = ex;
+				TargetY = ey;
+				AngleD = absolute((atan2(ey-sy,ex-sx) - sa));
+				if(AngleD < MinAngle){
+					TargetX = ex;
+					TargetY = ey;
+					MinAngle = AngleD;
+				}
+			}
+		}
+	}
+	return [TargetX,TargetY];
+}

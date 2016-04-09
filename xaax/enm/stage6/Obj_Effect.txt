@@ -1,0 +1,567 @@
+function wait(w){
+loop(w){yield}
+}
+
+task Concentration(setlong,SE){
+let long     =0;
+let longp    =1;
+
+PlaySE(SE);
+
+WaveOut(setlong);
+loop{
+if(setlong<long){break}
+long+=longp;
+if(setlong>long){loop(2){Cherry(rand(0,360))}}
+yield;
+}
+}
+
+task Cherry(angle){
+let leff      = Obj_Create(OBJ_EFFECT);
+let lalpha    = 0;
+let lkill     = false;
+let lspeed    = rand(8,10);
+let lspeedp   = 0.1;
+let scale     = rand(1,6);
+let lspin     = rand(-1,1);
+
+Obj_SetPosition(leff,GetEnemyX+200*sin(angle),GetEnemyY+200*cos(angle));
+ObjEffect_SetTexture(leff,imgSPNB);
+ObjEffect_SetRenderState(leff,ADD);
+ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(leff,scale,scale);
+ObjEffect_SetLayer(leff,3);
+ObjEffect_CreateVertex(leff,4);
+ObjEffect_SetVertexXY(leff,0,-16,-16);//-16,-16
+ObjEffect_SetVertexXY(leff,1,-16,16);
+ObjEffect_SetVertexXY(leff,2,16,-16);
+ObjEffect_SetVertexXY(leff,3,16,16);
+ObjEffect_SetVertexUV(leff,0,160,80);//160,80
+ObjEffect_SetVertexUV(leff,1,160,112);
+ObjEffect_SetVertexUV(leff,2,190,80);
+ObjEffect_SetVertexUV(leff,3,190,112);//190,112
+
+loop{
+if(Obj_BeDeleted(leff)==true){break}
+if(lalpha<=0&&lkill==true){Obj_Delete(leff);break}
+if(lalpha>0&&lkill==true){lalpha-=255/10;}
+if(scale>0&&lkill==false){scale-=0.05;}
+if(lalpha<255&&lkill==false){lalpha+=15}
+ObjEffect_SetScale(leff,scale,scale);
+ObjEffect_SetVertexColor(leff,0,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,1,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,2,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,3,lalpha,255,255,255);
+
+if(lkill==false){
+let enemyangle  = atan2(GetEnemyY-Obj_GetY(leff),GetEnemyX-Obj_GetX(leff));
+Obj_SetAngle(leff,enemyangle);
+if(lspin>=0&&lspin<=1){ObjEffect_SetAngle(leff,(lspeed*50)*-1,(lspeed*50)*1,(lspeed*50)*1)}
+if(lspin>=-1&&lspin<=0){ObjEffect_SetAngle(leff,(lspeed*50)*1,(lspeed*50)*-1,(lspeed*50)*-1)}
+}
+
+lspeed+=lspeedp;
+Obj_SetSpeed(leff,lspeed);
+
+if(GetEnemyX-80<Obj_GetX(leff)&&GetEnemyX+80>Obj_GetX(leff)
+ &&GetEnemyY-80<Obj_GetY(leff)&&GetEnemyY+80>Obj_GetY(leff)
+){lkill=true}
+
+yield;
+}
+}
+
+task WaveOut(setlong){
+let weff      = Obj_Create(OBJ_EFFECT);
+let sca       = 10;
+let alpha     = 0;
+
+Obj_SetPosition(weff,GetEnemyX,GetEnemyY);
+ObjEffect_SetTexture(weff,imgSPNB);
+ObjEffect_SetRenderState(weff,ADD);
+ObjEffect_SetPrimitiveType(weff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(weff,2);
+ObjEffect_CreateVertex(weff,4);
+ObjEffect_SetVertexXY(weff,0,-15,-15);//-16,-16
+ObjEffect_SetVertexXY(weff,1,-15,15);
+ObjEffect_SetVertexXY(weff,2,15,-15);
+ObjEffect_SetVertexXY(weff,3,15,15);
+ObjEffect_SetVertexUV(weff,0,2,224);//160,80
+ObjEffect_SetVertexUV(weff,1,2,254);
+ObjEffect_SetVertexUV(weff,2,32,224);
+ObjEffect_SetVertexUV(weff,3,32,254);//190,112
+
+loop{
+Obj_SetPosition(weff,GetEnemyX,GetEnemyY);
+if(sca>0){sca-=10/setlong/2}
+if(sca<=0){Obj_Delete(weff);break}
+ObjEffect_SetScale(weff,sca,sca);
+
+if(alpha<255){alpha+=15}
+ObjEffect_SetVertexColor(weff,0,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,1,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,2,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,3,alpha,0,100,100);
+
+yield;
+}
+}
+
+task Concentration2(x,y,setlong,SE){
+let long     =0;
+let longp    =1;
+
+PlaySE(SE);
+
+WaveOut2(x,y,setlong);
+loop{
+if(setlong<long){break}
+long+=longp;
+if(setlong>long){loop(2){Cherry2(x,y,rand(0,360))}}
+yield;
+}
+}
+
+task Cherry2(x,y,angle){
+let leff      = Obj_Create(OBJ_EFFECT);
+let lalpha    = 0;
+let lkill     = false;
+let lspeed    = rand(8,10);
+let lspeedp   = 0.1;
+let scale     = rand(1,6);
+let lspin     = rand(-1,1);
+
+Obj_SetPosition(leff,x+200*sin(angle),y+200*cos(angle));
+ObjEffect_SetTexture(leff,imgSPNB);
+ObjEffect_SetRenderState(leff,ADD);
+ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(leff,scale,scale);
+ObjEffect_SetLayer(leff,3);
+ObjEffect_CreateVertex(leff,4);
+ObjEffect_SetVertexXY(leff,0,-16,-16);//-16,-16
+ObjEffect_SetVertexXY(leff,1,-16,16);
+ObjEffect_SetVertexXY(leff,2,16,-16);
+ObjEffect_SetVertexXY(leff,3,16,16);
+ObjEffect_SetVertexUV(leff,0,160,80);//160,80
+ObjEffect_SetVertexUV(leff,1,160,112);
+ObjEffect_SetVertexUV(leff,2,190,80);
+ObjEffect_SetVertexUV(leff,3,190,112);//190,112
+
+loop{
+if(Obj_BeDeleted(leff)==true){break}
+if(lalpha<=0&&lkill==true){Obj_Delete(leff);break}
+if(lalpha>0&&lkill==true){lalpha-=255/10;}
+if(scale>0&&lkill==false){scale-=0.05;}
+if(lalpha<255&&lkill==false){lalpha+=15}
+ObjEffect_SetScale(leff,scale,scale);
+ObjEffect_SetVertexColor(leff,0,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,1,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,2,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,3,lalpha,255,255,255);
+
+if(lkill==false){
+let enemyangle  = atan2(y-Obj_GetY(leff),x-Obj_GetX(leff));
+Obj_SetAngle(leff,enemyangle);
+if(lspin>=0&&lspin<=1){ObjEffect_SetAngle(leff,(lspeed*50)*-1,(lspeed*50)*1,(lspeed*50)*1)}
+if(lspin>=-1&&lspin<=0){ObjEffect_SetAngle(leff,(lspeed*50)*1,(lspeed*50)*-1,(lspeed*50)*-1)}
+}
+
+lspeed+=lspeedp;
+Obj_SetSpeed(leff,lspeed);
+
+if(x-80<Obj_GetX(leff)&&x+80>Obj_GetX(leff)
+ &&y-80<Obj_GetY(leff)&&y+80>Obj_GetY(leff)
+){lkill=true}
+
+yield;
+}
+}
+
+task WaveOut2(x,y,setlong){
+let weff      = Obj_Create(OBJ_EFFECT);
+let sca       = 10;
+let alpha     = 0;
+
+Obj_SetPosition(weff,x,y);
+ObjEffect_SetTexture(weff,imgSPNB);
+ObjEffect_SetRenderState(weff,ADD);
+ObjEffect_SetPrimitiveType(weff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(weff,2);
+ObjEffect_CreateVertex(weff,4);
+ObjEffect_SetVertexXY(weff,0,-15,-15);//-16,-16
+ObjEffect_SetVertexXY(weff,1,-15,15);
+ObjEffect_SetVertexXY(weff,2,15,-15);
+ObjEffect_SetVertexXY(weff,3,15,15);
+ObjEffect_SetVertexUV(weff,0,2,224);//160,80
+ObjEffect_SetVertexUV(weff,1,2,254);
+ObjEffect_SetVertexUV(weff,2,32,224);
+ObjEffect_SetVertexUV(weff,3,32,254);//190,112
+
+loop{
+if(sca>0){sca-=10/setlong/2}
+if(sca<=0){Obj_Delete(weff);break}
+ObjEffect_SetScale(weff,sca,sca);
+
+if(alpha<255){alpha+=15}
+ObjEffect_SetVertexColor(weff,0,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,1,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,2,alpha,0,100,100);
+ObjEffect_SetVertexColor(weff,3,alpha,0,100,100);
+
+yield;
+}
+}
+
+task LeafConcentration(setlong,SE){
+let long     =0;
+let longp    =1;
+
+PlaySE(SE);
+
+loop{
+if(setlong<long){break}
+long+=longp;
+if(setlong>long){Leaf(rand(0,360));}
+yield;
+}
+}
+
+task Leaf(angle){
+let leff      = Obj_Create(OBJ_EFFECT);
+let lalpha    = 0;
+let lkill     = false;
+let lspeed    = rand(5,7);
+let lspeedp   = 0.1;
+let scale     = rand(1,5);
+let lspin     = rand(-1,1);
+
+Obj_SetPosition(leff,GetEnemyX+250*sin(angle),GetEnemyY+250*cos(angle));
+ObjEffect_SetTexture(leff,imgSPNB);
+ObjEffect_SetRenderState(leff,ADD);
+ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(leff,scale,scale);
+ObjEffect_SetLayer(leff,1);
+ObjEffect_CreateVertex(leff,4);
+ObjEffect_SetVertexXY(leff,0,-16,-16);
+ObjEffect_SetVertexXY(leff,1,-16,16);
+ObjEffect_SetVertexXY(leff,2,16,-16);
+ObjEffect_SetVertexXY(leff,3,16,16);
+ObjEffect_SetVertexUV(leff,0,160,80);
+ObjEffect_SetVertexUV(leff,1,160,112);
+ObjEffect_SetVertexUV(leff,2,190,80);
+ObjEffect_SetVertexUV(leff,3,190,112);
+
+loop{
+if(Obj_BeDeleted(leff)==true){break}
+if(lalpha<=0&&lkill==true){Obj_Delete(leff)}
+if(lalpha>0&&lkill==true){lalpha-=255/10}
+if(lalpha<255&&lkill==false){lalpha+=15}
+ObjEffect_SetVertexColor(leff,0,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,1,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,2,lalpha,255,255,255);
+ObjEffect_SetVertexColor(leff,3,lalpha,255,255,255);
+
+if(lkill==false){
+let enemyangle  = atan2(GetEnemyY-Obj_GetY(leff),GetEnemyX-Obj_GetX(leff));
+Obj_SetAngle(leff,enemyangle);
+if(lspin>=0&&lspin<=1){ObjEffect_SetAngle(leff,0,0,(lspeed*50)*1)}
+if(lspin>=-1&&lspin<=0){ObjEffect_SetAngle(leff,0,0,(lspeed*50)*-1)}
+}
+
+lspeed+=lspeedp;
+Obj_SetSpeed(leff,lspeed);
+
+if(GetEnemyX-50<Obj_GetX(leff)&&GetEnemyX+50>Obj_GetX(leff)
+ &&GetEnemyY-50<Obj_GetY(leff)&&GetEnemyY+50>Obj_GetY(leff)
+){lkill=true}
+
+yield;
+}
+}
+
+task TheWorld(alpha,r,g,b,stop){
+let tw      = Obj_Create(OBJ_EFFECT);
+let img     = GetCurrentScriptDirectory~".\enm6eff\TheWorld.png";
+let power     = GetCurrentScriptDirectory~".\enm6se\power.wav";
+let TWframe = 0;
+
+LoadGraphic(img);
+PlaySE(power);
+
+Obj_SetPosition(tw,GetEnemyX,GetEnemyY);
+ObjEffect_SetTexture(tw,img);
+ObjEffect_SetRenderState(tw,ALPHA);
+ObjEffect_SetPrimitiveType(tw,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(tw,7);
+ObjEffect_CreateVertex(tw,4);
+ObjEffect_SetVertexXY(tw,0,400/-2,400/-2);
+ObjEffect_SetVertexXY(tw,1,400/-2,400/2);
+ObjEffect_SetVertexXY(tw,2,400/2,400/-2);
+ObjEffect_SetVertexXY(tw,3,400/2,400/2);
+ObjEffect_SetVertexUV(tw,0,0,0);
+ObjEffect_SetVertexUV(tw,1,0,400);
+ObjEffect_SetVertexUV(tw,2,400,0);
+ObjEffect_SetVertexUV(tw,3,400,400);
+ObjEffect_SetVertexColor(tw,0,alpha,r,g,b);
+ObjEffect_SetVertexColor(tw,1,alpha,r,g,b);
+ObjEffect_SetVertexColor(tw,2,alpha,r,g,b);
+ObjEffect_SetVertexColor(tw,3,alpha,r,g,b);
+
+loop{
+TWframe++;
+if(TWframe<100){
+ObjEffect_SetScale(tw,TWframe/20,TWframe/20)}
+if(TWframe>stop&&stop>0){Obj_Delete(tw)}
+if(Obj_BeDeleted(tw)==true){break}
+
+yield;
+}
+}
+
+task VSname(type){
+//type
+//0:既出
+//1:alpha操作演出
+let tw      = Obj_Create(OBJ_EFFECT);
+let img     = GetCurrentScriptDirectory~".\enm6eff\ename.png";
+let alpha   = 0;
+
+LoadGraphic(img);
+
+Obj_SetPosition(tw,MinX+100,MinY+10);
+ObjEffect_SetTexture(tw,img);
+ObjEffect_SetRenderState(tw,ALPHA);
+ObjEffect_SetPrimitiveType(tw,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(tw,7);
+ObjEffect_CreateVertex(tw,4);
+ObjEffect_SetVertexXY(tw,0,192/-2,16/-2);
+ObjEffect_SetVertexXY(tw,1,192/-2,16/2);
+ObjEffect_SetVertexXY(tw,2,192/2,16/-2);
+ObjEffect_SetVertexXY(tw,3,192/2,16/2);
+ObjEffect_SetVertexUV(tw,0,0,0);
+ObjEffect_SetVertexUV(tw,1,0,16);
+ObjEffect_SetVertexUV(tw,2,192,0);
+ObjEffect_SetVertexUV(tw,3,192,16);
+
+loop{
+if(type==0){
+ObjEffect_SetVertexColor(tw,0,255,255,255,255);
+ObjEffect_SetVertexColor(tw,1,255,255,255,255);
+ObjEffect_SetVertexColor(tw,2,255,255,255,255);
+ObjEffect_SetVertexColor(tw,3,255,255,255,255);}
+if(type==1){
+if(alpha<255){alpha+=5}
+ObjEffect_SetVertexColor(tw,0,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,2,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,3,alpha,255,255,255);}
+
+
+yield;
+}
+}
+
+task VSname2(x,type){
+//type
+//0:既出
+//1:alpha操作演出
+let tw      = Obj_Create(OBJ_EFFECT);
+let img     = GetCurrentScriptDirectory~".\enm6eff\ename2.png";
+let alpha   = 0;
+
+LoadGraphic(img);
+
+Obj_SetPosition(tw,MinX+10+x,MinY+22);
+ObjEffect_SetTexture(tw,img);
+ObjEffect_SetRenderState(tw,ALPHA);
+ObjEffect_SetPrimitiveType(tw,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(tw,7);
+ObjEffect_CreateVertex(tw,4);
+ObjEffect_SetVertexXY(tw,0,22/-2,22/-2);
+ObjEffect_SetVertexXY(tw,1,22/-2,22/2);
+ObjEffect_SetVertexXY(tw,2,22/2,22/-2);
+ObjEffect_SetVertexXY(tw,3,22/2,22/2);
+ObjEffect_SetVertexUV(tw,0,0,0);
+ObjEffect_SetVertexUV(tw,1,0,64);
+ObjEffect_SetVertexUV(tw,2,64,0);
+ObjEffect_SetVertexUV(tw,3,64,64);
+
+loop{
+if(type==0){
+ObjEffect_SetVertexColor(tw,0,255,255,255,255);
+ObjEffect_SetVertexColor(tw,1,255,255,255,255);
+ObjEffect_SetVertexColor(tw,2,255,255,255,255);
+ObjEffect_SetVertexColor(tw,3,255,255,255,255);}
+if(type==1){
+if(alpha<255){alpha+=5}
+ObjEffect_SetVertexColor(tw,0,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,1,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,2,alpha,255,255,255);
+ObjEffect_SetVertexColor(tw,3,alpha,255,255,255);}
+
+
+yield;
+}
+}
+
+task DefeatExplosion(x,y){
+let frame = 0;
+
+PlaySE(gekiha);
+MotionBlurEx(ALL,120,122,ADD);
+Slow(3);
+
+loop{
+DeleteEnemyShotToItemInCircle(ALL,GetEnemyX,GetEnemyY,500);
+frame++;
+if(frame<60){
+CherryFainal(GetX,GetY,rand(100,255),rand(100,255),rand(100,255));
+CherryFainal(GetX,GetY,rand(100,255),rand(100,255),rand(100,255));
+}
+if(frame==60){
+Slow(0);
+PlaySE(gekiha);
+loop(50){CherryFainal(GetX,GetY,255,0,0);}
+SetY(MinY-1000);
+}
+if(frame==180){
+AddLife(-10);
+break;
+}
+
+yield;
+}
+}
+
+task CherryFainal(x,y,r,g,b){
+let cef     = Obj_Create(OBJ_EFFECT);
+let alpha2  = 200;
+let spinA   = rand(0,180);
+let spinB   = rand(0,180);
+let sca     = rand(2,3);
+let sp      = rand(2,5);
+
+Obj_SetPosition(cef,x,y);
+ObjEffect_SetTexture(cef,imgSPNB);
+Obj_SetSpeed(cef,sp);
+Obj_SetAngle(cef,rand(0,360));
+ObjEffect_SetScale(cef,sca,sca);
+ObjEffect_SetRenderState(cef,ADD);
+ObjEffect_SetPrimitiveType(cef,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(cef,2);
+ObjEffect_CreateVertex(cef,4);
+ObjEffect_SetAngle(cef,spinA,spinB,spinA);
+ObjEffect_SetVertexXY(cef,0,-16,-16);
+ObjEffect_SetVertexXY(cef,1,-16,16);
+ObjEffect_SetVertexXY(cef,2,16,-16);
+ObjEffect_SetVertexXY(cef,3,16,16);
+ObjEffect_SetVertexUV(cef,0,160,80);
+ObjEffect_SetVertexUV(cef,1,160,112);
+ObjEffect_SetVertexUV(cef,2,190,80);
+ObjEffect_SetVertexUV(cef,3,190,112);
+
+loop{
+let gx = Obj_GetX(cef);
+let gy = Obj_GetY(cef);
+
+if(Obj_GetSpeed(cef)>0){sp-=0.05}
+Obj_SetSpeed(cef,sp);
+if(Obj_GetSpeed(cef)<=0&&sca>0){sca-=0.1}
+ObjEffect_SetScale(cef,sca,sca);
+
+if(alpha2<=0){Obj_Delete(cef);break}
+
+if(Obj_GetSpeed(cef)<=0&&alpha2>0){alpha2-=15}
+spinA+=rand(2,3);
+spinB+=rand(-2,-3);
+ObjEffect_SetAngle(cef,spinA,spinB,spinA);
+ObjEffect_SetVertexColor(cef,0,alpha2,r,g,b);
+ObjEffect_SetVertexColor(cef,1,alpha2,r,g,b);
+ObjEffect_SetVertexColor(cef,2,alpha2,r,g,b);
+ObjEffect_SetVertexColor(cef,3,alpha2,r,g,b);
+
+yield;
+}
+}
+
+task Set_SAura(r,g,b){
+let img       = GetCurrentScriptDirectory~".\enm6eff\enemy_aura.png";
+let id        = Obj_Create(OBJ_EFFECT);
+let sca       = 0;
+let sca1      = 0;
+let aa        = 0;
+let move1     = 0;
+let movea     = 0;
+let Anime     = 0;
+
+LoadGraphic(img);
+
+ObjEffect_SetTexture(id,img);
+ObjEffect_SetRenderState(id,ALPHA);
+ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetLayer(id,1);
+ObjEffect_CreateVertex(id,4);
+ObjEffect_SetVertexXY(id,0,48/-2,48/-2);
+ObjEffect_SetVertexXY(id,1,48/-2,48/2);
+ObjEffect_SetVertexXY(id,2,48/2,48/-2);
+ObjEffect_SetVertexXY(id,3,48/2,48/2);
+ObjEffect_SetVertexColor(id,0,255,r,g,b);
+ObjEffect_SetVertexColor(id,1,255,r,g,b);
+ObjEffect_SetVertexColor(id,2,255,r,g,b);
+ObjEffect_SetVertexColor(id,3,255,r,g,b);
+
+loop{
+Obj_SetPosition(id,GetX,GetY);
+
+if(sca<1){
+sca1+=3;
+sca=1.00*sin(sca1);}
+ObjEffect_SetScale(id,1+rand(-0.05,0.05),1+rand(-0.05,0.05));
+
+Anime++;
+if(Anime==40){Anime=0}
+if(Anime>=0&&Anime<=5){
+ObjEffect_SetVertexUV(id,0,0,0);
+ObjEffect_SetVertexUV(id,1,0,48);
+ObjEffect_SetVertexUV(id,2,48,0);
+ObjEffect_SetVertexUV(id,3,48,48);}
+if(Anime>=5&&Anime<=10){
+ObjEffect_SetVertexUV(id,0,48,0);
+ObjEffect_SetVertexUV(id,1,48,48);
+ObjEffect_SetVertexUV(id,2,96,0);
+ObjEffect_SetVertexUV(id,3,96,48);}
+if(Anime>=10&&Anime<=15){
+ObjEffect_SetVertexUV(id,0,96,0);
+ObjEffect_SetVertexUV(id,1,96,48);
+ObjEffect_SetVertexUV(id,2,144,0);
+ObjEffect_SetVertexUV(id,3,144,48);}
+if(Anime>=15&&Anime<=20){
+ObjEffect_SetVertexUV(id,0,144,0);
+ObjEffect_SetVertexUV(id,1,144,48);
+ObjEffect_SetVertexUV(id,2,192,0);
+ObjEffect_SetVertexUV(id,3,192,48);}
+if(Anime>=20&&Anime<=25){
+ObjEffect_SetVertexUV(id,0,192,0);
+ObjEffect_SetVertexUV(id,1,192,48);
+ObjEffect_SetVertexUV(id,2,240,0);
+ObjEffect_SetVertexUV(id,3,240,48);}
+if(Anime>=25&&Anime<=30){
+ObjEffect_SetVertexUV(id,0,240,0);
+ObjEffect_SetVertexUV(id,1,240,48);
+ObjEffect_SetVertexUV(id,2,288,0);
+ObjEffect_SetVertexUV(id,3,288,48);;}
+if(Anime>=30&&Anime<=35){
+ObjEffect_SetVertexUV(id,0,288,0);
+ObjEffect_SetVertexUV(id,1,288,48);
+ObjEffect_SetVertexUV(id,2,336,0);
+ObjEffect_SetVertexUV(id,3,336,48);}
+if(Anime>=35&&Anime<=40){
+ObjEffect_SetVertexUV(id,0,336,0);
+ObjEffect_SetVertexUV(id,1,336,48);
+ObjEffect_SetVertexUV(id,2,384,0);
+ObjEffect_SetVertexUV(id,3,384,48);}
+
+yield;
+}
+}

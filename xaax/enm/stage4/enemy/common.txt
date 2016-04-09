@@ -1,0 +1,217 @@
+task CML(r,g,b) {
+	let lifemax = GetLife;
+	loop{
+		if(GetLife<=100 && !enmfin){TrashEnemy(r,g,b);enmfin=true;break;}
+		if(GetHitCount!=0&&GetLife-100>=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\se\dmg1.wav");}
+		if(GetHitCount!=0&&GetLife-100<=lifemax*0.2){PlaySE(GetCurrentScriptDirectory~".\se\dmg2.wav");}
+		yield;
+	}
+}
+
+task TrashEnemy(r,g,b) {
+	SetDamageRate(0,0);
+	VanishEffect(r,g,b);
+	VanishEffect(r,g,b);
+	Explosion03(GetX,GetY,15,0.05,r,g,b,4,0);
+	Explosion03(GetX,GetY,15,0.05,r,g,b,4,70);
+	LeafConcentration;
+	SetY(-100);
+	PlaySE(GetCurrentScriptDirectory~".\se\enep.wav");
+	loop(60){yield;}//敵が倒されてから消えるまでのフレーム
+	VanishEnemy;
+	}
+
+task VanishEffect(r,g,b) {
+	Explosion02(GetX+rand(-20,20),GetY+rand(-20,20),10,0.03,r,g,b,4);
+	}
+	
+task Explosion02(x,y,alpha,scale,r,g,b,layer) {
+	let sca = 0;
+	let alp = 255;
+	let imgCEff = GetCurrentScriptDirectory~".\img\eff_circle.png";
+	let eff = Obj_Create(OBJ_EFFECT);
+	LoadGraphic(imgCEff);
+	ObjEffect_SetTexture(eff,imgCEff);
+	ObjEffect_SetRenderState(eff,ADD);
+	ObjEffect_SetPrimitiveType(eff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(eff,layer);
+	ObjEffect_CreateVertex(eff,4);
+	ObjEffect_SetVertexXY(eff,0,256/-2,256/-2);
+	ObjEffect_SetVertexXY(eff,1,256/-2,256/2);
+	ObjEffect_SetVertexXY(eff,2,256/2,256/-2);
+	ObjEffect_SetVertexXY(eff,3,256/2,256/2);
+	ObjEffect_SetVertexUV(eff,0,  0,  0);
+	ObjEffect_SetVertexUV(eff,1,256,  0);
+	ObjEffect_SetVertexUV(eff,2,  0,256);
+	ObjEffect_SetVertexUV(eff,3,256,256);
+	Obj_SetPosition(eff,x,y);
+	loop(floor(255/absolute(alpha))+1){
+		ObjEffect_SetVertexColor(eff,0,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,1,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,2,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,3,alp,r,g,b);
+		ObjEffect_SetScale(eff,sca,sca);
+		alp-=alpha;
+		sca+=scale;
+		yield;
+		}
+	Obj_Delete(eff);
+	}
+
+task Explosion03(x,y,alpha,scale,r,g,b,layer,angle) {
+	let sca		= 0;
+	let alp		= 255;
+	let imgCEff	= GetCurrentScriptDirectory~".\img\exp.png";
+	let eff		= Obj_Create(OBJ_EFFECT);
+	LoadGraphic(imgCEff);
+	ObjEffect_SetTexture(eff,imgCEff);
+	ObjEffect_SetRenderState(eff,ADD);
+	ObjEffect_SetPrimitiveType(eff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(eff,layer);
+	ObjEffect_CreateVertex(eff,4);
+	ObjEffect_SetAngle(eff,angle,rand(0,360),0);
+	ObjEffect_SetVertexXY(eff,0,256/-2,256/-2);
+	ObjEffect_SetVertexXY(eff,1,256/-2,256/2);
+	ObjEffect_SetVertexXY(eff,2,256/2,256/-2);
+	ObjEffect_SetVertexXY(eff,3,256/2,256/2);
+	ObjEffect_SetVertexUV(eff,0,  0,  0);
+	ObjEffect_SetVertexUV(eff,1,256,  0);
+	ObjEffect_SetVertexUV(eff,2,  0,256);
+	ObjEffect_SetVertexUV(eff,3,256,256);
+	Obj_SetPosition(eff,x,y);
+	loop(floor(255/absolute(alpha))+1){
+		ObjEffect_SetVertexColor(eff,0,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,1,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,2,alp,r,g,b);
+		ObjEffect_SetVertexColor(eff,3,alp,r,g,b);
+		ObjEffect_SetScale(eff,sca,sca);
+		alp-=alpha;
+		sca+=scale;
+		yield;
+	}
+	Obj_Delete(eff);
+}
+	
+task LeafConcentration{
+	LoadGraphic(GetCurrentScriptDirectory~".\img\spellEfect.png");
+	loop(4){
+		Leaf(GetX,GetY,rand(0,360));
+		Leaf_SUBT(GetX,GetY,rand(0,360));
+	}
+}
+
+task Leaf(x,y,angle){
+	let imgSpellEfect = GetCurrentScriptDirectory~".\img\spellEfect.png";
+	let leff		= Obj_Create(OBJ_EFFECT);
+	let rgbr		= rand(100,255);
+	let rgbg		= rand(100,255);
+	let rgbb		= rand(100,255);
+	let lalpha		= 255;
+	let lalphap		= 15;
+	let lkill		= 0;
+	let lkillp		= 2;
+	let mxsp		= trunc(rand(2,4));
+	let lspeed		= 0;
+	let lspeedp		= 0;
+	let scale		= rand(1,2);
+	let lspin		= rand(-2,2);
+	let lspin2		= rand(-1,1);
+	let lspin3		= rand(-1,1);
+	let enemyangle	= rand(0,360);
+	Obj_SetPosition(leff,x,y);
+	ObjEffect_SetTexture(leff,imgSpellEfect);
+	ObjEffect_SetRenderState(leff,ADD);
+	ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(leff,scale,scale);
+	ObjEffect_SetLayer(leff,1);
+	ObjEffect_CreateVertex(leff,4);
+	ObjEffect_SetVertexXY(leff,0,-16,-16);
+	ObjEffect_SetVertexXY(leff,1,-16,16);
+	ObjEffect_SetVertexXY(leff,2,16,-16);
+	ObjEffect_SetVertexXY(leff,3,16,16);
+	ObjEffect_SetVertexUV(leff,0,160,80);
+	ObjEffect_SetVertexUV(leff,1,160,112);
+	ObjEffect_SetVertexUV(leff,2,190,80);
+	ObjEffect_SetVertexUV(leff,3,190,112);
+
+	loop(60){
+		lkill+=lkillp;
+		if(Obj_BeDeleted(leff)==true){break;}
+		lalpha-=8;
+		ObjEffect_SetVertexColor(leff,0,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,1,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,2,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,3,lalpha,rgbr,rgbg,rgbb);
+
+		ObjEffect_SetAngle(leff,lkill*lspin3,lkill*lspin2,lkill*scale*lspin+enemyangle);
+		Obj_SetAngle(leff,enemyangle);
+
+		if(scale>0){scale-=0.01;}
+		ObjEffect_SetScale(leff,scale,scale);
+
+		if(lspeed<mxsp){lspeedp+=1;}
+		lspeed=mxsp*sin(lspeedp);
+		Obj_SetSpeed(leff,mxsp-lspeed);
+
+		yield;
+		}
+		Obj_Delete(leff);
+	}
+	
+task Leaf_SUBT(x,y,angle){
+	let imgSpellEfect = GetCurrentScriptDirectory~".\img\spellEfect.png";
+	let leff		= Obj_Create(OBJ_EFFECT);
+	let rgbr		= rand(0,200);
+	let rgbg		= rand(0,200);
+	let rgbb		= rand(0,200);
+	let lalpha		= 255;
+	let lalphap		= 15;
+	let lkill		= 0;
+	let lkillp		= 2;
+	let mxsp		= trunc(rand(2,4));
+	let lspeed		= 0;
+	let lspeedp		= 0;
+	let scale		= rand(1,2);
+	let lspin		= rand(-2,2);
+	let lspin2		= rand(-1,1);
+	let lspin3		= rand(-1,1);
+	let enemyangle	= rand(0,360);
+	Obj_SetPosition(leff,x,y);
+	ObjEffect_SetTexture(leff,imgSpellEfect);
+	ObjEffect_SetRenderState(leff,SUBTRACT);
+	ObjEffect_SetPrimitiveType(leff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(leff,scale,scale);
+	ObjEffect_SetLayer(leff,1);
+	ObjEffect_CreateVertex(leff,4);
+	ObjEffect_SetVertexXY(leff,0,-16,-16);
+	ObjEffect_SetVertexXY(leff,1,-16,16);
+	ObjEffect_SetVertexXY(leff,2,16,-16);
+	ObjEffect_SetVertexXY(leff,3,16,16);
+	ObjEffect_SetVertexUV(leff,0,160,80);
+	ObjEffect_SetVertexUV(leff,1,160,112);
+	ObjEffect_SetVertexUV(leff,2,190,80);
+	ObjEffect_SetVertexUV(leff,3,190,112);
+
+	loop(60){
+		lkill+=lkillp;
+		if(Obj_BeDeleted(leff)==true){break;}
+		lalpha-=8;
+		ObjEffect_SetVertexColor(leff,0,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,1,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,2,lalpha,rgbr,rgbg,rgbb);
+		ObjEffect_SetVertexColor(leff,3,lalpha,rgbr,rgbg,rgbb);
+
+		ObjEffect_SetAngle(leff,lkill*lspin3,lkill*lspin2,lkill*scale*lspin+enemyangle);
+		Obj_SetAngle(leff,enemyangle);
+
+		if(scale>0){scale-=0.01;}
+		ObjEffect_SetScale(leff,scale,scale);
+
+		if(lspeed<mxsp){lspeedp+=1;}
+		lspeed=mxsp*sin(lspeedp);
+		Obj_SetSpeed(leff,mxsp-lspeed);
+
+		yield;
+	}
+	Obj_Delete(leff);
+}

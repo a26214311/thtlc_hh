@@ -1,0 +1,16 @@
+
+#Title[enm1_1 Plural Lunatic]
+#Text[邪星章1面中ボス　メリーシェパード]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm1_entry.txt]
+ #ScriptPath[.\enm1_Attack01_Lunatic.txt]
+ #ScriptPath[.\enm1_Attack02_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm1_SpellCard00_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm1_leave.txt]
+
+#EndScriptPathData

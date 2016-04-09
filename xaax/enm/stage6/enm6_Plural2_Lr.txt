@@ -1,0 +1,30 @@
+
+#Title[enm6_2 Plural ReimuL]
+#Text[邪星章6面ボス　イシュア・ナザレヌス 霊夢L]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm6_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack01_Lunatic.txt]
+ #ScriptPath[.\enm6_SpellCard01_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack02_Lunatic.txt]
+ #ScriptPath[.\enm6_SpellCard02_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack03_Lunatic.txt]
+ #ScriptPath[.\enm6_SpellCard03_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack04_Lunatic.txt]
+ #ScriptPath[.\enm6_SpellCard04_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack05_Lunatic.txt]
+ #ScriptPath[.\enm6_SpellCard05_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_SpellCard07_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_SpellCard06_Lunatic.txt]
+
+#EndScriptPathData

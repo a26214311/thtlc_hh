@@ -1,0 +1,13 @@
+
+#Title[enm2_1 Plural Hard]
+#Text[邪星章2面中ボス　コリン・シャーリット]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm2_entry.txt]
+ #ScriptPath[.\enm2_Attack01_Hard.txt]
+ #ScriptPath[.\enm2_SpellCard01_Hard.txt]
+ #ScriptPath[.\enm2_leave.txt]
+
+#EndScriptPathData

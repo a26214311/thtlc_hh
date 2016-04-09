@@ -1,0 +1,28 @@
+
+#Title[enm6_2 Plural SakuyaE]
+#Text[邪星章6面ボス　イシュア・ナザレヌス 咲夜E]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm6_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack01_Easy.txt]
+ #ScriptPath[.\enm6_SpellCard01_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack02_Easy.txt]
+ #ScriptPath[.\enm6_SpellCard02_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack03_Easy.txt]
+ #ScriptPath[.\enm6_SpellCard03_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack04_Easy.txt]
+ #ScriptPath[.\enm6_SpellCard04_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_Attack05_Easy.txt]
+ #ScriptPath[.\enm6_SpellCard05_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm6_SpellCard06_Easy.txt]
+
+#EndScriptPathData

@@ -1,0 +1,391 @@
+task EnemyTexture03(hv){
+let spn1	= Obj_Create(OBJ_EFFECT);
+let img		= GetCurrentScriptDirectory~".\enm3img\enm3.png";
+let A_count	= 0;
+let A_countM	= 0;
+let Animetion	= false;
+let AnimetionM	= false;
+let AR_count	= 0;
+let AL_count	= 0;
+let A_returnR	= 0;
+let A_returnL	= 0;
+let lrz		= 0;
+let cc		= 0;
+
+LoadGraphic(img);
+
+Obj_SetPosition(spn1,GetX,GetY);
+ObjEffect_SetTexture(spn1,img);
+ObjEffect_SetRenderState(spn1,ALPHA);
+ObjEffect_SetPrimitiveType(spn1,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn1,1,1);
+ObjEffect_SetLayer(spn1,3);
+ObjEffect_CreateVertex(spn1,4);
+
+loop{
+cc++;
+if(hv==true){
+Obj_SetPosition(spn1,GetX,GetY+5*sin(cc*4));}
+if(hv==false){
+Obj_SetPosition(spn1,GetX,GetY);}
+
+//この辺if文グチャグチャで気色悪い
+if(Animetion==true){A_count++;}
+if(AnimetionM==true){A_countM++;}
+if(A_count==40){A_count=0;}
+if(A_countM==40){A_countM=0;}
+if(trunc(GetSpeedX)==0){A_returnR++;A_returnL++;}
+if(GetSpeedX>0){AR_count++;AnimetionM=false;Animetion=false;}
+if(AR_count==10){AR_count=5;}
+if(GetSpeedX<0){AL_count++;AnimetionM=false;Animetion=false;}
+if(AL_count==10){AL_count=5;}
+if(trunc(GetSpeedX)==0&&A_returnR<=0){AR_count=20;}
+if(A_returnR>=5&&AR_count>0){AR_count--;}
+if(AR_count<=0){AR_count=0;A_returnR=0;AnimetionM=true;}
+if(trunc(GetSpeedX)==0&&A_returnL<=0){AL_count=20;}
+if(A_returnL>=5&&AL_count>0){AL_count--;}
+if(AL_count<=0){AL_count=0;A_returnL=0;Animetion=true;}
+
+if(AnimetionM==true){
+if(A_countM>=0  && A_countM<=20){
+ObjEffect_SetVertexXY(spn1,0,40/-2,92/-2);
+ObjEffect_SetVertexXY(spn1,1,40/-2,92/2);
+ObjEffect_SetVertexXY(spn1,2,40/2,92/-2);
+ObjEffect_SetVertexXY(spn1,3,40/2,92/2);
+ObjEffect_SetVertexUV(spn1,0,31,4);
+ObjEffect_SetVertexUV(spn1,1,31,96);
+ObjEffect_SetVertexUV(spn1,2,72,4);
+ObjEffect_SetVertexUV(spn1,3,72,96);}
+if(A_countM>=20 && A_countM<=40){
+ObjEffect_SetVertexXY(spn1,0,40/-2,92/-2);
+ObjEffect_SetVertexXY(spn1,1,40/-2,92/2);
+ObjEffect_SetVertexXY(spn1,2,40/2,92/-2);
+ObjEffect_SetVertexXY(spn1,3,40/2,92/2);
+ObjEffect_SetVertexUV(spn1,0,31,104);
+ObjEffect_SetVertexUV(spn1,1,31,196);
+ObjEffect_SetVertexUV(spn1,2,72,104);
+ObjEffect_SetVertexUV(spn1,3,72,196);}}
+if(Animetion==true){
+if(A_count>=0  && A_count<=20){
+ObjEffect_SetVertexXY(spn1,0,40/-2,92/-2);
+ObjEffect_SetVertexXY(spn1,1,40/-2,92/2);
+ObjEffect_SetVertexXY(spn1,2,40/2,92/-2);
+ObjEffect_SetVertexXY(spn1,3,40/2,92/2);
+ObjEffect_SetVertexUV(spn1,0,31,4);
+ObjEffect_SetVertexUV(spn1,1,31,96);
+ObjEffect_SetVertexUV(spn1,2,72,4);
+ObjEffect_SetVertexUV(spn1,3,72,96);}
+if(A_count>=20 && A_count<=40){
+ObjEffect_SetVertexXY(spn1,0,40/-2,92/-2);
+ObjEffect_SetVertexXY(spn1,1,40/-2,92/2);
+ObjEffect_SetVertexXY(spn1,2,40/2,92/-2);
+ObjEffect_SetVertexXY(spn1,3,40/2,92/2);
+ObjEffect_SetVertexUV(spn1,0,31,104);
+ObjEffect_SetVertexUV(spn1,1,31,196);
+ObjEffect_SetVertexUV(spn1,2,72,104);
+ObjEffect_SetVertexUV(spn1,3,72,196);}}
+if(GetSpeedX>0||GetSpeedX==0&&AnimetionM==false){
+if(AR_count>=0  && AR_count<=5 ){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,128,9);
+ObjEffect_SetVertexUV(spn1,1,128,91);
+ObjEffect_SetVertexUV(spn1,2,175,9);
+ObjEffect_SetVertexUV(spn1,3,175,91);}
+if(AR_count>=5  && AR_count<=10){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,128,109);
+ObjEffect_SetVertexUV(spn1,1,128,191);
+ObjEffect_SetVertexUV(spn1,2,175,109);
+ObjEffect_SetVertexUV(spn1,3,175,191);}}
+if(GetSpeedX<0||GetSpeedX==0&&Animetion==false){
+if(AL_count>=0  && AL_count<=5 ){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,225,9);
+ObjEffect_SetVertexUV(spn1,1,225,91);
+ObjEffect_SetVertexUV(spn1,2,272,9);
+ObjEffect_SetVertexUV(spn1,3,272,91);}
+if(AL_count>=5  && AL_count<=10){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,225,109);
+ObjEffect_SetVertexUV(spn1,1,225,191);
+ObjEffect_SetVertexUV(spn1,2,272,109);
+ObjEffect_SetVertexUV(spn1,3,272,191);}}
+
+yield;
+}
+}
+
+task EnemyTexture03_typeB(hv){
+let spn1	= Obj_Create(OBJ_EFFECT);
+let img		= GetCurrentScriptDirectory~".\enm3img\enm3.png";
+let A_count	= 0;
+let A_countM	= 0;
+let Animetion	= false;
+let AnimetionM	= false;
+let AR_count	= 0;
+let AL_count	= 0;
+let A_returnR	= 0;
+let A_returnL	= 0;
+let lrz		= 0;
+let cc		= 0;
+
+LoadGraphic(img);
+
+Obj_SetPosition(spn1,GetX,GetY);
+ObjEffect_SetTexture(spn1,img);
+ObjEffect_SetRenderState(spn1,ALPHA);
+ObjEffect_SetPrimitiveType(spn1,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn1,1,1);
+ObjEffect_SetLayer(spn1,3);
+ObjEffect_CreateVertex(spn1,4);
+
+loop{
+cc++;
+if(hv==true){
+Obj_SetPosition(spn1,GetX,GetY+5*sin(cc*4));}
+if(hv==false){
+Obj_SetPosition(spn1,GetX,GetY);}
+
+//この辺if文グチャグチャで気色悪い
+if(Animetion==true){A_count++;}
+if(AnimetionM==true){A_countM++;}
+if(A_count==200){A_count=0;}
+if(A_countM==200){A_countM=0;}
+if(trunc(GetSpeedX)==0){A_returnR++;A_returnL++;}
+if(GetSpeedX>0){AR_count++;AnimetionM=false;Animetion=false;}
+if(AR_count==10){AR_count=5;}
+if(GetSpeedX<0){AL_count++;AnimetionM=false;Animetion=false;}
+if(AL_count==10){AL_count=5;}
+if(trunc(GetSpeedX)==0&&A_returnR<=0){AR_count=20;}
+if(A_returnR>=5&&AR_count>0){AR_count--;}
+if(AR_count<=0){AR_count=0;A_returnR=0;AnimetionM=true;}
+if(trunc(GetSpeedX)==0&&A_returnL<=0){AL_count=20;}
+if(A_returnL>=5&&AL_count>0){AL_count--;}
+if(AL_count<=0){AL_count=0;A_returnL=0;Animetion=true;}
+
+if(AnimetionM==true){
+if(A_countM>=0  && A_countM<=20){
+ObjEffect_SetVertexXY(spn1,0,40/-2,92/-2);
+ObjEffect_SetVertexXY(spn1,1,40/-2,92/2);
+ObjEffect_SetVertexXY(spn1,2,40/2,92/-2);
+ObjEffect_SetVertexXY(spn1,3,40/2,92/2);
+ObjEffect_SetVertexUV(spn1,0,31,4);
+ObjEffect_SetVertexUV(spn1,1,31,96);
+ObjEffect_SetVertexUV(spn1,2,72,4);
+ObjEffect_SetVertexUV(spn1,3,72,96);}
+if(A_countM>=20 && A_countM<=40){
+ObjEffect_SetVertexXY(spn1,0,42/-2,94/-2);
+ObjEffect_SetVertexXY(spn1,1,42/-2,94/2);
+ObjEffect_SetVertexXY(spn1,2,42/2,94/-2);
+ObjEffect_SetVertexXY(spn1,3,42/2,94/2);
+ObjEffect_SetVertexUV(spn1,0,333,104);
+ObjEffect_SetVertexUV(spn1,1,333,197);
+ObjEffect_SetVertexUV(spn1,2,375,104);
+ObjEffect_SetVertexUV(spn1,3,375,197);}}
+if(Animetion==true){
+if(A_count>=0  && A_count<=20||A_count>=60 && A_count<=80){
+ObjEffect_SetVertexXY(spn1,0,42/-2,94/-2);
+ObjEffect_SetVertexXY(spn1,1,42/-2,94/2);
+ObjEffect_SetVertexXY(spn1,2,42/2,94/-2);
+ObjEffect_SetVertexXY(spn1,3,42/2,94/2);
+ObjEffect_SetVertexUV(spn1,0,333,4);
+ObjEffect_SetVertexUV(spn1,1,333,97);
+ObjEffect_SetVertexUV(spn1,2,375,4);
+ObjEffect_SetVertexUV(spn1,3,375,97);}
+if(A_count>=20 && A_count<=40||A_count>=80 && A_count<=100){
+ObjEffect_SetVertexXY(spn1,0,42/-2,94/-2);
+ObjEffect_SetVertexXY(spn1,1,42/-2,94/2);
+ObjEffect_SetVertexXY(spn1,2,42/2,94/-2);
+ObjEffect_SetVertexXY(spn1,3,42/2,94/2);
+ObjEffect_SetVertexUV(spn1,0,333,104);
+ObjEffect_SetVertexUV(spn1,1,333,197);
+ObjEffect_SetVertexUV(spn1,2,375,104);
+ObjEffect_SetVertexUV(spn1,3,375,197);}
+if(A_count>=100&&A_count<=120||A_count>=140&&A_count<=160){
+ObjEffect_SetVertexXY(spn1,0,48/-2,94/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,94/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,94/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,94/2);
+ObjEffect_SetVertexUV(spn1,0,427,4);
+ObjEffect_SetVertexUV(spn1,1,427,97);
+ObjEffect_SetVertexUV(spn1,2,475,4);
+ObjEffect_SetVertexUV(spn1,3,475,97);}
+if(A_count>=120&&A_count<=140||A_count>=180&&A_count<=200){
+ObjEffect_SetVertexXY(spn1,0,48/-2,94/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,94/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,94/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,94/2);
+ObjEffect_SetVertexUV(spn1,0,427,104);
+ObjEffect_SetVertexUV(spn1,1,427,197);
+ObjEffect_SetVertexUV(spn1,2,475,104);
+ObjEffect_SetVertexUV(spn1,3,475,197);}}
+if(GetSpeedX>0||GetSpeedX==0&&AnimetionM==false){
+if(AR_count>=0  && AR_count<=5 ){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,128,9);
+ObjEffect_SetVertexUV(spn1,1,128,91);
+ObjEffect_SetVertexUV(spn1,2,175,9);
+ObjEffect_SetVertexUV(spn1,3,175,91);}
+if(AR_count>=5  && AR_count<=10){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,128,109);
+ObjEffect_SetVertexUV(spn1,1,128,191);
+ObjEffect_SetVertexUV(spn1,2,175,109);
+ObjEffect_SetVertexUV(spn1,3,175,191);}}
+if(GetSpeedX<0||GetSpeedX==0&&Animetion==false){
+if(AL_count>=0  && AL_count<=5 ){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,225,9);
+ObjEffect_SetVertexUV(spn1,1,225,91);
+ObjEffect_SetVertexUV(spn1,2,272,9);
+ObjEffect_SetVertexUV(spn1,3,272,91);}
+if(AL_count>=5  && AL_count<=10){
+ObjEffect_SetVertexXY(spn1,0,48/-2,82/-2);
+ObjEffect_SetVertexXY(spn1,1,48/-2,82/2);
+ObjEffect_SetVertexXY(spn1,2,48/2,82/-2);
+ObjEffect_SetVertexXY(spn1,3,48/2,82/2);
+ObjEffect_SetVertexUV(spn1,0,225,109);
+ObjEffect_SetVertexUV(spn1,1,225,191);
+ObjEffect_SetVertexUV(spn1,2,272,109);
+ObjEffect_SetVertexUV(spn1,3,272,191);}}
+
+yield;
+}
+}
+
+task BackGroundEffect03{
+let imgBACK1  = GetCurrentScriptDirectory~".\enm3img\enm3a.png";
+let imgBACK2  = GetCurrentScriptDirectory~".\enm3img\enm3b.png";
+let imgBACK3  = GetCurrentScriptDirectory~".\enm3img\enm3c.png";
+let spn1      = Obj_Create(OBJ_EFFECT);
+let spn4      = Obj_Create(OBJ_EFFECT);
+let spn2      = Obj_Create(OBJ_EFFECT);
+let spn3      = Obj_Create(OBJ_EFFECT);
+let cc        = 0;
+let alpha1    = 0;
+let alpha2    = 0;
+
+LoadGraphic(imgBACK1);
+LoadGraphic(imgBACK2);
+LoadGraphic(imgBACK3);
+
+Obj_SetPosition(spn1,CenX,CenY);
+ObjEffect_SetTexture(spn1,imgBACK1);
+ObjEffect_SetRenderState(spn1,ALPHA);
+ObjEffect_SetPrimitiveType(spn1,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn1,1,1);
+ObjEffect_SetLayer(spn1,0);
+ObjEffect_CreateVertex(spn1,4);
+ObjEffect_SetVertexXY(spn1,0,384/-2,448/-2);
+ObjEffect_SetVertexXY(spn1,1,384/-2,448/2);
+ObjEffect_SetVertexXY(spn1,2,384/2,448/-2);
+ObjEffect_SetVertexXY(spn1,3,384/2,448/2);
+ObjEffect_SetVertexUV(spn1,0,0,0);
+ObjEffect_SetVertexUV(spn1,1,0,448);
+ObjEffect_SetVertexUV(spn1,2,384,0);
+ObjEffect_SetVertexUV(spn1,3,384,448);
+Obj_SetPosition(spn2,CenX,CenY);
+ObjEffect_SetTexture(spn2,imgBACK1);
+ObjEffect_SetRenderState(spn2,SUBTRACT);
+ObjEffect_SetPrimitiveType(spn2,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn2,1,1);
+ObjEffect_SetAngle(spn2,0,0,0);
+ObjEffect_SetLayer(spn2,0);
+ObjEffect_CreateVertex(spn2,4);
+ObjEffect_SetVertexXY(spn2,0,384/-2,448/-2);
+ObjEffect_SetVertexXY(spn2,1,384/-2,448/2);
+ObjEffect_SetVertexXY(spn2,2,384/2,448/-2);
+ObjEffect_SetVertexXY(spn2,3,384/2,448/2);
+Obj_SetPosition(spn3,CenX,CenY);
+ObjEffect_SetTexture(spn3,imgBACK2);
+ObjEffect_SetRenderState(spn3,ALPHA);
+ObjEffect_SetPrimitiveType(spn3,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn3,1,1);
+ObjEffect_SetAngle(spn3,0,0,0);
+ObjEffect_SetLayer(spn3,0);
+ObjEffect_CreateVertex(spn3,4);
+ObjEffect_SetVertexXY(spn3,0,384/-2,448/-2);
+ObjEffect_SetVertexXY(spn3,1,384/-2,448/2);
+ObjEffect_SetVertexXY(spn3,2,384/2,448/-2);
+ObjEffect_SetVertexXY(spn3,3,384/2,448/2);
+ObjEffect_SetVertexUV(spn3,0,0,0);
+ObjEffect_SetVertexUV(spn3,1,0,384);
+ObjEffect_SetVertexUV(spn3,2,384,0);
+ObjEffect_SetVertexUV(spn3,3,384,384);
+Obj_SetPosition(spn4,CenX,CenY);
+ObjEffect_SetTexture(spn4,imgBACK3);
+ObjEffect_SetRenderState(spn4,ALPHA);
+ObjEffect_SetPrimitiveType(spn4,PRIMITIVE_TRIANGLESTRIP);
+ObjEffect_SetScale(spn4,1.3,1.3);
+ObjEffect_SetAngle(spn4,0,0,0);
+ObjEffect_SetLayer(spn4,0);
+ObjEffect_CreateVertex(spn4,4);
+ObjEffect_SetVertexXY(spn4,0,400/-2,400/-2);
+ObjEffect_SetVertexXY(spn4,1,400/-2,400/2);
+ObjEffect_SetVertexXY(spn4,2,400/2,400/-2);
+ObjEffect_SetVertexXY(spn4,3,400/2,400/2);
+ObjEffect_SetVertexUV(spn4,0,0,0);
+ObjEffect_SetVertexUV(spn4,1,0,400);
+ObjEffect_SetVertexUV(spn4,2,400,0);
+ObjEffect_SetVertexUV(spn4,3,400,400);
+
+loop{
+cc++;
+ObjEffect_SetVertexUV(spn1,0,0,0+cc);
+ObjEffect_SetVertexUV(spn1,1,0,448+cc);
+ObjEffect_SetVertexUV(spn1,2,384,0+cc);
+ObjEffect_SetVertexUV(spn1,3,384,448+cc);
+ObjEffect_SetVertexUV(spn2,0,0,0+cc*2);
+ObjEffect_SetVertexUV(spn2,1,0,448+cc*2);
+ObjEffect_SetVertexUV(spn2,2,384,0+cc*2);
+ObjEffect_SetVertexUV(spn2,3,384,448+cc*2);
+ObjEffect_SetVertexUV(spn3,0,0,0-cc*2);
+ObjEffect_SetVertexUV(spn3,1,0,448-cc*2);
+ObjEffect_SetVertexUV(spn3,2,384,0-cc*2);
+ObjEffect_SetVertexUV(spn3,3,384,448-cc*2);
+
+ObjEffect_SetAngle(spn4,0,0,cc/5);
+
+if(alpha1<255){alpha1+=15}
+if(alpha2<155){alpha2+=15}
+ObjEffect_SetVertexColor(spn1,0,alpha1,200,200,200);
+ObjEffect_SetVertexColor(spn1,1,alpha1,200,200,200);
+ObjEffect_SetVertexColor(spn1,2,alpha1,200,200,200);
+ObjEffect_SetVertexColor(spn1,3,alpha1,200,200,200);
+ObjEffect_SetVertexColor(spn2,0,alpha1,0,255,255);
+ObjEffect_SetVertexColor(spn2,1,alpha1,0,255,255);
+ObjEffect_SetVertexColor(spn2,2,alpha1,0,255,255);
+ObjEffect_SetVertexColor(spn2,3,alpha1,0,255,255);
+ObjEffect_SetVertexColor(spn3,0,alpha1,255,255,255);
+ObjEffect_SetVertexColor(spn3,1,alpha1,255,255,255);
+ObjEffect_SetVertexColor(spn3,2,alpha1,255,255,255);
+ObjEffect_SetVertexColor(spn3,3,alpha1,255,255,255);
+ObjEffect_SetVertexColor(spn4,0,alpha1,0,0,0);
+ObjEffect_SetVertexColor(spn4,1,alpha1,150,150,100);
+ObjEffect_SetVertexColor(spn4,2,alpha1,150,150,100);
+ObjEffect_SetVertexColor(spn4,3,alpha1,0,0,0);
+
+yield;
+}
+}

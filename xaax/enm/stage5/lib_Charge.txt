@@ -1,0 +1,195 @@
+//画像パス&読み込み(ファイルの構成が違う時は要変更)
+	let imgWhite = GetCurrentScriptDirectory ~ "enm5eff\Effect_White.png";
+
+	LoadGraphic(imgWhite);
+
+
+
+//画像破棄(画像を破棄しないと気になる人用・コピーして使って下さい)
+//	DeleteGraphic(imgWhite);
+
+
+
+//収束・拡散するエフェクト
+//頂点の数 三角形なら「3」
+//収束の速度 0:等速 1:最初の方が早い 2:最後の方が早い
+//X座標、Y座標
+//初期角度、角速度
+//エフェクトの最初の大きさ、最終的な大きさ
+//中心を透明にするか trueで透明になる
+//初期透明度、最終的な透明度
+//エフェクトの色 RGBで指定
+//収束に要する時間
+	task O_Aura(vertex, concent_type, x, y, angIni, angChange, scale1, scale2, inv_center, alpha1, alpha2, r, g, b, Time) {
+		let Obj = Obj_Create(OBJ_EFFECT);
+
+		let scale1 = scale1/128;
+		let scale2 = scale2/128;
+
+		let angle    = angIni;
+		let span     = 360/vertex;
+		let alpha    = alpha1;
+		let scale    = scale1;
+		let sclsin   = 0;
+		let sclsPlus = 90/Time;
+
+		if(concent_type == 2) {
+			sclsin   = 90;
+		}
+
+		let sclChange = scale2 - scale1;
+		let alpChange = alpha2 - alpha1;
+
+		Obj_SetPosition(Obj, x, y);
+		ObjEffect_SetTexture(Obj, imgWhite);
+		ObjEffect_SetRenderState(Obj, ADD);
+		ObjEffect_SetPrimitiveType(Obj, PRIMITIVE_TRIANGLEFAN);
+		ObjEffect_SetScale(Obj, scale, scale);
+		ObjEffect_SetAngle(Obj, 0, 0, angle);
+		ObjEffect_SetLayer(Obj, 3);
+
+		ObjEffect_CreateVertex(Obj, vertex+2);
+
+		ObjEffect_SetVertexXY(Obj, 0,    0,    0);
+		ascent(i in 0..vertex+1) { ObjEffect_SetVertexXY(Obj, i+1, 64*cos(span*i), 64*sin(span*i)); }
+
+		ObjEffect_SetVertexUV(Obj, 0, 64, 64);
+		ascent(i in 0..vertex+1) { ObjEffect_SetVertexUV(Obj, i+1, 64 + 32*cos(span*i), 64 + 32*sin(span*i)); }
+
+		if(inv_center) {
+			ObjEffect_SetVertexColor(Obj, 0, 0, r, g, b);
+		} else { 
+			ObjEffect_SetVertexColor(Obj, 0, alpha, r, g, b);
+		}
+		ascent(i in 0..vertex+1) { ObjEffect_SetVertexColor(Obj, i+1, alpha, r, g, b); }
+
+		loop(Time) {
+			sclsin += sclsPlus;
+
+			if(concent_type == 0) {
+				scale += sclChange/Time;
+			} else if(concent_type == 1) {
+				scale = scale1 + sclChange*sin(sclsin);
+			} else if(concent_type == 2) {
+				scale = scale1 + sclChange*(1 - sin(sclsin));
+			}
+			angle += angChange;
+			alpha += alpChange/Time;
+
+			ObjEffect_SetScale(Obj, scale, scale);
+			ObjEffect_SetAngle(Obj, 0, 0, angle);
+			if(inv_center) {
+				ObjEffect_SetVertexColor(Obj, 0, 0, r, g, b);
+			} else { 
+				ObjEffect_SetVertexColor(Obj, 0, alpha, r, g, b);
+			}
+			ascent(i in 0..vertex+1) { ObjEffect_SetVertexColor(Obj, i+1, alpha, r, g, b); }
+			yield;
+		}
+
+		if(scale != 0) {
+			loop(20) {
+				angle += angChange;
+				alpha -= alpha2/20;
+
+				ObjEffect_SetAngle(Obj, 0, 0, angle);
+				if(inv_center) {
+					ObjEffect_SetVertexColor(Obj, 0, 0, r, g, b);
+				} else { 
+					ObjEffect_SetVertexColor(Obj, 0, alpha, r, g, b);
+				}
+				ascent(i in 0..vertex+1) { ObjEffect_SetVertexColor(Obj, i+1, alpha, r, g, b); }
+				yield;
+			}
+		}
+
+		Obj_Delete(Obj);
+	}
+
+
+
+//電気エフェクト
+//電撃を出し続ける時間(フレーム指定)
+//電撃の量 「2」で2倍、「3」で3倍…
+//この値を大きくするほど電撃が長くなる 通常は「15」推奨
+//X座標 Y座標
+//1フレームで伸びる長さ
+//角度変化の大きさ 例：「30」を設定すると「±15度」に変化する
+//r1, g1, b1: 根本の色 RGBで設定
+//r2, g2, b2: 先端の色 RGBで設定
+//電撃の消え方 1:一気に消える 2:根元から次第に消える
+	task Thunder(time, amount, num, x, y, length, angChange, r1, g1, b1, r2, g2, b2, delType) {
+		loop(time) {
+			loop(amount) { ThunderControl(x, y, r1, g1, b1, r2, g2, b2); }
+			yield;
+		}
+
+		task ThunderControl(x, y, r1, g1, b1, r2, g2, b2) {
+			let angle   = rand(0, 360);
+			let delTime = num;
+
+			let r = r1;
+			let g = g1;
+			let b = b1;
+
+			let rPlus = (r2 - r1) / 8;
+			let gPlus = (g2 - g1) / 8;
+			let bPlus = (b2 - b1) / 8;
+
+			loop(num) {
+				ThunderEffect(x, y, angle, r, g, b, delTime);
+				x = x + length*cos(angle);
+				y = y + length*sin(angle);
+
+				if(r != r2) { r += rPlus; }
+				if(g != g2) { g += gPlus; }
+				if(b != b2) { b += bPlus; }
+
+				if(delType == 1) { delTime--; }
+
+				angle += rand(-angChange/2, angChange/2);
+				yield;
+			}
+
+			task ThunderEffect(x, y, angle, r, g, b, delTime) {
+				let Obj = Obj_Create(OBJ_EFFECT);
+
+				let alpha  = 255;
+				let alpLim = 128;
+
+				Obj_SetPosition(Obj, x, y);
+				ObjEffect_SetTexture(Obj, imgWhite);
+				ObjEffect_SetRenderState(Obj, ALPHA);
+				ObjEffect_SetPrimitiveType(Obj, PRIMITIVE_TRIANGLESTRIP);
+				ObjEffect_SetAngle(Obj, 0, 0, angle);
+				ObjEffect_SetLayer(Obj, 3);
+
+				ObjEffect_CreateVertex(Obj, 4);
+				ObjEffect_SetVertexXY(Obj, 0,      0, -0.5);
+				ObjEffect_SetVertexXY(Obj, 1,      0,  0.5);
+				ObjEffect_SetVertexXY(Obj, 2, length, -0.5);
+				ObjEffect_SetVertexXY(Obj, 3, length,  0.5);
+
+				ObjEffect_SetVertexUV(Obj, 0, 750, 270);
+				ObjEffect_SetVertexUV(Obj, 1, 750, 282);
+				ObjEffect_SetVertexUV(Obj, 2, 762, 270);
+				ObjEffect_SetVertexUV(Obj, 3, 762, 282);
+
+				ObjEffect_SetVertexColor(Obj, 0, alpha, r, g, b);
+				ObjEffect_SetVertexColor(Obj, 1, alpha, r, g, b);
+				ObjEffect_SetVertexColor(Obj, 2, alpha, r, g, b);
+				ObjEffect_SetVertexColor(Obj, 3, alpha, r, g, b);
+
+				loop(delTime) {
+					ObjEffect_SetVertexColor(Obj, 0, alpha, r, g, b);
+					ObjEffect_SetVertexColor(Obj, 1, alpha, r, g, b);
+					ObjEffect_SetVertexColor(Obj, 2, alpha, r, g, b);
+					ObjEffect_SetVertexColor(Obj, 3, alpha, r, g, b);
+					alpha -= alpLim/15;
+					yield;
+				}
+
+				Obj_Delete(Obj);
+			}
+		}
+	}

@@ -1,0 +1,214 @@
+task Ending(){
+	let count	= 0;
+	let frame	= 0;
+	let timer	= [0,0,0];
+	let timer1	= 0;
+	let timer2	= 0;
+	let timer3	= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let i		= 0;
+	let display	= false;
+	let tdif	= GetCommonDataEx("title","Diffi");
+
+	function Wait(frame){
+		loop(frame*60){yield};
+	}
+	function WaitE(){
+		while(GetEnemyNum()!=0){yield;}
+	}
+	function WaitU(num){
+		while(GetEnemyNum()<num){yield;}
+	}
+	
+	//SetCommonDataEx("title","Diffi","normal");
+	
+	BlackOutED(240);
+	
+	loop(300){yield;}
+	
+	alternative(tdif)
+	case("easy"){
+		SetCommonDataEx("title","clear_stageE",7);
+	}
+	case("normal"){
+		SetCommonDataEx("title","clear_stageN",7);
+	}
+	case("hard"){
+		SetCommonDataEx("title","clear_stageH",7);
+	}
+	case("lunatic"){
+		SetCommonDataEx("title","clear_stageL",7);
+	}
+	
+	loop{
+		let cter	= GetCommonDataEx("title","clear_stageEX_R");
+		let ctem	= GetCommonDataEx("title","clear_stageEX_M");
+		let ctes	= GetCommonDataEx("title","clear_stageEX_S");
+		let cte		= GetCommonDataEx("title","clear_stageE");
+		let ctn		= GetCommonDataEx("title","clear_stageN");
+		let cth		= GetCommonDataEx("title","clear_stageH");
+		let ctl		= GetCommonDataEx("title","clear_stageL");
+		let tdif	= GetCommonDataEx("title","Diffi");
+		
+		SetPlayerX(CenX);
+		SetPlayerY(CenY+170);
+		ForbidShot(true);
+		ForbidBomb(true);
+
+		alternative(tdif)
+		case("easy"){
+			alternative(cte)
+			case(7){
+				timer1++;
+			}
+			case(8){
+				timer2++;
+			}
+			case(9){
+				timer3++;
+			}
+		}
+		case("normal"){
+			alternative(ctn)
+			case(7){
+				timer1++;
+			}
+			case(8){
+				timer2++;
+			}
+			case(9){
+				timer3++;
+			}
+		}
+		case("hard"){
+			alternative(cth)
+			case(7){
+				timer1++;
+			}
+			case(8){
+				timer2++;
+			}
+			case(9){
+				timer3++;
+			}
+		}
+		case("lunatic"){
+			alternative(ctl)
+			case(7){
+				timer1++;
+			}
+			case(8){
+				timer2++;
+			}
+			case(9){
+				timer3++;
+			}
+		}
+		
+		if(timer1==1){
+			PlayMusicSP(15);
+			
+			/*
+>針霊夢でのクリアの際に多分通常エンディングの時のみだと思いますがエンディングテーマが流れているのにエンディングに進まずステージのままになるのですが・・・　先日のこれですが
+>自機を変えたらエンディングになりました。多分ストーリークリアしていない機体でEXクリアするとこうなる気がします
+			*/
+			
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				if( Continued ){
+					Ending01Bad();
+				}
+				else{
+					if( cter == 1 && tdif != "easy" && GetPlayerLife >= 3 ){
+						Ending04true();
+					}
+					else{
+						Ending01Good();
+					}
+				}
+			}
+			case("Marisa.txt"){
+				if( Continued ){
+					Ending02Bad();
+				}
+				else{
+					if( ctem==1 && tdif != "easy" && GetPlayerLife >= 3 ){
+						Ending04true();
+					}
+					else{
+						Ending02Good();
+					}
+				}
+			}
+			case("Sakuya.txt"){
+				if( Continued ){
+					Ending03Bad();
+				}
+				else{
+					if( ctes==1 && tdif != "easy" && GetPlayerLife >= 3 ){
+						Ending04true();
+					}
+					else{
+						Ending03Good();
+					}
+				}
+			}
+			others{
+				if( Continued ){
+					Ending01Bad();
+				}
+				else{
+					if( cter == 1 && tdif != "easy" && GetPlayerLife >= 3 ){
+						Ending04true();
+					}
+					else{
+						Ending01Good();
+					}
+				}
+			}
+		}
+		
+		if(timer2==1){
+			PlayMusicSP(16);
+			StaffRollMain();
+		}
+		
+		if(timer3==1){
+			let gp		= GetCommonDataEx("title","practise");
+			let gex		= GetCommonDataEx("title","ex");
+			let gsrn	= GetCommonDataEx("r","sp_score_reimu_normal");
+			
+			if(gp==false){
+				SetCommonDataEx("title","practise",true);//条件に関わらずpractice解放
+				EnemyNameED(CenX+96,CenY,csd~".\front\dic01.png",0.8);
+				PlaySE(extend);
+				Wait(5);
+			}
+			SetCommonDataEx("title","listen_bgm",14);//ｻｳﾝﾄﾞﾃｽﾄのコメントが6面まで全部見れる
+			let diffh  = GetCommonDataEx("title","Diffi");
+			if(diffh=="normal"){
+				display=true;
+				loop(28){
+					if(gsrn[i]!=0){
+						display=false;
+					}
+					i++;
+				}
+				if(display==true){
+					EnemyNameED(CenX+96,CenY,csd~".\front\dic00.png",0.8);
+					Wait(5);
+				}
+			}
+			if(Continued==false&&gex==false){
+				SetCommonDataEx("title","ex",true);
+				EnemyNameED(CenX+96,CenY,csd~".\front\dic02.png",0.8);
+				PlaySE(extend);
+				Wait(5);
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Wait(3);
+			ClearStage;
+		}
+	yield;
+	}
+}

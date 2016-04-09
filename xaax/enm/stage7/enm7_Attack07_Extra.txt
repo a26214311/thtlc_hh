@@ -1,0 +1,165 @@
+
+#Title[enm7 Attack07]
+#Text[エルフィン・ミント
+通常弾幕7]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+script_enemy_main{
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= csd~".\enm7se\timer1.wav";
+	let t10			= csd~".\enm7se\timer2.wav";
+	let tan			= csd~".\enm7se\shot1.wav";
+	let kira		= csd~".\enm7se\shot2.wav";
+	let Gspel		= csd~".\enm7se\echo5.wav";
+	let laser		= csd~".\enm7se\Laser2.wav";
+	let power		= csd~".\enm7se\enemy_powereffect.wav";
+	let powerl		= csd~".\enm7se\power_logo.wav";
+	let gekiha		= csd~".\enm7se\BossEnd.wav";
+	let powerla		= csd~".\enm7se\power_logo.wav";
+	let kaku		= csd~".\enm7se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angle3		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= csd ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let S_count		= 0;
+	let endc		= 0;
+	let i			= 0;
+	let rt			= 0;
+
+	@Initialize{
+		SetLife(5000);
+		SetDamageRate(0,0);
+		SetInvincibility(120);
+		
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+
+		//弾幕削除制限　(初期値64)
+		LoadUserShotData(shotdir);
+		SetMovePosition03(CenX,CenY-100,10,5);
+		LoadGraphic(imgEffect);
+		LoadGraphic(imgSPNB);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		hpb(0,1,0);
+		SetTimer(60);
+		Timer(2,0);
+		EnemyTexture07(true);
+		SetEffectForZeroLife(0,0,0);
+		VSname(0);
+		while(i<4){
+			VSname2(0+i*10,0);
+			i++;
+		}i=0;
+		RedMagicCircle(1,0);//1が既出 引数2はﾃﾞｨﾚｲ
+		
+		CreateEnemyFromFile(csd~"enm7_Family04_Extra.txt",0,0,0,0,0);
+		SetShotAutoDeleteClip(64,64,64,32);
+	}
+
+	@MainLoop{
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		SetCollisionB(GetX, GetY, 16);
+
+		//制限時間処理
+		if(GetTimer<=10 && GetTimer>=0){T_count++;}
+		alternative(T_count)
+		case(1,60,120,180,240){PlaySE(t10);}
+		case(300,360,420,480,540){PlaySE(t5);}
+
+		//ボム中、使用後一定時間ダメージ無効処理
+		if(OnBomb==true){SetDamageRate(120,100);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRate(120,100);}
+
+		a++;	
+		frame++;
+		count++;
+		timer++;
+		if(frame==200){
+			ShotMain;
+		}
+		if(timer==100){
+			SetCommonDataEx("anime","anime_flag",true);
+			Concentration(50,powerla);
+		}
+		if(timer==200){
+			SetCommonDataEx("anime","anime_flag",false);
+		}
+		alternative(count)
+		case(300){
+			if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+			else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+		}
+		if(count==300){
+			count=150;
+		}
+
+	}//MainLoopの")"です。
+
+	@DrawLoop{}
+
+	@Finalize{}
+	
+	task ShotMain(){
+		let cc		= 0;
+		
+		loop{
+			cc++;
+			if(cc==1){
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,-45,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer+5,0,0,10,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,225,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer-5,0,0,10,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,-25,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer-10,0,0,10,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,205,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer+10,0,0,10,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,-15,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer-20,0,0,10,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,5,195,0,-0.1,0,kGREEN62);
+				SetShotDataA(0,60,5,GetAngleToPlayer+20,0,0,10,kPURPLE62);
+				FireShot(0);
+				PlaySE(kira);
+				cc=-7;
+			}
+			yield;
+		}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

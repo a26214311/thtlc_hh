@@ -1,0 +1,141 @@
+script_enemy_main
+{//落ちてきて打ち返すだけの妖精
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy;
+	if(GetArgument==0){imgEnemy = csd~".\img\fairy_red.png";}
+	if(GetArgument==1){imgEnemy = csd~".\img\fairy_blue.png";}
+	let imgAngle=0;
+	let shotAngle=0;
+	let ShotSE = csd ~".\se\shot02.wav";
+	let ex = 0;
+	let ey = 0;
+	let frame = 0;
+	let angle = 0;
+	let timer = 0;
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+
+	@Initialize
+	{
+		SetLife(20);
+		LoadGraphic(imgEnemy);
+		SetTexture(imgEnemy);
+		Initialize_Fairy(0,255,100,100);
+		Enemy_Move;
+	}
+	
+	@MainLoop
+	{
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		alternative(tdif)
+		case("hard"){
+			timer++;
+			if(timer==1){
+				PlaySE(ShotSE);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,0.5,angle,0,0,0,YELLOW01);
+				SetShotDataA(0,120,NULL,NULL,0,0.05,3,YELLOW01);
+				FireShot(0);
+				angle+=18;
+				timer=-29;
+			}
+		}
+		case("lunatic"){
+			timer++;
+			if(timer==1){
+				PlaySE(ShotSE);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,0.1,angle,0,0,0,YELLOW01);
+				SetShotDataA(0,120,NULL,NULL,0,0.05,5,YELLOW01);
+				FireShot(0);
+				CreateShotA(0,GetX,GetY,10);
+				SetShotDataA(0,0,0.1,angle*-1,0,0,0,YELLOW01);
+				SetShotDataA(0,120,NULL,NULL,0,0.05,5,YELLOW01);
+				FireShot(0);
+				angle+=18;
+				timer=-14;
+			}
+		}
+
+		if(GetX<MinX-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY>MaxY+100&&!enmfin){
+		VanishEnemy;
+		}
+		if(!enmfin){SetCollisionA(GetX(),GetY(),16);}//当たり判定(自弾)登録
+		if(!enmfin){ex = GetX;ey = GetY;}
+		if(enmfin&&count==0){
+			alternative(tdif)
+			case("easy"){
+				CreateShot01(ex,ey,1,atan2(GetPlayerY-ey,GetPlayerX-ex),9,15);
+			}
+			case("normal"){
+				CreateShot01(ex,ey,2,atan2(GetPlayerY-ey,GetPlayerX-ex),9,15);
+			}
+			case("hard"){
+				CreateShot01(ex,ey,3,atan2(GetPlayerY-ey,GetPlayerX-ex),9,15);
+			}
+			case("lunatic"){
+				CreateShot01(ex,ey,2,atan2(GetPlayerY-ey,GetPlayerX-ex),9,15);
+				CreateShot01(ex,ey,4,atan2(GetPlayerY-ey,GetPlayerX-ex),9,15);
+			}
+			count=1;
+		}
+		frame++;
+		if(GetCommonData("BossFlag")&&!enmfin) {
+			TrashEnemy(255,64,64);
+			enmfin=true;
+			}//BossFlagがtrueの時、敵を倒す（エフェクト付き）
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		DrawFairy(imgEnemy);
+	}
+	
+	task Enemy_Move {
+		let MoveX = GetCenterX-rand(-200,200);
+		let MoveSpeed = 1.5;
+		while(!enmfin) {
+			SetMovePosition01(MoveX,MaxY+120,MoveSpeed);
+			MoveSpeed+=0.01;
+			yield;
+			}
+		}
+#include_function".\lib_anime_fairy.txt"
+}

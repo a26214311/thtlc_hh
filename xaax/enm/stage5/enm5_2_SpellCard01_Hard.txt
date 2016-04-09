@@ -1,0 +1,199 @@
+
+#Title[enm5_2 spell01 hard]
+#Text[ジャネット・アルカンジェ　奏符「スカイパラダイスオーケストラ」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm5eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm5se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm5se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm5se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm5se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm5se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm5se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm5se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm5se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm5se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let RED02     = 193;
+    let ORANGE02  = 194;
+    let YELLOW02  = 195;
+    let GREEN02   = 196;
+    let BLUE02    = 197;
+    let AQUA02    = 198;
+    let PURPLE02  = 199;
+    let WHITE02   = 200;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,GetClipMinY+160,10,5);
+        LoadGraphic(imgEffect);
+	Aura(8,200,128,100);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,1);
+	VSnameB2(2);
+	EnemyTexture05a_typeB(true);
+	RedMagicCircle(1,0);
+	Shot_Main;
+	SetEffectForZeroLife(0,0,0);
+	SpellPracticeSave("hard",17);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm5img\jannet00000.png",0,0,384,512);
+	CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm5spell\enm5_2_sn01_hard.png",0,0,384,32,255,255,255);
+	BackGroundEffect2;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	}
+	
+	if(endc==0){
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	}
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	}
+
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	if(tact!=11){
+	CreateItem(ITEM_1UP,CenX,CenY);
+	}
+	}
+	
+task Shot_Main {
+	let x;
+	let y;
+	let angle;
+	let wt = 90;
+	let shotc = 0;
+	let r;
+	let way = 48;
+	let shot = [RED02,ORANGE02,YELLOW02,GREEN02,BLUE02,AQUA02,PURPLE02];
+	loop(120){yield;}
+		loop {
+			angle = rand(0,360);
+			r = 64;
+			shotc = rand_int(0,6);
+			loop(way) {
+				x = GetX+cos(angle)*r;
+				y = GetY+sin(angle)*r;
+				angle += 360/way;
+				ColorShot(x,y,angle,shot[shotc]);
+				PlaySE(kira);
+				DelaySE(tan,30);
+				CreateShot02(GetX,GetY,  4,angle  ,-0.1,1.2,22,0);
+				CreateShot02(GetX,GetY,4.2,angle  ,-0.1,1.2,22,0);
+				CreateShot02(GetX,GetY,4.4,angle  ,-0.1,1.2,22,0);
+				}
+			Concentration(50,powerla);
+			loop(wt){yield;}
+			count+=30;
+			if(wt>=90){wt-=3;}
+		}
+	}
+	
+	function ColorShot(x,y,angle,color) {
+		CreateShotA(0,x,y,30);
+		SetShotDataA(0,0,0,angle,0,0,0,color);
+		alternative(color)
+		case(RED02)   {SetShotDataA(0,30,  1,NULL,-0.6,0.05,  1+1,NULL);}
+		case(ORANGE02){SetShotDataA(0,30,1.5,NULL,-0.4,0.02,1.5+1,NULL);}
+		case(YELLOW02){SetShotDataA(0,30,  2,NULL,-0.2,0.01,  2+1,NULL);}
+		case(GREEN02) {SetShotDataA(0,30,2.5,NULL,   0,   0,2.5+1,NULL);}
+		case(BLUE02)  {SetShotDataA(0,30,  2,NULL, 0.2,0.01,  2+1,NULL);}
+		case(AQUA02)  {SetShotDataA(0,30,1.5,NULL, 0.4,0.02,1.5+1,NULL);}
+		case(PURPLE02){SetShotDataA(0,30,  1,NULL, 0.6,0.05,  1+1,NULL);}
+		SetShotDataA(0,200,NULL,NULL,0,0,0,NULL);
+		FireShot(0);
+		}
+		
+	task DelaySE(se,t) {
+		loop(t){yield;}
+		PlaySE(se);
+		}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

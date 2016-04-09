@@ -1,0 +1,509 @@
+	task StageTask1(){
+		let CX=GetCenterX();//STGシーンの中心x座標を取得
+		let CY=GetCenterY();//STGシーンの中心y座標を取得
+		let eFreeX=0;//敵の自由なx
+		let eFreeY=0;//敵の自由なy
+		let HayaCount = 0;//早回し用のカウント
+		let BreakTime = 0;//中ボスを倒すまでの時間
+		let timer	= 0;
+		let when	= 0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+		SetCommonData("BossFlag",false);
+		function Wait(let frame){
+			loop(frame){yield};
+		}
+		function WaitForZeroEnemy(){
+			while(GetEnemyNum() != 0){yield;}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(2);
+				PlayMusicName(-25,1);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+
+		
+		Wait(180);//60
+		PlayMusicSP(1);
+		PlayMusicName(-40,0);
+		StageLogo(1,360,120);
+		Wait(480);//540
+
+		//敵をファイルから読みこんで出現
+		ascent(i in 0..4) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+80,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-80,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		if(tdif=="easy"||tdif=="normal"){
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+180,MinY-80,0,0,0);
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+150,MinY-40,0,0,1);
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+120,MinY-80,0,0,2);
+		}
+
+		ascent(i in 0..6) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+80,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-80,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		Wait(240);
+
+
+		ascent(i in 0..3) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+60,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-60,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+140,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-140,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+100,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-100,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		Wait(180);
+		ascent(i in 0..5) {
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+i*20),MinY-40,0,0,0);
+		Wait(30);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+i*20),MinY-40,0,0,1);
+		Wait(30);
+		}
+
+		ascent(i in 0..3) {
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+30+i*60,MinY-40,0,0,1);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-30-i*60,MinY-40,0,0,1);
+		Wait(150);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+180-i*60,MinY-40,0,0,1);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-180+i*60,MinY-40,0,0,1);
+		Wait(150);
+		}
+
+		Wait(180);
+
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_E.txt",CX,0,0,0,0);
+		}case("normal"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_N.txt",CX,0,0,0,0);
+		}case("hard"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_H.txt",CX,0,0,0,0);
+		}case("lunatic"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_L.txt",CX,0,0,0,0);
+		}
+		//中ボスで
+		WaitForZeroEnemy();
+		Wait(60);
+
+		ascent(i in 0..3) {
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+30+i*60,MinY-40,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-30-i*60,MinY-40,0,0,0);
+		Wait(180);
+
+			ascent(a in 0..3) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+a*30),MinY-40,0,0,2);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+a*30),MinY-40,0,0,3);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			}
+
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+180-i*60,MinY-40,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-180+i*60,MinY-40,0,0,0);
+		Wait(180);
+
+			ascent(a in 0..3) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+a*30),MinY-40,0,0,2);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+a*30),MinY-40,0,0,3);
+			Wait(20);
+			}
+
+		}
+
+		Wait(240);
+
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		
+		SecondNameDisplay(0);
+		StartMusic();
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+		WaitForZeroEnemy();
+		alternative(GetPlayerScriptName)
+		case("Reimu.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02r.txt",0,0,0,0,0);
+		}case("Marisa.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02m.txt",0,0,0,0,0);
+		}case("Sakuya.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02s.txt",0,0,0,0,0);
+		}
+
+		WaitForZeroEnemy();//敵が消えるまで停止
+		Wait(120);//60フレーム待つ
+
+	}
+
+	task StageTask1ns(){
+		let CX=GetCenterX();//STGシーンの中心x座標を取得
+		let CY=GetCenterY();//STGシーンの中心y座標を取得
+		let eFreeX=0;//敵の自由なx
+		let eFreeY=0;//敵の自由なy
+		let HayaCount = 0;//早回し用のカウント
+		let BreakTime = 0;//中ボスを倒すまでの時間
+		let timer	= 0;
+		let when	= 0;
+		let tdif	= GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+		SetCommonData("BossFlag",false);
+		function Wait(let frame){
+			loop(frame){yield};
+		}
+		function WaitForZeroEnemy(){
+			while(GetEnemyNum() != 0){yield;}
+		}
+		function StartMusic(){
+			while(timer<2){
+				let gms	= GetCommonDataEx("in","music");
+				if(gms==true){timer++;}
+				if(timer==1){
+				PlayMusicSP(2);
+				PlayMusicName(-25,1);
+				}
+				yield;
+			}
+		}
+		function SecondNameDisplay(type){
+			while(when<2){
+				let gsnd = GetCommonDataEx("in","snd");
+				if(gsnd==true){when++;}
+				if(when==1){
+				EnemyName(CenX+110,CenY+120,0.55,type);
+				}
+			yield;
+			}
+			when=0;
+		}
+
+		Wait(180);//60
+		PlayMusicSP(1);
+		SetCommonDataEx("title","listen_bgm",1);
+		SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		PlayMusicName(-40,0);
+		StageLogo(1,360,120);
+		Wait(480);//540
+
+		//敵をファイルから読みこんで出現
+		ascent(i in 0..4) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+80,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-80,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		if(tdif=="easy"||tdif=="normal"){
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+180,MinY-80,0,0,0);
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+150,MinY-40,0,0,1);
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy02.txt",CX+120,MinY-80,0,0,2);
+		}
+
+		ascent(i in 0..6) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+80,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-80,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy01.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		Wait(240);
+
+
+		ascent(i in 0..3) {
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+60,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-60,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+20,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-20,MinY-40,0,0,3);
+			Wait(20);//
+
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+140,MinY-40,0,0,0);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-140,MinY-40,0,0,2);
+			Wait(20);//
+			ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX+100,MinY-40,0,0,1);
+			Wait(20);//
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy03.txt",CX-100,MinY-40,0,0,3);
+			Wait(20);//
+		}
+
+		Wait(180);
+		ascent(i in 0..5) {
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+i*20),MinY-40,0,0,0);
+		Wait(30);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+i*20),MinY-40,0,0,1);
+		Wait(30);
+		}
+
+		ascent(i in 0..3) {
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+30+i*60,MinY-40,0,0,1);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-30-i*60,MinY-40,0,0,1);
+		Wait(150);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+180-i*60,MinY-40,0,0,1);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-180+i*60,MinY-40,0,0,1);
+		Wait(150);
+		}
+
+		Wait(180);
+
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+		alternative(tdif)
+		case("easy"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_E.txt",CX,0,0,0,0);
+		}case("normal"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_N.txt",CX,0,0,0,0);
+		}case("hard"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_H.txt",CX,0,0,0,0);
+		}case("lunatic"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural_L.txt",CX,0,0,0,0);
+		}
+		//中ボスで
+		WaitForZeroEnemy();
+		Wait(60);
+
+		ascent(i in 0..3) {
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+30+i*60,MinY-40,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-30-i*60,MinY-40,0,0,0);
+		Wait(180);
+
+			ascent(a in 0..3) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+a*30),MinY-40,0,0,2);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+a*30),MinY-40,0,0,3);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			}
+
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX+180-i*60,MinY-40,0,0,0);
+		ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		ProtectionOfTheStarItem(0,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+		CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy05.txt",CX-180+i*60,MinY-40,0,0,0);
+		Wait(180);
+
+			ascent(a in 0..3) {
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX+(20+a*30),MinY-40,0,0,2);
+			Wait(20);
+			ProtectionOfTheStarItem(1,rand(MinX,MaxX),rand(MinY,MinY+50),1,90);
+			CreateEnemyFromFile(GetCurrentScriptDirectory~".\enm\stage1\enemy\fairy04.txt",CX-(20+a*30),MinY-40,0,0,3);
+			Wait(20);
+			}
+
+		}
+
+		Wait(240);
+
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+
+		SetCommonDataEx("title","listen_bgm",2);
+		SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+		alternative(tdif)
+		case("easy"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Er.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Em.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Es.txt",0,0,0,0,0);
+			}
+		}case("normal"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Nr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Nm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Ns.txt",0,0,0,0,0);
+			}
+		}case("hard"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Hs.txt",0,0,0,0,0);
+			}
+		}case("lunatic"){
+			alternative(GetPlayerScriptName)
+			case("Reimu.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Lr.txt",0,0,0,0,0);
+			}case("Marisa.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Lm.txt",0,0,0,0,0);
+			}case("Sakuya.txt"){
+				CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Plural2_Ls.txt",0,0,0,0,0);
+			}
+		}
+		SecondNameDisplay(0);
+		StartMusic();
+		DeleteAllEnemyWithoutBoss;
+		DeleteEnemyShotToItem(ALL);
+		WaitForZeroEnemy();
+		alternative(GetPlayerScriptName)
+		case("Reimu.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02r.txt",0,0,0,0,0);
+		}case("Marisa.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02m.txt",0,0,0,0,0);
+		}case("Sakuya.txt"){
+			CreateEnemyBossFromFile(GetCurrentScriptDirectory~".\enm\stage1\enm1_Event02s.txt",0,0,0,0,0);
+		}
+		WaitForZeroEnemy();//敵が消えるまで停止
+		Wait(120);//60フレーム待つ
+
+		out(240);
+		Wait(180);
+
+		SetCommonDataEx("title","sp_stage",2);
+	}

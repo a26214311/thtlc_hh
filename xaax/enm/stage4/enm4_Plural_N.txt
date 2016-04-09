@@ -1,0 +1,16 @@
+
+#Title[enm4_1 Plural Normal]
+#Text[邪星章4面中ボス　甕星 無々夢]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm4_Event00.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack01_Normal.txt]
+ #ScriptPath[.\enm4_SpellCard01_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Enter.txt]
+
+#EndScriptPathData

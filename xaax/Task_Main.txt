@@ -1,0 +1,146 @@
+task StageMain(){
+	let frame1	= 0;
+	let frame2	= 0;
+	let frame3	= 0;
+	let frame4	= 0;
+	let frame5	= 0;
+	let frame6	= 0;
+
+	SetCommonDataEx("title","sp_stage",1);
+	ExtendLine();
+
+	loop{
+		let tsps	= GetCommonDataEx("title","sp_stage");
+		let tdif	= GetCommonDataEx("title","Diffi");
+		let tcse	= GetCommonDataEx("title","clear_stageE");
+		let tcsn	= GetCommonDataEx("title","clear_stageN");
+		let tcsh	= GetCommonDataEx("title","clear_stageH");
+		let tcsl	= GetCommonDataEx("title","clear_stageL");
+
+		if(tsps==1){
+			frame1++;
+		}
+		if(frame1==1){
+			alternative(tdif)
+			case("easy"){
+				if(tcse<1){SetCommonDataEx("title","clear_stageE",1);}
+			}case("normal"){
+				if(tcsn<1){SetCommonDataEx("title","clear_stageN",1);}
+			}case("hard"){
+				if(tcsh<1){SetCommonDataEx("title","clear_stageH",1);}
+			}case("lunatic"){
+				if(tcsl<1){SetCommonDataEx("title","clear_stageL",1);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			StageTask1ns();
+		}//1面の処理
+		if(tsps==2){
+			frame2++;
+		}
+		if(frame2==1){
+			DeleteEnemyShotImmediatelyInCircle(ALL,CenX,CenY,5000);
+			ClearByteCodeCache;
+			SetCommonDataEx("title","listen_bgm",3);
+			alternative(tdif)
+			case("easy"){
+				if(tcse<2){SetCommonDataEx("title","clear_stageE",2);}
+			}case("normal"){
+				if(tcsn<2){SetCommonDataEx("title","clear_stageN",2);}
+			}case("hard"){
+				if(tcsh<2){SetCommonDataEx("title","clear_stageH",2);}
+			}case("lunatic"){
+				if(tcsl<2){SetCommonDataEx("title","clear_stageL",2);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Default();
+			StageTask2ns();
+		}//2面の処理
+		if(tsps==3){
+			frame3++;
+		}
+		if(frame3==1){
+			DeleteEnemyShotImmediatelyInCircle(ALL,CenX,CenY,5000);
+			ClearByteCodeCache;
+			SetCommonDataEx("title","listen_bgm",5);
+			alternative(tdif)
+			case("easy"){
+				if(tcse<3){SetCommonDataEx("title","clear_stageE",3);}
+			}case("normal"){
+				if(tcsn<3){SetCommonDataEx("title","clear_stageN",3);}
+			}case("hard"){
+				if(tcsh<3){SetCommonDataEx("title","clear_stageH",3);}
+			}case("lunatic"){
+				if(tcsl<3){SetCommonDataEx("title","clear_stageL",3);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Default();
+			StageTask3ns();
+		}//3面の処理
+		if(tsps==4){
+			frame4++;
+		}
+		if(frame4==1){
+			DeleteEnemyShotImmediatelyInCircle(ALL,CenX,CenY,5000);
+			ClearByteCodeCache;
+			SetCommonDataEx("title","listen_bgm",7);
+			alternative(tdif)
+			case("easy"){
+				if(tcse<4){SetCommonDataEx("title","clear_stageE",4);}
+			}case("normal"){
+				if(tcsn<4){SetCommonDataEx("title","clear_stageN",4);}
+			}case("hard"){
+				if(tcsh<4){SetCommonDataEx("title","clear_stageH",4);}
+			}case("lunatic"){
+				if(tcsl<4){SetCommonDataEx("title","clear_stageL",4);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Default();
+			StageTask4ns();
+		}//4面の処理
+		if(tsps==5){
+			frame5++;
+		}
+		if(frame5==1){
+			DeleteEnemyShotImmediatelyInCircle(ALL,CenX,CenY,5000);
+			ClearByteCodeCache;
+			SetCommonDataEx("title","listen_bgm",9);
+			alternative(tdif)
+			case("easy"){
+				if(tcse<5){SetCommonDataEx("title","clear_stageE",5);}
+			}case("normal"){
+				if(tcsn<5){SetCommonDataEx("title","clear_stageN",5);}
+			}case("hard"){
+				if(tcsh<5){SetCommonDataEx("title","clear_stageH",5);}
+			}case("lunatic"){
+				if(tcsl<5){SetCommonDataEx("title","clear_stageL",5);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Default();
+			StageTask5ns();
+		}//5面の処理
+		if(tsps==6){
+			frame6++;
+		}
+		if(frame6==1){
+			DeleteEnemyShotImmediatelyInCircle(ALL,CenX,CenY,5000);
+			ClearByteCodeCache;
+			SetCommonDataEx("title","listen_bgm",11);
+			alternative(tdif)
+			case("easy"){
+				if(tcse<6){SetCommonDataEx("title","clear_stageE",6);}
+			}case("normal"){
+				if(tcsn<6){SetCommonDataEx("title","clear_stageN",6);}
+			}case("hard"){
+				if(tcsh<6){SetCommonDataEx("title","clear_stageH",6);}
+			}case("lunatic"){
+				if(tcsl<6){SetCommonDataEx("title","clear_stageL",6);}
+			}
+			SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+			Default();
+			StageTask6ns();
+			break;
+		}//6面の処理
+
+		yield;
+	}
+}

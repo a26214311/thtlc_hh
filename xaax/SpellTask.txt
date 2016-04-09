@@ -1,0 +1,82 @@
+task SpellPracticeSave(type,h){
+	let i		= 0;
+	let sn		= [0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,0,0,
+					0,0,0,0,0,0,0,0,0,0,0];//27 28 31 31
+	let sn0		= GetCommonDataEx("r","sp_score_reimu_easy");
+	let sn1		= GetCommonDataEx("r","sp_score_reimu_normal");
+	let sn2		= GetCommonDataEx("r","sp_score_reimu_hard");
+	let sn3		= GetCommonDataEx("r","sp_score_reimu_lunatic");
+	let sn4		= GetCommonDataEx("r","sp_score_reimu_extra");
+	
+	alternative(type)
+	case("easy"){
+		loop(27){
+			sn[i]=sn0[i];
+			i++;
+		}
+		i=0;
+		
+		sn[h]=1111;
+		
+		SetCommonDataEx("r","sp_score_reimu_easy",[sn[0],sn[1],sn[2],sn[3],sn[4],sn[5],sn[6],sn[7],sn[8],sn[9],
+							sn[10],sn[11],sn[12],sn[13],sn[14],sn[15],sn[16],sn[17],sn[18],sn[19],
+							sn[20],sn[21],sn[22],sn[23],sn[24],sn[25],sn[26]]);
+		SaveCommonDataEx("r","script\TheLastComer\Score_Reimu.dat");
+	}
+	case("normal"){
+		loop(28){
+			sn[i]=sn1[i];
+			i++;
+		}
+		i=0;
+		
+		sn[h]=1111;
+		
+		SetCommonDataEx("r","sp_score_reimu_normal",[sn[0],sn[1],sn[2],sn[3],sn[4],sn[5],sn[6],sn[7],sn[8],sn[9],
+							sn[10],sn[11],sn[12],sn[13],sn[14],sn[15],sn[16],sn[17],sn[18],sn[19],
+							sn[20],sn[21],sn[22],sn[23],sn[24],sn[25],sn[26],sn[27]]);
+		SaveCommonDataEx("r","script\TheLastComer\Score_Reimu.dat");
+	}
+	case("hard"){
+		loop(31){
+			sn[i]=sn2[i];
+			i++;
+		}
+		i=0;
+		
+		sn[h]=1111;
+		
+		SetCommonDataEx("r","sp_score_reimu_hard",[sn[0],sn[1],sn[2],sn[3],sn[4],sn[5],sn[6],sn[7],sn[8],sn[9],
+							sn[10],sn[11],sn[12],sn[13],sn[14],sn[15],sn[16],sn[17],sn[18],sn[19],
+							sn[20],sn[21],sn[22],sn[23],sn[24],sn[25],sn[26],sn[27],sn[28],sn[29],sn[30]]);
+		SaveCommonDataEx("r","script\TheLastComer\Score_Reimu.dat");
+	}
+	case("lunatic"){
+		loop(31){
+			sn[i]=sn3[i];
+			i++;
+		}
+		i=0;
+		
+		sn[h]=1111;
+		
+		SetCommonDataEx("r","sp_score_reimu_lunatic",[sn[0],sn[1],sn[2],sn[3],sn[4],sn[5],sn[6],sn[7],sn[8],sn[9],
+							sn[10],sn[11],sn[12],sn[13],sn[14],sn[15],sn[16],sn[17],sn[18],sn[19],
+							sn[20],sn[21],sn[22],sn[23],sn[24],sn[25],sn[26],sn[27],sn[28],sn[29],sn[30]]);
+		SaveCommonDataEx("r","script\TheLastComer\Score_Reimu.dat");
+	}
+	case("extra"){
+		loop(12){
+			sn[i]=sn4[i];
+			i++;
+		}
+		i=0;
+		
+		sn[h]=1111;
+		
+		SetCommonDataEx("r","sp_score_reimu_extra",[sn[0],sn[1],sn[2],sn[3],sn[4],sn[5],sn[6],sn[7],sn[8],sn[9],sn[10],sn[11]]);
+		SaveCommonDataEx("r","script\TheLastComer\Score_Reimu.dat");
+	}
+	case("phantasm"){}
+}

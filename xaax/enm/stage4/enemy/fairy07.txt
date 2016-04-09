@@ -1,0 +1,268 @@
+script_enemy_main{
+	/*ソース曰く丸パ○リ混沌
+	星Exの鱗左へ
+	*/
+	let count	= 0;
+	let frame	= 0;
+	let timer	= 0;
+	let angle	= 0;
+	let angle2	= 0;
+	let angle3	= 0;
+	let cx		= GetCenterX();//STGシーンの中心x座標を取得
+	let csd		= GetCurrentScriptDirectory;
+	let imgAngle	= 0;
+	let shotAngle	= 0;
+	let kira	= csd~".\se\shot2.wav";
+	let tan		= csd~".\se\shot1.wav";
+	let shotdir	= csd~"kshotData.txt";
+	let imgEnemy	= csd~".\img\fairy_ex2.png";//ココの画像を変えると変わる(日本語変
+	let MinX	= GetClipMinX;
+	let MaxX	= GetClipMaxX;
+	let MinY	= GetClipMinY;
+	let MaxY	= GetClipMaxY;
+	let CenX	= GetCenterX;
+	let CenY	= GetCenterY;
+	let i		= trunc(rand(0,10));
+
+	// アイテムを落とす数
+	let Inam_1up	= 0;
+	let Inam_Bomb	= 0;
+	let Inam_Item	= 0;
+
+	@Initialize{
+		SetX(MaxX+50);
+		SetY(MinY+50);
+		SetLife(500);
+		LoadGraphic(imgEnemy);
+		LoadUserShotData(shotdir);
+		SetMovePosition03(MinX-150,MinY+100,8,1);
+		SetTexture(imgEnemy);
+		Initialize_Fairy(GetArgument,100,100,255);//あーぐめんとの所が対応してる(7まで
+		/*
+		0	最小
+		1	最小（綿毛）
+		2	小
+		3	小（帽子）
+		4	中
+		5	中（リボン）
+		6	大
+		7	大（向日葵）
+		*/
+	}
+	
+	@MainLoop{
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+
+		frame++;
+		count++;
+		timer++;
+
+		let shote	= kPURPLE50;
+
+		if(count==60){
+			alternative(tdif)
+			case("easy"){
+				if(angle2==0){
+					loop(12){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+6,0,-0.3,1.7,shote);
+						FireShot(0);
+						angle+=360/12;
+					}
+				}else{
+					loop(12){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-6,0,-0.3,1.7,shote);
+						FireShot(0);
+						angle+=360/12;
+					}
+				}
+			}case("normal"){
+				if(angle2==0){
+					loop(15){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/15;
+					}
+				}else{
+					loop(15){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/15;
+					}
+				}
+			}case("hard"){
+				if(angle2==0){
+					loop(20){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/20;
+					}
+				}else{
+					loop(20){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/20;
+					}
+				}
+			}case("lunatic"){
+				if(angle2==0){
+					loop(24){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle+8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/24;
+					}
+				}else{
+					loop(24){
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle,0,-0.3,2,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-2,0,-0.3,1.9,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-4,0,-0.3,1.8,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-6,0,-0.3,1.7,shote);
+						FireShot(0);
+						CreateShotA(0,GetX,GetY,10);
+						SetShotDataA(0,0,10,angle-8,0,-0.3,1.6,shote);
+						FireShot(0);
+						angle+=360/24;
+					}
+				}
+			}
+			angle2++;
+			if(angle2==2){angle2=0;}
+			angle+=4.5/2;
+			PlaySE(tan);
+			if(angle3<15){angle3+=3;}
+			count=0+angle3;
+		}
+
+		//画面外に出ると死ぬ
+		if(GetX<MinX-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY>MaxY+100&&!enmfin){
+		VanishEnemy;
+		}
+		//判定
+		SetCollisionA(GetX(),GetY(),16);
+		SetCollisionB(GetX(),GetY(),16);
+		yield;
+	}
+	
+	@Finalize{
+		//DeleteEnemyShotToItem(CHILD);
+		loop(Inam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(Inam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..Inam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		DrawFairy(imgEnemy);//言わずもがな。
+	}
+#include_function".\lib_anime_fairy.txt"
+#include_function".\lib_kshot.txt"
+#include_function".\Obj_Shot.txt"
+}

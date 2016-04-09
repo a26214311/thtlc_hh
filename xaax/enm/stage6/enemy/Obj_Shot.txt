@@ -1,0 +1,190 @@
+task StarLaser(x,y,angle,speed,scale,shote,delay){
+let id		= [Obj_Create(OBJ_SHOT),
+			Obj_Create(OBJ_LASER),
+			Obj_Create(OBJ_LASER),
+			Obj_Create(OBJ_LASER),
+			Obj_Create(OBJ_LASER),
+			Obj_Create(OBJ_LASER)];
+let i		= 0;
+let spin	= 0;
+let rd		= trunc(rand(0,100));
+let spp		= 0;
+
+Obj_SetPosition(id[0],x,y);
+Obj_SetAngle(id[0],angle);
+ObjShot_SetGraphic(id[0],WHITE01);
+ObjShot_SetBombResist(id[0],true);
+Obj_SetAlpha(id[0],0);
+Obj_SetAutoDelete(id[0],false);
+Obj_SetCollisionToPlayer(id[0],false);
+
+loop(5){
+Obj_SetPosition(id[1+i],x,y);
+Obj_SetAngle(id[1+i],angle);
+Obj_SetAutoDelete(id[1+i],true);
+ObjShot_SetDelay(id[1+i],delay);
+ObjShot_SetBombResist(id[1+i],false);
+ObjShot_SetGraphic(id[1+i],shote);
+ObjLaser_SetLength(id[1+i],scale);
+ObjLaser_SetWidth(id[1+i],scale/10);
+ObjLaser_SetSource(id[1+i],false);
+i++;
+}
+i=0;
+
+loop{
+let gox	= Obj_GetX(id[0]);
+let goy	= Obj_GetY(id[0]);
+
+if(spp<speed){
+spp+=0.05;
+Obj_SetSpeed(id[0],spp);
+}
+
+if(rd>=0&&rd<50){
+spin++;
+}else{
+spin--;
+}
+
+Obj_SetPosition(id[1],gox+(scale/2)*sin(spin+72*1),goy+(scale/2)*cos(spin+72*1));
+Obj_SetPosition(id[2],gox+(scale/2)*sin(spin+72*2),goy+(scale/2)*cos(spin+72*2));
+Obj_SetPosition(id[3],gox+(scale/2)*sin(spin+72*3),goy+(scale/2)*cos(spin+72*3));
+Obj_SetPosition(id[4],gox+(scale/2)*sin(spin+72*4),goy+(scale/2)*cos(spin+72*4));
+Obj_SetPosition(id[5],gox+(scale/2)*sin(spin+72*5),goy+(scale/2)*cos(spin+72*5));
+
+Obj_SetAngle(id[1],72*-1-72-spin);
+Obj_SetAngle(id[2],72*-2-72-spin);
+Obj_SetAngle(id[3],72*-3-72-spin);
+Obj_SetAngle(id[4],72*-4-72-spin);
+Obj_SetAngle(id[5],72*-5-72-spin);
+
+//削除処理
+if(gox<MinX-300){
+loop(6){
+ObjShot_FadeDelete(id[i]);
+i++;
+}
+i=0;
+break;
+}
+if(gox>MaxX+300){
+loop(6){
+ObjShot_FadeDelete(id[i]);
+i++;
+}
+i=0;
+break;
+}
+if(goy<MinY-300){
+loop(6){
+ObjShot_FadeDelete(id[i]);
+i++;
+}
+i=0;
+break;
+}
+if(goy>MaxY+300){
+loop(6){
+ObjShot_FadeDelete(id[i]);
+i++;
+}
+i=0;
+break;
+}
+
+yield;
+}
+}
+
+task StarBullet(x,y,speed,shote){
+let id		= Obj_Create(OBJ_SHOT);
+let angle1	= 0;
+let angle2	= 0;
+let dis		= 0;
+let count	= 1;
+let frame	= 0;
+
+Obj_SetPosition(id,GetX,GetY-50);
+ObjShot_SetGraphic(id,WHITE05);
+ObjShot_SetBombResist(id,true);
+Obj_SetAlpha(id,0);
+Obj_SetAutoDelete(id,false);
+Obj_SetCollisionToPlayer(id,false);
+
+loop{
+let gox = Obj_GetX(id);
+let goy = Obj_GetY(id);
+
+frame++;
+if(dis<30){dis++;}
+if(dis==30){dis=0;count++;}
+
+alternative(count)
+case(1){angle1=109;}
+case(2){angle1=-36}
+case(3){angle1=180;}
+case(4){angle1=36;}
+case(5){angle1=252;}
+
+Obj_SetAngle(id,angle1);
+Obj_SetSpeed(id,8);
+
+CreateShotA(0,gox,goy,0);
+SetShotDataA(0,0,0,angle1+dis*12,0,0,0,shote);
+SetShotDataA(0,180-dis-count,0,NULL,rand(-0.1,0.1),0.01,speed,shote);
+FireShot(0);
+PlaySE(kira);
+
+if(count==6){
+Obj_Delete(id);
+break;
+}
+
+yield;
+}
+}
+
+task FalseLaser(x,y,angle,speed,shote,fr,w,delay){
+let ost = Obj_Create(OBJ_SHOT);
+let ang = 0;
+let frame = 0;
+
+Obj_SetPosition(ost,x,y);
+Obj_SetAngle(ost,angle);
+Obj_SetSpeed(ost,speed);
+ObjShot_SetBombResist(ost,true);
+ObjShot_SetDelay(ost,delay);
+ObjShot_SetGraphic(ost,shote);
+Obj_SetAutoDelete(ost,true);
+
+loop{
+let sgx = Obj_GetX(ost);
+let sgy = Obj_GetY(ost);
+
+ang++;
+if(fr=="+"){
+Obj_SetAngle(ost,angle+w*sin(ang*10));
+}
+else{
+Obj_SetAngle(ost,angle-w*sin(ang*10));
+}
+
+frame++;
+if(frame==1){
+CreateShotA(0,sgx,sgy,0);
+SetShotDataA(0,0,0,Obj_GetAngle(ost),0,0,10,shote);
+SetShotKillTime(0,30);
+FireShot(0);
+ang+=0.1;
+frame=0;
+}
+
+if(Obj_BeDeleted(ost)==true){
+Obj_Delete(ost);
+break;
+}
+
+yield;
+}
+}

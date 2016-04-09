@@ -1,0 +1,212 @@
+script_enemy Faily{
+    let gcsd      = GetCurrentScriptDirectory;
+    let effimg    = gcsd ~ ".\enm6eff\bulletbreak.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+    let img       = GetCurrentScriptDirectory~".\enm6eff\faily_npc.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 1;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let move1     = 0;
+    let moveA     = 0;
+    let alpha     = 0;
+
+    @Initialize {
+        SetLife(500);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	LoadUserShotData(shotdir);
+	alternative(GetArgument)
+	case(0){SetMovePosition03(CenX-150,CenY-50,10,5);}
+	case(1){SetMovePosition03(CenX-100,CenY-150,10,5);}
+	case(2){SetMovePosition03(CenX,CenY,10,5);}
+	case(3){SetMovePosition03(CenX+100,CenY-150,10,5);}
+	case(4){SetMovePosition03(CenX+150,CenY-50,10,5);}
+        LoadGraphic(img);
+	Set_SAura(150,0,150);
+	//Aura(8,255,255,255);
+	//EnemyTexture(true);
+
+	/*
+	0 チルノ
+	1 大妖精
+	2 サニーミルク
+	3 ルナチャイルド
+	4 スターサファイア
+	*/
+
+	}
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRateEx(30,50,30,0);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRateEx(30,50,30,0);}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	if(frame==1){Faily_Bullet(GetArgument);}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {
+	if(alpha<255){alpha+=5;}
+	if(move1<90){moveA+=3;}
+	move1=90*sin(moveA);
+	if(GetSpeedX==0){
+	SetTexture(img);
+	alternative(GetArgument)
+	case(0){SetGraphicRect(37,0,59,32);}
+	case(1){SetGraphicRect(34,32,62,64);}
+	case(2){SetGraphicRect(35,66,61,96);}
+	case(3){SetGraphicRect(33,96,63,128);}
+	case(4){SetGraphicRect(35,130,61,160);}
+	SetGraphicAngle(90-move1,0,90-move1);
+	}
+	if(GetSpeedX>0){
+	SetTexture(img);
+	alternative(GetArgument)
+	case(0){SetGraphicRect(4,0,26,32);}
+	case(1){SetGraphicRect(1,32,29,64);}
+	case(2){SetGraphicRect(2,66,28,96);}
+	case(3){SetGraphicRect(0,96,30,128);}
+	case(4){SetGraphicRect(3,130,29,160);}
+	SetGraphicAngle(180,0,0);
+	}
+	if(GetSpeedX<0){
+	SetTexture(img);
+	alternative(GetArgument)
+	case(0){SetGraphicRect(4,0,26,32);}
+	case(1){SetGraphicRect(1,32,29,64);}
+	case(2){SetGraphicRect(2,66,28,96);}
+	case(3){SetGraphicRect(0,96,30,128);}
+	case(4){SetGraphicRect(3,130,29,160);}
+	SetGraphicAngle(0,0,0);
+	}
+	SetGraphicScale(1,1);
+        SetRenderState(ALPHA);
+	SetAlpha(alpha);
+	SetColor(200,200,200);
+        DrawGraphic(GetX, (GetY+3)+3*sin(a*2));
+	}
+
+	task Faily_Bullet(type){
+	let framet = 0;
+	let countt = 0;
+	let timert = 0;
+	let anglet = 0;
+
+	loop{
+	framet++;
+	alternative(type)
+	case(0){
+	if(framet==60){
+	CreateShotA(0,GetX+rand(-20,20),GetY,10);
+	SetShotDataA(0,0,rand(-2,-3),GetAngleToPlayer,0,0.05,rand(2,3),kAQUA13);
+	FireShot(0);
+	PlaySE(kira);
+	framet=40;
+	}
+	}
+	case(1){
+	if(framet==60){
+	loop(10){
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,2,anglet,0,-0.05,0,kGREEN12);
+	SetShotDataA(0,120,NULL,NULL,0,0.01,3,kGREEN12);
+	FireShot(0);
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,2,anglet+36,0,-0.05,0,kGREEN12);
+	SetShotDataA(0,120,NULL,NULL,0,-0.01,-3,kGREEN12);
+	FireShot(0);
+	anglet+=36;
+	}
+	PlaySE(kira);
+	anglet+=9;
+	framet=30;
+	}
+	}
+	case(2){
+	if(framet==60){
+	loop(12){
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,0,anglet,0,-0.01,-1,kRED_F);
+	FireShot(0);
+	anglet+=30;
+	}
+	PlaySE(tan);
+	anglet+=15;
+	framet=30;
+	}
+	}
+	case(3){
+	if(framet==60){
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,5,(GetAngleToPlayer-20)+10*sin(anglet*10),0,0,5,kYELLOW12a);
+	FireShot(0);
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,5,(GetAngleToPlayer+20)+10*sin(anglet*10),0,0,5,kYELLOW12a);
+	FireShot(0);
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,5,(GetAngleToPlayer-40)+10*sin(anglet*10),0,0,5,kYELLOW12a);
+	FireShot(0);
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,5,(GetAngleToPlayer+40)+10*sin(anglet*10),0,0,5,kYELLOW12a);
+	FireShot(0);
+	anglet++;
+	framet=55;
+	PlaySE(kira);
+	}
+	}
+	case(4){
+	if(framet==60){
+	CreateShotA(0,GetX+rand(-20,20),GetY,10);
+	SetShotDataA(0,0,rand(-2,-3),GetAngleToPlayer,0,0.05,rand(2,3),kBLUE42);
+	FireShot(0);
+	framet=40;
+	PlaySE(kira);
+	}
+	}
+
+
+	yield;
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

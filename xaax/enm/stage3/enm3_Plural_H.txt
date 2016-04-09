@@ -1,0 +1,14 @@
+
+#Title[enm3_1 Plural Normal]
+#Text[邪星章3面中ボス　ピアシテ・パスカル]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm3_Attack03_Hard.txt]
+ #ScriptPath[.\enm3_SpellCard03_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Enter.txt]
+
+#EndScriptPathData

@@ -1,0 +1,118 @@
+task EnemyName(x,y,scau,type){
+	let defb	= Obj_Create(OBJ_EFFECT);
+	let def0	= Obj_Create(OBJ_EFFECT);
+	let def		= Obj_Create(OBJ_EFFECT);
+	let csd		= GetCurrentScriptDirectory;
+	let img1	= [csd~".\front\2nd_name01.png",
+					csd~".\front\2nd_name02.png",
+					csd~".\front\2nd_name03.png",
+					csd~".\front\2nd_name04.png",
+					csd~".\front\2nd_name05.png",
+					csd~".\front\2nd_name06.png",
+					csd~".\front\2nd_name07.png",
+					csd~".\front\2nd_name08.png",
+					csd~".\front\2nd_name09.png",
+					csd~".\front\2nd_name10.png"];
+	let rectx	= [504,504,504,504,508,504,504,504,504,526];
+	let img2	= csd~".\front\enamebk.png";
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let cc		= 0;
+	let alpha	= 0;
+	let alpha2	= 0;
+	let scay	= 0;
+	let sca		= 0;
+	
+	LoadGraphic(img1[type]);
+	LoadGraphic(img2);
+	
+	ObjEffect_SetTexture(defb,img1[type]);
+	ObjEffect_SetRenderState(defb,ALPHA);
+	ObjEffect_SetPrimitiveType(defb,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(defb,8);
+	ObjEffect_CreateVertex(defb,4);
+	ObjEffect_SetScale(defb,scau,scay+0.1);
+	ObjEffect_SetVertexXY(defb,0,rectx[type]/-2,170/-2);
+	ObjEffect_SetVertexXY(defb,1,rectx[type]/-2,170/2);
+	ObjEffect_SetVertexXY(defb,2,rectx[type]/2,170/-2);
+	ObjEffect_SetVertexXY(defb,3,rectx[type]/2,170/2);
+	ObjEffect_SetVertexUV(defb,0,0,0);
+	ObjEffect_SetVertexUV(defb,1,0,170);
+	ObjEffect_SetVertexUV(defb,2,rectx[type],0);
+	ObjEffect_SetVertexUV(defb,3,rectx[type],170);
+	
+	ObjEffect_SetTexture(def,img1[type]);
+	ObjEffect_SetRenderState(def,ALPHA);
+	ObjEffect_SetPrimitiveType(def,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(def,8);
+	ObjEffect_CreateVertex(def,4);
+	ObjEffect_SetScale(def,scau,scay);
+	ObjEffect_SetVertexXY(def,0,rectx[type]/-2,170/-2);
+	ObjEffect_SetVertexXY(def,1,rectx[type]/-2,170/2);
+	ObjEffect_SetVertexXY(def,2,rectx[type]/2,170/-2);
+	ObjEffect_SetVertexXY(def,3,rectx[type]/2,170/2);
+	ObjEffect_SetVertexUV(def,0,0,0);
+	ObjEffect_SetVertexUV(def,1,0,170);
+	ObjEffect_SetVertexUV(def,2,rectx[type],0);
+	ObjEffect_SetVertexUV(def,3,rectx[type],170);
+	
+	ObjEffect_SetTexture(def0,img2);
+	ObjEffect_SetRenderState(def0,ALPHA);
+	ObjEffect_SetPrimitiveType(def0,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(def0,8);
+	ObjEffect_CreateVertex(def0,4);
+	ObjEffect_SetVertexXY(def0,0,64/-2,64/-2);
+	ObjEffect_SetVertexXY(def0,1,64/-2,64/2);
+	ObjEffect_SetVertexXY(def0,2,64/2,64/-2);
+	ObjEffect_SetVertexXY(def0,3,64/2,64/2);
+	ObjEffect_SetVertexUV(def0,0,0,0);
+	ObjEffect_SetVertexUV(def0,1,0,64);
+	ObjEffect_SetVertexUV(def0,2,64,0);
+	ObjEffect_SetVertexUV(def0,3,64,64);
+	
+	loop{
+		let gsnd = GetCommonDataEx("in","snd");
+		let gx = Obj_GetX(def);
+		let gy = Obj_GetY(def);
+		
+		if(scay<scau){sca+=3}
+		scay=scau*sin(sca);
+		ObjEffect_SetScale(def,scau,scay);
+		ObjEffect_SetScale(defb,scau*1.1,scay*1.1);
+		
+		if(move1<70&&alpha<255){alpha+=5}
+		if(move1>70&&alpha>0){alpha-=5}
+		ObjEffect_SetVertexColor(def,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(def,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(defb,0,alpha,0,0,0);
+		ObjEffect_SetVertexColor(defb,1,alpha,0,0,0);
+		ObjEffect_SetVertexColor(defb,2,alpha,0,0,0);
+		ObjEffect_SetVertexColor(defb,3,alpha,0,0,0);
+		if(move1<70&&alpha2<255){alpha2+=2.5}
+		if(move1>70&&alpha2>0){alpha2-=5}
+		ObjEffect_SetVertexColor(def0,0,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,1,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,2,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(def0,3,alpha2,255,255,255);
+		
+		cc++;
+		Obj_SetPosition(def,x-move2,y);
+		Obj_SetPosition(defb,x+move2,y);
+		Obj_SetPosition(def0,x-50+move1,y);
+		ObjEffect_SetAngle(def0,0,0,cc);
+		move1+=0.25;
+		move2+=moveA;
+		if(move1>60&&moveA<0.5){moveA+=0.01}
+		if(move1>70&&alpha<0||OnEvent==false){
+			Obj_Delete(defb);
+			Obj_Delete(def);
+			Obj_Delete(def0);
+			break;
+		}
+		yield;
+	}
+}

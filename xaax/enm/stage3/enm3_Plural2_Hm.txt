@@ -1,0 +1,23 @@
+
+#Title[enm3_2 Plural MarisaN]
+#Text[邪星章3面ボス　ピアシテ・パスカル 魔理沙N]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm3_Event01m.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack01_Hard.txt]
+ #ScriptPath[.\enm3_SpellCard01_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack02_Hard.txt]
+ #ScriptPath[.\enm3_SpellCard02_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack04_Hard.txt]
+ #ScriptPath[.\enm3_SpellCard04_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_SpellCard05_Hard.txt]
+
+
+#EndScriptPathData

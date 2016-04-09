@@ -1,0 +1,422 @@
+task EndingBack(texture1,texture2,kill,delete){
+	let id		= [Obj_Create(OBJ_EFFECT),Obj_Create(OBJ_EFFECT)];
+	let alpha1	= 0;
+	let alphaA	= 0;
+	let die		= 0;
+	let change	= false;
+	let i		= 0;
+	
+	LoadGraphic(texture1);
+	LoadGraphic(texture2);
+	ObjEffect_SetTexture(id[0],texture1);
+	ObjEffect_SetTexture(id[1],texture2);
+	loop(2){
+		Obj_SetPosition(id[i],CenX+96,CenY);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,640/-2,480/-2);
+		ObjEffect_SetVertexXY(id[i],1,640/-2,480/2);
+		ObjEffect_SetVertexXY(id[i],2,640/2,480/-2);
+		ObjEffect_SetVertexXY(id[i],3,640/2,480/2);
+		ObjEffect_SetVertexUV(id[i],0,0,0);
+		ObjEffect_SetVertexUV(id[i],1,0,480);
+		ObjEffect_SetVertexUV(id[i],2,640,0);
+		ObjEffect_SetVertexUV(id[i],3,640,480);
+		i++;
+	}
+	i=0;
+	
+	loop{
+		let gtcb = GetCommonDataEx("ending","BGChange");
+
+		if(change==true&&alpha1<=0){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			break;
+		}
+
+		if(gtcb!=delete){change=true;}
+
+		if(kill>0){die++;}
+		if(die>kill&&kill>0){change=true;}
+		
+		if(change==false&&alpha1<255){alphaA+=5;}
+		if(change==true&&alpha1>0){alphaA+=5;}
+		alpha1=255*sin(alphaA);
+		
+		if(delete==0){
+			ObjEffect_SetVertexColor(id[0],0,alpha1,255,255,255);
+			ObjEffect_SetVertexColor(id[0],1,alpha1,255,255,255);
+			ObjEffect_SetVertexColor(id[0],2,alpha1,255,255,255);
+			ObjEffect_SetVertexColor(id[0],3,alpha1,255,255,255);
+		}else{
+			ObjEffect_SetVertexColor(id[0],0,255,255,255,255);
+			ObjEffect_SetVertexColor(id[0],1,255,255,255,255);
+			ObjEffect_SetVertexColor(id[0],2,255,255,255,255);
+			ObjEffect_SetVertexColor(id[0],3,255,255,255,255);
+		}
+		ObjEffect_SetVertexColor(id[1],0,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],1,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],2,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],3,alpha1,255,255,255);
+		
+		yield;
+	}
+}
+
+task EndingText(x,y,texture,rect3,rect4,sca,delete){
+	let id		= Obj_Create(OBJ_EFFECT);
+	let sca1	= 0;
+	let scaA	= 0;
+	let die		= 0;
+	let dl		= false;
+	let rgb		= [0,0,0];
+	
+	LoadGraphic(texture);
+	Obj_SetPosition(id,x,y);
+	ObjEffect_SetTexture(id,texture);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,8);
+	ObjEffect_SetScale(id,sca,sca);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexColor(id,0,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,1,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,2,255,rgb[0],rgb[1],rgb[2]);
+	ObjEffect_SetVertexColor(id,3,255,rgb[0],rgb[1],rgb[2]);
+	
+	loop{
+		let gtc = GetCommonDataEx("ending","TextChange");
+
+		if(gtc!=delete){dl=true;}
+
+		die++;
+		if(die>=60&&GetKeyState(VK_SHOT)==KEY_PUSH){dl=true;}
+		if(die>=60&&GetKeyState(VK_SKIP)==KEY_HOLD){dl=true;}
+		if(die==300){dl=true;}
+		
+		if(dl==true){
+			gtc+=1;
+			SetCommonDataEx("ending","TextChange",gtc);
+			Obj_Delete(id);
+			break;
+		}
+		
+		if(sca1<rect4){scaA+=10;}
+		sca1=rect4*sin(scaA);
+		
+		ObjEffect_SetVertexXY(id,0,trunc(rect3/-2),trunc(sca1/-2));
+		ObjEffect_SetVertexXY(id,1,trunc(rect3/-2),trunc(sca1/2));
+		ObjEffect_SetVertexXY(id,2,trunc(rect3/2),trunc(sca1/-2));
+		ObjEffect_SetVertexXY(id,3,trunc(rect3/2),trunc(sca1/2));
+		ObjEffect_SetVertexUV(id,0,0,0);
+		ObjEffect_SetVertexUV(id,1,0,sca1);
+		ObjEffect_SetVertexUV(id,2,rect3,0);
+		ObjEffect_SetVertexUV(id,3,rect3,sca1);
+		
+		yield;
+	}
+}
+
+task StaffRollMain(){
+	let frame	= 0;
+	
+	StaffRollBack(420,4380);//420+,4380+
+
+	loop{
+		let tdif	= GetCommonDataEx("title","Diffi");
+		SetPlayerX(CenX);
+		SetPlayerY(MaxY-50);
+		
+		frame++;
+		alternative(frame)
+		case(30){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt00.png",626,92,255,255,255,1,390);
+		}case(460){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt01.png",391,142,255,255,255,1,360);
+		}case(880){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt02.png",473,157,255,255,255,1,360);
+		}case(1300){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,300);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt03.png",505,92,255,255,255,1,300);
+		}case(1660){//1660
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt05.png",475,223,255,255,255,1,300);
+		}case(2020){//
+			StarHoleED(CenX+96,CenY+100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY+100,csd~".\end\staffroll\endt06.png",430,223,255,255,255,1,300);
+			StarHoleED(CenX+96-160,CenY-100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96-160,CenY-100,csd~".\end\staffroll\endt06b.png",430,223,255,255,255,1,300);
+			StarHoleED(CenX+96+160,CenY-100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96+160,CenY-100,csd~".\end\staffroll\endt07.png",513,222,255,255,255,1,300);
+
+		}case(2380){
+			StarHoleED(CenX+96,CenY-100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY-100,csd~".\end\staffroll\endt08.png",597,222,255,255,255,1,300);
+			StarHoleED(CenX+96-160,CenY+100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96-160,CenY+100,csd~".\end\staffroll\endt09.png",472,222,255,255,255,1,300);
+			StarHoleED(CenX+96+160,CenY+100,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96+160,CenY+100,csd~".\end\staffroll\endt10.png",472,223,255,255,255,1,300);
+		}case(2740){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,300);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt04.png",457,223,255,255,255,1,300);
+		}case(3100){
+			StarHoleED(CenX+96-120,CenY+80,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96-120,CenY+80,csd~".\end\staffroll\endt11.png",592,222,255,255,255,1,300);
+			StarHoleED(CenX+96+120,CenY-80,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96+120,CenY-80,csd~".\end\staffroll\endt12.png",592,222,255,255,255,1,300);
+		}case(3460){
+			StarHoleED(CenX+96,CenY,90,0,0,36,0,0,360);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt13.png",513,223,255,255,255,1,360);
+		}case(3820){
+			BlackHoleED(CenX+96,CenY,90,0,0,660);
+			StaffRoll(CenX+96,CenY,csd~".\end\staffroll\endt14.png",700,188,255,255,255,1,500);
+		}case(4600){
+			alternative(tdif)
+			case("easy"){
+				SetCommonDataEx("title","clear_stageE",9);
+			}case("normal"){
+				SetCommonDataEx("title","clear_stageN",9);
+			}case("hard"){
+				SetCommonDataEx("title","clear_stageH",9);
+			}case("lunatic"){
+				SetCommonDataEx("title","clear_stageL",9);
+			}
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task StaffRollBack(time,long){
+	let id		= [Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT)];
+	let csd		= GetCurrentScriptDirectory;
+	let img		= [csd~".\end\staffroll\endbg00.png",
+					csd~".\end\staffroll\endbg01.png",
+					csd~".\end\staffroll\endbg02.png"];
+	let i		= 0;
+	let cc		= 0;
+	let alpha1	= 0;
+	let alphaA	= 0;
+	let alpha2	= 0;
+	let alphaB	= 0;
+	let r1		= 100;
+	let g1		= 100;
+	let b1		= 100;
+	let r2		= 150;
+	let g2		= 150;
+	let b2		= 150;
+	let r3		= 200;
+	let g3		= 200;
+	let b3		= 200;
+	let frame	= 0;
+	
+	loop(3){
+		LoadGraphic(img[i]);
+		Obj_SetPosition(id[i],CenX+96,CenY);
+		ObjEffect_SetTexture(id[i],img[i]);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(id[i],0,0,0);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,640/-2,480/-2);
+		ObjEffect_SetVertexXY(id[i],1,640/-2,480/2);
+		ObjEffect_SetVertexXY(id[i],2,640/2,480/-2);
+		ObjEffect_SetVertexXY(id[i],3,640/2,480/2);
+		ObjEffect_SetVertexUV(id[i],0,0,0);
+		ObjEffect_SetVertexUV(id[i],1,0,480);
+		ObjEffect_SetVertexUV(id[i],2,640,0);
+		ObjEffect_SetVertexUV(id[i],3,640,480);
+	i++;
+	}
+	ObjEffect_SetRenderState(id[0],ALPHA);
+	ObjEffect_SetRenderState(id[1],ADD);
+	ObjEffect_SetRenderState(id[2],ADD);
+	
+	loop{
+		cc++;
+		ObjEffect_SetVertexUV(id[0],0,0,0-cc/5);
+		ObjEffect_SetVertexUV(id[0],1,0,480-cc/5);
+		ObjEffect_SetVertexUV(id[0],2,640,0-cc/5);
+		ObjEffect_SetVertexUV(id[0],3,640,480-cc/5);
+		ObjEffect_SetVertexUV(id[1],0,0,0);
+		ObjEffect_SetVertexUV(id[1],1,0,480);
+		ObjEffect_SetVertexUV(id[1],2,640,0);
+		ObjEffect_SetVertexUV(id[1],3,640,480);
+		ObjEffect_SetVertexUV(id[2],0,0,0+cc/5);
+		ObjEffect_SetVertexUV(id[2],1,0,480+cc/5);
+		ObjEffect_SetVertexUV(id[2],2,640,0+cc/5);
+		ObjEffect_SetVertexUV(id[2],3,640,480+cc/5);
+		
+		frame++;
+		
+		if(alpha1<255){alphaA+=2;}
+		alpha1=255*sin(alphaA);
+		if(alpha2<255&&frame>=time){alphaB+=1;}
+		alpha2=255*sin(alphaB);
+		if(frame>=long){
+			if(r1>0){r1-=1;}
+			if(g1>0){g1-=1;}
+			if(b1>0){b1-=1;}
+			if(r2>0){r2-=1;}
+			if(g2>0){g2-=1;}
+			if(b2>0){b2-=1;}
+			if(r3>0){r3-=1;}
+			if(g3>0){g3-=1;}
+			if(b3>0){b3-=1;}
+		}
+		if(frame>=long&&b1>255){}
+		
+		ObjEffect_SetVertexColor(id[0],0,alpha1,r1,g1,b1);
+		ObjEffect_SetVertexColor(id[0],1,alpha1,r1,g1,b1);
+		ObjEffect_SetVertexColor(id[0],2,alpha1,r1,g1,b1);
+		ObjEffect_SetVertexColor(id[0],3,alpha1,r1,g1,b1);
+		ObjEffect_SetVertexColor(id[1],0,alpha2,r2,g2,b2);
+		ObjEffect_SetVertexColor(id[1],1,alpha2,r2,g2,b2);
+		ObjEffect_SetVertexColor(id[1],2,alpha2,r2,g2,b2);
+		ObjEffect_SetVertexColor(id[1],3,alpha2,r2,g2,b2);
+		ObjEffect_SetVertexColor(id[2],0,alpha1,r3,g3,b3);
+		ObjEffect_SetVertexColor(id[2],1,alpha1,r3,g3,b3);
+		ObjEffect_SetVertexColor(id[2],2,alpha1,r3,g3,b3);
+		ObjEffect_SetVertexColor(id[2],3,alpha1,r3,g3,b3);
+		
+		yield;
+	}
+}
+
+task StaffRoll(x,y,texture,rect3,rect4,r,g,b,sca,kill){
+	let id		= [Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT)];
+	let csd		= GetCurrentScriptDirectory;
+	let img		= [csd~".\end\staffroll\end00.png",
+					csd~".\end\staffroll\end01.png"];
+	let rgb		= [r,g,b];
+	let i		= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let alpha1	= 0;
+	let alphaA	= 0;
+	let sca1	= 0;
+	let scaA	= 0;
+	let die		= 0;
+	let dl		= false;
+	
+	loop(2){
+		LoadGraphic(img[i]);
+		ObjEffect_SetTexture(id[i],img[i]);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(id[i],0,0,0);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,256/-2,256/-2);
+		ObjEffect_SetVertexXY(id[i],1,256/-2,256/2);
+		ObjEffect_SetVertexXY(id[i],2,256/2,256/-2);
+		ObjEffect_SetVertexXY(id[i],3,256/2,256/2);
+		ObjEffect_SetVertexUV(id[i],0,0,0);
+		ObjEffect_SetVertexUV(id[i],1,0,256);
+		ObjEffect_SetVertexUV(id[i],2,256,0);
+		ObjEffect_SetVertexUV(id[i],3,256,256);
+		i++;
+	}
+	i=0;
+
+		LoadGraphic(texture);
+		ObjEffect_SetTexture(id[2],texture);
+		ObjEffect_SetRenderState(id[2],ALPHA);
+		ObjEffect_SetPrimitiveType(id[2],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(id[2],0,0,0);
+		ObjEffect_SetLayer(id[2],8);
+		ObjEffect_CreateVertex(id[2],4);
+		ObjEffect_SetVertexXY(id[2],0,rect3/-2,rect4/-2);
+		ObjEffect_SetVertexXY(id[2],1,rect3/-2,rect4/2);
+		ObjEffect_SetVertexXY(id[2],2,rect3/2,rect4/-2);
+		ObjEffect_SetVertexXY(id[2],3,rect3/2,rect4/2);
+		ObjEffect_SetVertexUV(id[2],0,0,0);
+		ObjEffect_SetVertexUV(id[2],1,0,rect4);
+		ObjEffect_SetVertexUV(id[2],2,rect3,0);
+		ObjEffect_SetVertexUV(id[2],3,rect3,rect4);
+		ObjEffect_SetTexture(id[3],texture);
+		ObjEffect_SetRenderState(id[3],ALPHA);
+		ObjEffect_SetPrimitiveType(id[3],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetAngle(id[3],0,0,0);
+		ObjEffect_SetLayer(id[3],8);
+		ObjEffect_CreateVertex(id[3],4);
+		ObjEffect_SetVertexXY(id[3],0,rect3/-2,rect4/-2);
+		ObjEffect_SetVertexXY(id[3],1,rect3/-2,rect4/2);
+		ObjEffect_SetVertexXY(id[3],2,rect3/2,rect4/-2);
+		ObjEffect_SetVertexXY(id[3],3,rect3/2,rect4/2);
+		ObjEffect_SetVertexUV(id[3],0,0,0);
+		ObjEffect_SetVertexUV(id[3],1,0,rect4);
+		ObjEffect_SetVertexUV(id[3],2,rect3,0);
+		ObjEffect_SetVertexUV(id[3],3,rect3,rect4);
+
+	loop{
+		if(dl==true&&alpha1<=0){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(id[2]);
+			Obj_Delete(id[3]);
+			break;
+		}
+		
+		die++;
+		if(die>kill){dl=true;}
+		
+		if(move1<50&&dl==false){moveA+=1;}
+		if(move1>0&&dl==true){moveA+=1;}
+		move1=50*sin(moveA);
+		Obj_SetPosition(id[0],x,y);
+		Obj_SetPosition(id[1],x-(50-move1),y);
+		Obj_SetPosition(id[2],x+(50-move1),y);
+		Obj_SetPosition(id[3],x+(50-move1),y);
+		
+		if(move2<180&&dl==false){moveB+=1;}
+		if(move2>0&&dl==true){moveB+=1;}
+		move2=180*sin(moveB);
+		ObjEffect_SetAngle(id[0],0,0,180-move2);
+		
+		if(sca1<sca&&dl==false){scaA+=1;}
+		if(sca1>0&&dl==true){scaA+=1;}
+		sca1=sca*sin(scaA);
+		ObjEffect_SetScale(id[0],sca1,sca1);
+		ObjEffect_SetScale(id[1],sca,sca);
+		ObjEffect_SetScale(id[2],sca/1.5,sca/1.5);
+		ObjEffect_SetScale(id[3],sca/1.45,sca/1.45);
+		
+		if(alpha1<255&&dl==false){alphaA+=1;}
+		if(alpha1>0&&dl==true){alphaA+=1;}
+		alpha1=255*sin(alphaA);
+		ObjEffect_SetVertexColor(id[0],0,0,255,255,0);
+		ObjEffect_SetVertexColor(id[0],1,0,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,0,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,0,255,255,0);
+		
+		ObjEffect_SetVertexColor(id[1],0,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],1,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],2,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[1],3,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[2],0,alpha1/2,0,0,0);
+		ObjEffect_SetVertexColor(id[2],1,alpha1/2,0,0,0);
+		ObjEffect_SetVertexColor(id[2],2,alpha1/2,0,0,0);
+		ObjEffect_SetVertexColor(id[2],3,alpha1/2,0,0,0);
+		ObjEffect_SetVertexColor(id[3],0,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[3],1,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[3],2,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(id[3],3,alpha1,255,255,255);
+		
+		yield;
+	}
+}

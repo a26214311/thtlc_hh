@@ -1,0 +1,227 @@
+
+#Title[enm5 spell05 hard]
+#Text[ミシェル・サンタンジェ　選別「モリヤの山道」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm5eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm5se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm5se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm5se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm5se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm5se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm5se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm5se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm5se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm5se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(MaxX,MinY,10,5);
+	LoadGraphic(imgEffect);
+	Aura(8,50,50,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(2,1,0);
+	Timer(1,1);
+	VSname(0);
+	EnemyTexture05b(true);
+	RedMagicCircle(1,0);
+	Shot_Main;
+	SetEffectForZeroLife(0,0,0);
+	SpellPracticeSave("hard",22);
+    }
+
+    @MainLoop {
+	yield;
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,50,GetCurrentScriptDirectory~".\enm5img\michel10000.png",0,0,384,512);
+	CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm5spell\enm5_sn05_hard.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	SetDurableSpellCard;
+	}
+	if(S_count==120){
+	ascent(let a in 0..5){Star(a*72,32,3);Star(a*72,48,-3);}
+	}
+	
+	if(S_count>=180 && frame%20==0){
+//		PlaySE(kira);
+		CreateShot(rand(MinX,MaxX),MaxY+20,2,-45,237,0);
+		CreateShot(MinX-20,rand(MinY,MaxY),2,-45,237,0);
+		}
+		
+	if(S_count>=180 && frame%10==0){
+		PlaySE(kira);
+		CreateShot01(rand(MinX,MaxX),MaxY+10,rand(1,2),rand(240,300),22,0);
+		}
+
+	if(endc==0){
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	}
+
+	if(GetTimer<=2){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	SetLife(1);
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	task Star(angle,r,a2) {
+		let obj = CreateShot01(GetX,GetY,0,angle,158,0);
+		loop {
+			ObjShot_SetBombResist(obj,true);
+			Obj_SetAutoDelete(obj,false);
+			Obj_SetPosition(obj,GetX+r*cos(angle),GetY+r*sin(angle));
+			angle+=a2;
+			yield;
+			}
+		}
+	task Shot_Main {
+		let wt = 120;
+		loop(120){yield;}
+		loop {
+			Concentration(50,powerla);
+			loop(60){yield;}
+			ascent(let i in 0..100){
+				CreateShotNAD(GetX,GetY,i/5+0.4,45,-0.05*i/50,0,10,10,0);
+				CreateShotNAD(GetX,GetY,i/5+0.4,45+180,-0.05*i/50,0,10,10,0);
+				CreateShotNAD(GetX,GetY,i/5,45,-0.05*i/50,0,10,10,180);
+				CreateShotNAD(GetX,GetY,i/5,45+180,-0.05*i/50,0,10,10,180);
+				}
+			wt-=3;
+			PlaySE(tan);
+			SetMovePosition03(MaxX,rand(MinY,CenX),10,5);
+			loop(wt){yield;}
+		}
+	}
+	
+	task CreateShot(x,y,s,a,g,d) {
+		let obj = CreateShot01(x,y,0,a,g,d);
+		Obj_SetAngle(obj,-90);
+		while(!Obj_BeDeleted(obj)) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			yield;
+			}
+		loop(60) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			yield;
+			}
+		}
+		
+	task CreateShotNAD(x,y,s,a,s2,s0,g,d,a2) {
+		SetShotColor(255,200,128);
+		let obj = CreateShot01(x,y,s,a,g,d);
+		SetShotColor(255,255,255);
+		Obj_SetAutoDelete(obj,false);
+		loop(60){
+			if(Obj_GetSpeed(obj)<s0){s+=s0;}
+			yield;
+			}
+		Obj_SetAngle(obj,135+a2);
+		Obj_SetSpeed(obj,2.3);
+		loop(118){
+			yield;
+			}
+		Obj_SetAutoDelete(obj,true);
+		}
+	
+function GravityShot(
+	let x,			// 弾源x座標
+	let y,			// 弾源y座標
+	let speed,		// 速度
+	let angle,		// 角度（絶対角度）
+	let grvSpeed,	// 重力加速度
+	let grvAngle,	// 重力角度（絶対角度）
+	let graphic,	// 画像
+	let delay		// 遅延フレーム数
+){
+	let xSpeed = speed * cos( angle );
+	let ySpeed = speed * sin( angle );
+	let accXSpeed = grvSpeed * cos( grvAngle );
+	let accYSpeed = grvSpeed * sin( grvAngle );
+	let maxXSpeed = [ 99, - 99 ][ accXSpeed < 0 ];
+	let maxYSpeed = [ 99, - 99 ][ accYSpeed < 0 ];
+	CreateShot12( x, y, xSpeed, ySpeed, accXSpeed, accYSpeed, maxXSpeed, maxYSpeed, graphic, delay );
+}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

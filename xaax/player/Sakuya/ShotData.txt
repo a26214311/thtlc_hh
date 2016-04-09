@@ -1,0 +1,16 @@
+#PlayerShotData
+
+ShotImage = ".\img\SakuyaShot.png"
+
+	ShotData{//四角形の当たり判定
+	id = 1
+	rect = (1,3,29,28)
+	render = ALPHA
+	alpha=255
+	}
+	ShotData{//縦長の当たり判定
+	id = 2
+	rect = (33,3,61,28)
+	render = ALPHA
+	alpha=255
+	}

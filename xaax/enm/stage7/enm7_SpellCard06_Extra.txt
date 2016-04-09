@@ -1,0 +1,204 @@
+
+#Title[enm7 spell06 extra]
+#Text[エルフィン・ミント
+芳香「カモンバタフライ」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main{
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= csd~".\enm7se\timer1.wav";
+	let t10			= csd~".\enm7se\timer2.wav";
+	let tan			= csd~".\enm7se\shot1.wav";
+	let kira		= csd~".\enm7se\shot2.wav";
+	let Gspel		= csd~".\enm7se\echo5.wav";
+	let laser		= csd~".\enm7se\Laser2.wav";
+	let power		= csd~".\enm7se\enemy_powereffect.wav";
+	let powerl		= csd~".\enm7se\power_logo.wav";
+	let gekiha		= csd~".\enm7se\BossEnd.wav";
+	let powerla		= csd~".\enm7se\power_logo.wav";
+	let kaku		= csd~".\enm7se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= csd ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let S_count		= 0;
+	let endc		= 0;
+	let i			= 0;
+	let rx			= [0,0,0,0];
+	let ry			= [0,0,0,0];
+
+	@Initialize{
+		SetLife(1000);
+		SetDamageRate(0,0);
+		SetInvincibility(120);
+		
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+
+		//弾幕削除制限　(初期値64)
+		SetShotAutoDeleteClip(30,30,30,30);
+		LoadUserShotData(shotdir);
+		SetMovePosition03(CenX,CenY-100,10,5);
+		LoadGraphic(imgEffect);
+		LoadGraphic(imgSPNB);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		hpb(1,0,0);
+		Timer(1,1);
+		EnemyTexture07(true);
+		SetEffectForZeroLife(0,0,0);
+		VSname(0);
+		while(i<4){
+			VSname2(0+i*10,0);
+			i++;
+		}i=0;
+		RedMagicCircle(1,0);//1が既出 引数2はﾃﾞｨﾚｲ
+		
+		CreateEnemyFromFile(csd~"enm7_Family01_Extra.txt",0,0,0,0,0);
+		SpellPracticeSave("extra",7);
+	}
+
+	@MainLoop{
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		SetCollisionB(GetX, GetY, 16);
+
+		//制限時間処理
+		if(GetTimer<=10 && GetTimer>=0){T_count++;}
+		alternative(T_count)
+		case(1,60,120,180,240){PlaySE(t10);}
+		case(300,360,420,480,540){PlaySE(t5);}
+
+		//ボム中、使用後一定時間ダメージ無効処理
+		if(OnBomb==true){SetDamageRate(0,0);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRate(35,0);}
+
+		//スペルカード延滞宣言
+		if(S_count==1){
+			CutinSP("TIREI",20,-50,8000000,60,GetCurrentScriptDirectory~".\enm7img\mint00000.png",0,0,384,512);
+			CutinSP2(-275,-10,GetCurrentScriptDirectory~".\enm7spell\enm7_sn06.png",0,0,384,32,255,255,255);
+			BackGroundEffect;
+		}
+		if(S_count==50){
+			//Concentration(50,powerla);
+		}
+
+		a++;	
+		frame++;
+		count++;
+		S_count++;
+		timer++;
+		if(frame==120){
+			rx[0]=rand(MinX,MaxX);
+			ry[0]=rand(MinY,MaxY);
+			rx[1]=rand(MinX,MaxX);
+			ry[1]=rand(MinY,MaxY);
+			rx[2]=rand(MinX,MaxX);
+			ry[2]=rand(MinY,MaxY);
+			rx[3]=rand(MinX,MaxX);
+			ry[3]=rand(MinY,MaxY);
+			loop(5){
+				CreateShotA(0,rx[0],ry[0],10);
+				SetShotDataA(0,0,1.8,angle,0,-0.1,0,kRED62);
+				SetShotDataA(0,300,NULL,NULL,0,0.05,2,kRED62);
+				FireShot(0);
+				CreateShotA(0,rx[1],ry[1],10);
+				SetShotDataA(0,0,1.8,angle,0,-0.1,0,kYELLOW62);
+				SetShotDataA(0,300,NULL,NULL,0,0.05,2,kYELLOW62);
+				FireShot(0);
+				CreateShotA(0,rx[2],ry[2],10);
+				SetShotDataA(0,0,1.8,angle,0,-0.1,0,kPURPLE62);
+				SetShotDataA(0,300,NULL,NULL,0,0.05,2,kPURPLE62);
+				FireShot(0);
+				CreateShotA(0,rx[3],ry[3],10);
+				SetShotDataA(0,0,1.8,angle,0,-0.1,0,kAQUA62);
+				SetShotDataA(0,300,NULL,NULL,0,0.05,2,kAQUA62);
+				FireShot(0);
+				angle+=72;
+				DeleteEnemyShotImmediatelyInCircle(ALL,GetPlayerX,GetPlayerY,16);
+			}
+			PlaySE(kira);
+		}
+		if(frame==250){
+			loop(32){
+				ComeOnButterfly(rand(MinX,MaxX),rand(MinY,MaxY),2.4,kRED22,30,rx[0],ry[0]);
+				ComeOnButterfly(rand(MinX,MaxX),rand(MinY,MaxY),2.4,kYELLOW22,30,rx[1],ry[1]);
+				ComeOnButterfly(rand(MinX,MaxX),rand(MinY,MaxY),2.4,kPURPLE22,30,rx[2],ry[2]);
+				ComeOnButterfly(rand(MinX,MaxX),rand(MinY,MaxY),2.4,kAQUA22,30,rx[3],ry[3]);
+				DeleteEnemyShotImmediatelyInCircle(ALL,GetPlayerX,GetPlayerY,16);
+			}
+			PlaySE(tan);
+		}
+		
+		if(timer==70||frame==150){
+			SetCommonDataEx("anime","anime_flag",true);
+			Concentration(50,powerla);
+		}
+		if(timer==170||frame==250){
+			SetCommonDataEx("anime","anime_flag",false);
+		}
+		alternative(count)
+		case(300){
+			if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+			else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+			else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+		}
+		if(count==300){
+			frame=-60;
+			count=-60;
+			timer=-60;
+			angle=-60;
+		}
+
+		let tact = GetCommonDataEx("title","act");
+		let tsst = GetCommonDataEx("title","start_stage");
+		if(tact==11){
+			if(OnPlayerMissed==true){
+				SetCommonDataEx("title","start_stage",false);
+				VanishEnemy;
+			}
+			if(GetEnemyLife<=10){
+				SetMovePosition03(CenX-30,CenY-120,10,5);
+				SetDamageRate(0,0);
+				endc++;
+			}
+			if(endc==1){
+				DeleteAllEnemyWithoutBoss;
+				DefeatExplosion(GetEnemyX,GetEnemyY);
+			}
+		}
+
+	}//MainLoopの")"です。
+
+	@DrawLoop{}
+
+	@Finalize{
+		let tact = GetCommonDataEx("title","act");
+		if(tact==11){
+			SetCommonDataEx("title","start_stage",false);
+		}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

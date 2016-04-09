@@ -1,0 +1,324 @@
+
+#Title[enm1 spell02 l]
+#Text[メリーシェパード　彷符「善き羊飼い」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm1eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~"..\..\se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~"..\..\se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~"..\..\se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~"..\..\se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~"..\..\se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~"..\..\se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~"..\..\se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~"..\..\se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~"..\..\se\核爆.wav";
+    let imgexp    = GetCurrentScriptDirectory~".\enm1eff\exp.png";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let objsheep = 0;
+    let sheepX;
+    let sheepY;
+    let endc	  = 0;
+
+    @Initialize {
+		//SetX(MaxX+100);
+		//SetY(MinY-100);
+	
+		SetLife(1000);
+		SetDamageRate(0,0);
+	
+		SetInvincibility(120);
+	
+		/*弾幕削除制限　(初期値64)*/
+		SetShotAutoDeleteClip(30,30,30,30);
+	
+		LoadUserShotData(shotdir);
+		SetMovePosition03(CenX,CenY-90,10,5);
+		LoadGraphic(imgEffect);
+		Aura(8,255,100,32);
+		LoadGraphic(imgexp);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		hpb(1,0,0);
+		Timer(1,1);
+		VSname(0);
+		EnemyTexture(true);
+		RedMagicCircle(1,0);
+		Shot_Main;
+		SetEffectForZeroLife(0,0,0);
+		SpellPracticeSave("lunatic",1);
+    }
+
+	@MainLoop {
+		yield;
+		SetCollisionA(GetX, GetY, 30);
+		SetCollisionB(GetX, GetY, 16);
+	
+		/*制限時間処理*/
+		if(GetTimer<=10 && GetTimer>=0){T_count++;}
+		alternative(T_count)
+		case(1,60,120,180,240){PlaySE(t10);}
+		case(300,360,420,480,540){PlaySE(t5);}
+	
+		/*ボム中、使用後一定時間ダメージ無効処理*/
+		if(OnBomb==true){SetDamageRate(20,50);Damage=0;}
+		if(OnBomb==false){Damage++;}
+		if(Damage>=100){SetDamageRate(20,50);}
+	
+		/*スペルカード延滞宣言*/
+		if(S_count==1){
+			CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm1img\face101ct.png",0,0,384,512);
+			CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm1spell\enm1_sn02_hard.png",0,0,384,32,255,255,255);
+			BackGroundEffect;
+		}
+		if(S_count==50){
+		//	Concentration(50,powerla);
+		}
+	
+
+		a++;
+		frame++;
+		count++;
+		S_count++;
+		timer++;
+		sheepX = Obj_GetX(objsheep);
+		sheepY = Obj_GetY(objsheep);
+	
+		let tact = GetCommonDataEx("title","act");
+		let tsst = GetCommonDataEx("title","start_stage");
+		if(tact==11){
+			if(OnPlayerMissed==true){
+				SetCommonDataEx("title","start_stage",false);
+				VanishEnemy;
+			}
+		}
+		if(GetEnemyLife<=10){
+			SetMovePosition03(CenX-30,CenY-120,10,5);
+			SetDamageRate(0,0);
+			endc++;
+		}
+		if(endc==1){
+			DeleteAllEnemyWithoutBoss;
+			DefeatExplosion(GetEnemyX,GetEnemyY);
+		}
+	}//MainLoopの")"です。
+
+	@DrawLoop {}
+
+	@Finalize {
+		let tact = GetCommonDataEx("title","act");
+		if(tact==11){
+			SetCommonDataEx("title","start_stage",false);
+		}
+	}
+	
+	task Shot_Main {
+		let wt = 120;
+		let shotY = 10;
+		let angle = 0;
+		loop(120){yield;}
+		Move;
+		CreateSheepSP;
+		ScopeEffect;
+		SetCommonData("Charge",true);
+		loop {
+			Concentration(50,powerla);
+			loop(60){yield;}
+			SetCommonData("Charge",false);
+			shotY=10;
+			angle=0;
+			loop(3){
+				shotY=10;
+				loop(18){
+					PlaySE(tan);
+					loop(1){
+						CreateSheepShot(MinX-22,shotY,rand(1,2.8),angle    +rand(-15,15),rand(-0.02,-0.05),rand(0.8,1.5),rand(0,60));
+						CreateSheepShot(MaxX+22,shotY,rand(1,2.8),angle+180+rand(-15,15),rand(-0.02,-0.05),rand(0.8,1.5),rand(0,60));
+					}
+					shotY+=30;
+					wait(1);
+					if(endc==1){break;}
+				}
+			}
+			loop(90){yield;}
+		}
+	}
+	
+	task Move {
+		loop{
+			wait(60);
+			SetMovePosition03(sheepX, sheepY, 20, 2);
+			wait(60);
+		}
+	}
+	
+	task CreateSheepShot(x,y,s,a,s2,s0,d) {
+		let obj = CreateShot02(x,y,0,a,0,0,0,d);
+		let count = 0;
+		let change = false;
+		if(a>-90&&a< 90){Obj_SetAngle(obj,250);ObjShot_SetGraphic(obj,252);}
+		if(a> 90&&a<270){Obj_SetAngle(obj,-80);ObjShot_SetGraphic(obj,253);}
+		loop(d){yield;}
+		while(!Obj_BeDeleted(obj)) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			if(s>s0){s+=s2;}
+			if(absolute(Obj_GetX(obj)-sheepX)<=90 && absolute(Obj_GetY(obj)-sheepY)<=90 && !change) {
+				a+=rand(0,180);
+				change = true;
+				PlaySE(laser);
+				s = 3;
+				s2 = 0.01;
+			}
+			if(a>-90&&a< 90){Obj_SetAngle(obj,250+sin(count*6));ObjShot_SetGraphic(obj,252);}
+			if(a> 90&&a<270){Obj_SetAngle(obj,-80+sin(count*6));ObjShot_SetGraphic(obj,253);}
+			count++;
+			yield;
+		}
+		loop(60) {
+			Obj_SetX(obj, Obj_GetX(obj)+cos(a)*s);
+			Obj_SetY(obj, Obj_GetY(obj)+sin(a)*s);
+			if(s>s0){s+=s2;}
+			yield;
+		}
+	}
+		
+	task CreateSheepSP {
+		SetShotColor(255,128,64);
+		objsheep = CreateShot01(GetX,GetY,0,rand(0,30),0,0);
+		SetShotColor(255,255,255);
+		let count = 0;
+		let s = 1.5;
+		let s2 = -0.06;
+		let a = rand(20,30);
+		ObjShot_SetBombResist(objsheep,true);
+		Obj_SetAutoDelete(objsheep,false);
+		if(a>-90&&a< 90){Obj_SetAngle(objsheep,250);ObjShot_SetGraphic(objsheep,252);}
+		if(a> 90&&a<270){Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,253);}
+		loop{
+			loop(3){
+				s = 3;
+				a = rand(10,20);
+				PlaySE(kira);
+				loop(120) {
+					Obj_SetX(objsheep, Obj_GetX(objsheep)+cos(a)*s);
+					Obj_SetY(objsheep, Obj_GetY(objsheep)+sin(a)*s);
+					if(s>0){s+=s2;}
+					if(s>=0){Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,252);}
+					else{Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,253);}
+					count++;
+					Obj_SetAngle(objsheep,Obj_GetAngle(objsheep)+sin(count*6));
+					yield;
+					}
+				s = 3;
+				s2 = -0.03;
+				a = rand(10,20)+150;
+				PlaySE(kira);
+				loop(120) {
+					Obj_SetX(objsheep, Obj_GetX(objsheep)+cos(a)*s);
+					Obj_SetY(objsheep, Obj_GetY(objsheep)+sin(a)*s);
+					if(s>0){s+=s2;}
+					if(s<=0){Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,252);}
+					else{Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,253);}
+					count++;
+					Obj_SetAngle(objsheep,Obj_GetAngle(objsheep)+sin(count*6));
+					yield;
+					}
+				}
+			loop(3){
+				s = 3;
+				a = rand(-20,-10);
+				PlaySE(kira);
+				loop(120) {
+					Obj_SetX(objsheep, Obj_GetX(objsheep)+cos(a)*s);
+					Obj_SetY(objsheep, Obj_GetY(objsheep)+sin(a)*s);
+					if(s>0){s+=s2;}
+					if(s>=0){Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,252);}
+					else{Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,253);}
+					count++;
+					Obj_SetAngle(objsheep,Obj_GetAngle(objsheep)+sin(count*6));
+					yield;
+					}
+				s = 3;
+				a = rand(-20,-10)+210;
+				PlaySE(kira);
+				loop(120) {
+					Obj_SetX(objsheep, Obj_GetX(objsheep)+cos(a)*s);
+					Obj_SetY(objsheep, Obj_GetY(objsheep)+sin(a)*s);
+					if(s>0){s+=s2;}
+					if(s<=0){Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,252);}
+					else{Obj_SetAngle(objsheep,-80);ObjShot_SetGraphic(objsheep,253);}
+					count++;
+					Obj_SetAngle(objsheep,Obj_GetAngle(objsheep)+sin(count*6));
+					yield;
+					}
+				}
+			}
+		}
+		
+task CreateEffectShot {
+	let obj = CreateShot01(GetX,GetY,0,0,0,0);
+	loop {
+		Obj_SetPosition(obj,sheepX,sheepY);
+		yield;
+		}
+	}
+	
+task ScopeEffect {
+	let weff      = Obj_Create(OBJ_EFFECT);
+
+	LoadGraphic(imgexp);
+
+	ObjEffect_SetTexture(weff,imgexp);
+	ObjEffect_SetRenderState(weff,ADD);
+	ObjEffect_SetPrimitiveType(weff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(weff,2);
+	ObjEffect_CreateVertex(weff,4);
+	ObjEffect_SetVertexXY(weff,0,-90,-90);
+	ObjEffect_SetVertexXY(weff,1,-90, 90);
+	ObjEffect_SetVertexXY(weff,2, 90,-90);
+	ObjEffect_SetVertexXY(weff,3, 90, 90);
+	ObjEffect_SetVertexUV(weff,0,  0,  0);
+	ObjEffect_SetVertexUV(weff,1,  0,256);
+	ObjEffect_SetVertexUV(weff,2,256,  0);
+	ObjEffect_SetVertexUV(weff,3,256,256);
+	ObjEffect_SetVertexColor(weff,0,255,0,100,100);
+	ObjEffect_SetVertexColor(weff,1,255,0,100,100);
+	ObjEffect_SetVertexColor(weff,2,255,0,100,100);
+	ObjEffect_SetVertexColor(weff,3,255,0,100,100);
+
+	while(endc==0){
+		Obj_SetPosition(weff,sheepX,sheepY);
+		yield;
+		}
+		
+	Obj_Delete(weff);
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

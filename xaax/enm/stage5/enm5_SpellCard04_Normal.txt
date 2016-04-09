@@ -1,0 +1,261 @@
+
+#Title[enm5 spell04 normal]
+#Text[ミシェル・サンタンジェ　啓示「ソドム終了のお知らせ」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm5eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm5se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm5se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm5se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm5se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm5se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm5se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm5se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm5se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm5se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm5se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "data_usershot.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,64);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,CenY-100,10,5);
+        LoadGraphic(imgEffect);
+	Aura(8,50,50,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,1);
+	VSname(0);
+	let tact = GetCommonDataEx("title","act");
+	if(tact!=11){
+	VSname2(0,0);
+	}
+	EnemyTexture05b_typeB(true);
+	RedMagicCircle(1,0);
+	Shot_Main;
+	SetEffectForZeroLife(0,0,0);
+	SpellPracticeSave("normal",19);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm5img\michel10000.png",0,0,384,512);
+	CutinSP2(-280,-10,GetCurrentScriptDirectory~".\enm5spell\enm5_sn04_normal.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	}
+	
+	if(S_count>=100 && frame%9==0) {
+		PlaySE(kira);
+		loop(5){
+			CreateShot02_(GetX,GetY,rand(3,4),rand(0,360),-0.02,0.5,245,20);
+			}
+		}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	}
+	if(endc==1){
+	DeleteAllEnemyWithoutBoss;
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+	
+	task Shot_Main {
+		let wt = 240;
+		loop(120){yield;}
+		loop {
+			let ranx = rand(-20,20);
+			ascent(let i in 0..10){
+				CreateBar;
+				}
+			PlaySE(kaku);
+			PlaySE(tan);
+			MoveToPlayerRand;
+			loop(wt){yield;}
+			wt-=13;
+			Concentration(50,powerla);
+			loop(60){yield;}
+		}
+	}
+		
+	
+task CreateBar {
+		let x;
+		loop {
+			x = rand(MinX,MaxX);
+			if(absolute(x-GetPlayerX) >= 64){break;}
+			}
+		
+		let angle = rand(260,280);
+		ascent(let s in 0..28) {
+			CreateShot(x,MaxY+10,s/5,angle,72,20,90-s);
+			}
+		Explosion(x,MaxY,60);
+	}
+	
+task CreateShot02_(x,y,s,a,s2,ms,g,d) {
+	let obj = CreateShot02(x,y,s,a,s2,ms,g,d);
+	while(!OnPlayerMissed) {
+		yield;
+		}
+	ObjShot_SetGraphic(obj, 246);
+	}
+
+task CreateShot(x,y,s,a,g,d,t) {
+	let count = 0;
+	let obj = Obj_Create(OBJ_SHOT);
+
+	Obj_SetPosition(obj, x, y);
+	Obj_SetSpeed(obj, s);
+	Obj_SetAngle(obj, a);
+	ObjShot_SetGraphic(obj, g);
+	ObjShot_SetDelay(obj, d);
+	
+	loop(d){ yield; }
+	
+	while(!Obj_BeDeleted(obj) && s>0) {
+		s-=0.1;
+		Obj_SetSpeed(obj, s);
+		yield;
+		}
+	Obj_SetSpeed(obj, 0);
+	loop(t){yield;}
+	PlaySE(tan);
+	GravityShot(Obj_GetX(obj),Obj_GetY(obj),rand(0,1.4),rand(240,300),0.02,90,g,20);
+	Obj_Delete(obj);
+	}
+	
+function MoveToPlayer_(xMove, yAdd, frame, left, top, right, bottom) {
+	let x;
+	let y;
+	if(GetPlayerX < GetX) {
+		// プレイヤーより右に敵がいれば、敵は左に動きます。
+		x = GetX - xMove;
+		// 但し、敵が可動領域の左端よりも左にいくようなら、右に動きます。
+		if(x < left) {
+			x = GetX + xMove;
+		}
+	} else {
+		// さもなくば、敵は右に動きます。
+		x = GetX + xMove;
+		// 但し、敵が可動領域の右端よりも右にいくようなら、左に動きます。
+		if(right < x) {
+			x = GetX - xMove;
+		}
+	}
+	// 可動領域の外に行く場合は、端っこで止めます。
+	y = GetY + yAdd;
+	if(y < top) {
+		y = top;
+	} else if(bottom < y) {
+		y = bottom;
+	}
+	SetMovePosition03(x, y, 20,1);
+}
+
+function MoveToPlayerRand {
+	MoveToPlayer_(rand(40, 80),rand(-40, 40),60,GetClipMinX+32,GetClipMinY+32,GetClipMaxX-32,GetClipMinY+160);
+	}
+	
+function GravityShot(
+	let x,			// 弾源x座標
+	let y,			// 弾源y座標
+	let speed,		// 速度
+	let angle,		// 角度（絶対角度）
+	let grvSpeed,	// 重力加速度
+	let grvAngle,	// 重力角度（絶対角度）
+	let graphic,	// 画像
+	let delay		// 遅延フレーム数
+){
+	let xSpeed = speed * cos( angle );
+	let ySpeed = speed * sin( angle );
+	let accXSpeed = grvSpeed * cos( grvAngle );
+	let accYSpeed = grvSpeed * sin( grvAngle );
+	let maxXSpeed = [ 99, - 99 ][ accXSpeed < 0 ];
+	let maxYSpeed = [ 99, - 99 ][ accYSpeed < 0 ];
+	CreateShot12( x, y, xSpeed, ySpeed, accXSpeed, accYSpeed, maxXSpeed, maxYSpeed, graphic, delay );
+}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

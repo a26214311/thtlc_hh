@@ -1,0 +1,208 @@
+
+#Title[enm4 before talk(魔理沙)]
+#Text[甕星 無々夢　戦闘前会話(魔理沙)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm4img\魔理沙通常.png",
+					csd~".\enm4img\魔理沙=3.png",
+					csd~".\enm4img\魔理沙ニヤリ.png",
+					csd~".\enm4img\魔理沙驚き.png",
+					csd~".\enm4img\魔理沙嫌.png",
+					csd~".\enm4img\魔理沙困り.png",
+					csd~".\enm4img\魔理沙笑顔.png",
+					csd~".\enm4img\魔理沙怒り.png",
+					csd~".\enm4img\魔理沙得意.png"];
+	let enmimg	= [csd~".\enm4img\mmm10000.png",
+					csd~".\enm4img\mmm10001.png",
+					csd~".\enm4img\mmm10002.png",
+					csd~".\enm4img\mmm10003.png",
+					csd~".\enm4img\mmm10004.png",
+					csd~".\enm4img\mmm10005.png"];
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(6){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);//左側キャラクタの画像を設定
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]好了，接下来出来的到底是什么牛鬼蛇神呢？");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]天上又现出异象来");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[3]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]看哪，有一条大红龙");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]什么龙？ 在哪在哪？");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]你就在那里到处乱找吧\n到你被吃掉那一刻或许就明白说的是谁了");
+
+		SetChar(LEFT,plaimg[8]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]哎呀呀\n我可不是这么简单就能吃掉的人类");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]确实，真是个吃不透的家伙");
+
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]不许玩双关！");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]星を纏った女が現れる…か。ついに余を縛る忌まわしき預言が解き放たれんとしておる");
+TextOut("\c[RED]だがそうはさせん。この時の為に正体を隠し東方へ渡り、密かに力を蓄えて来たのだ");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]你说什么？ 你不是八百万神来着吗？");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]即使曾有那以星神之名为伪装之时\n那也到此为止了");
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]八百万の神の中で余に適う奴は——せめて\n屈指可数也已经很不错了");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我很强的啦\n小心别把重要的手指给折断了啊");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]甕星は金星、宵闇を照らす明星であり全てを滅する強すぎる光");
+		SetChar(RIGHT,enmimg[3]);
+TextOut("\c[RED]只会模仿星辰的人类啊\n明白与星辰为敌的你是多么愚蠢吧！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm4eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm4eff\bossEfect.png";
+    let imgEffect2= GetCurrentScriptDirectory~".\enm4eff\wave.png";
+    let t5        = GetCurrentScriptDirectory~".\enm4se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm4se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm4se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm4se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm4se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm4se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm4se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm4se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm4se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm4se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm4se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	LoadGraphic(imgEffect2);
+	LoadGraphic(imgSPNB);
+	Aura(8,255,50,150);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture04(true);
+	VSname(1);
+	VSname2(0,1);
+	VSname2(10,1);
+	VSname2(20,1);
+	VSname2(30,1);
+	CreateEventFromScript("Event01");
+    }
+
+    @MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

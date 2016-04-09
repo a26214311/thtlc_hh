@@ -1,0 +1,471 @@
+task DiffiSelect(){
+	let id2		= Obj_Create(OBJ_EFFECT);
+	let id		= [Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT)];
+	let alpha1	= 0;
+	let rgb		= [255,255,255];
+	let rgb2	= [0,0,0];
+	let i		= 0;
+	let frame	= 0;
+	let count	= 0;
+	let timer	= 0;
+	let ctr		= 0;
+	let spin1	= 0;
+	let spinA	= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let move3	= 0;
+	let moveC	= 0;
+	let move4	= 0;
+	let moveD	= 0;
+	let cc		= 0;
+	let stc		= 0;
+	let rect1	= [0,256,256,256];
+	let rectA	= [256,512,512,512];
+	let rect2	= [256,0,256,256];
+	let rectB	= [512,256,512,512];
+	let rect3	= [256,256,0,256];
+	let rectC	= [512,512,256,512];
+	let rect4	= [256,256,256,0];
+	let rectD	= [512,512,512,256];
+	let lal		= [255,150];
+	let mt		= "NoData";
+	let change	= false;
+	let chcc	= 0;
+	
+	loop(4){
+		ObjEffect_SetTexture(id[i],imgt05);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.85,0.85);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,256/-2,116/-2);
+		ObjEffect_SetVertexXY(id[i],1,256/-2,116/2);
+		ObjEffect_SetVertexXY(id[i],2,256/2,116/-2);
+		ObjEffect_SetVertexXY(id[i],3,256/2,116/2);
+		i++;
+	}
+	i=0;
+	
+	Obj_SetPosition(id2,CenX+96,CenY+25);
+	ObjEffect_SetTexture(id2,imgw);
+	ObjEffect_SetRenderState(id2,ALPHA);
+	ObjEffect_SetPrimitiveType(id2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id2,8);
+	ObjEffect_SetScale(id2,0.5,0.3);
+	ObjEffect_CreateVertex(id2,6);
+	ObjEffect_SetVertexXY(id2,0,640/-2,480/-2);
+	ObjEffect_SetVertexXY(id2,1,640/-2,480/2);
+	ObjEffect_SetVertexXY(id2,2,0,480/-2);
+	ObjEffect_SetVertexXY(id2,3,0,480/2);
+	ObjEffect_SetVertexXY(id2,4,640/2,480/-2);
+	ObjEffect_SetVertexXY(id2,5,640/2,480/2);
+	ObjEffect_SetVertexUV(id2,0,0,0);
+	ObjEffect_SetVertexUV(id2,1,0,480);
+	ObjEffect_SetVertexUV(id2,2,0,0);
+	ObjEffect_SetVertexUV(id2,3,0,480);
+	ObjEffect_SetVertexUV(id2,4,640,0);
+	ObjEffect_SetVertexUV(id2,5,640,480);
+	
+	loop{
+		let tact = GetCommonDataEx("title","act");
+		let tdif = GetCommonDataEx("title","Diffi");
+		
+		cc++;
+		if(tact!=2&&tact!=10&&alpha1<255){alpha1+=15;}
+		ObjEffect_SetVertexColor(id[0],0,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],1,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],0,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],1,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],2,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[1],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],0,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],1,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],2,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[2],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],0,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],1,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],2,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[3],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id2,0,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,1,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,2,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,3,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,4,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,5,0,rgb2[0],rgb2[1],rgb2[2]);
+		
+		ctr++;
+		if(tact!=2&&tact!=10&&stc!=0&&ctr>10&&GetKeyState(VK_UP)==KEY_PUSH){
+			if(stc==1){stc=0;mt="UP";}
+			else if(stc==2){stc=1;mt="UP";}
+			else if(stc==3){stc=2;mt="UP";}
+			moveA=0;
+			moveB=0;
+			moveC=0;
+			moveD=0;
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact!=2&&tact!=10&&stc!=3&&ctr>10&&GetKeyState(VK_DOWN)==KEY_PUSH){
+			if(stc==0){stc=1;mt="DOWN";}
+			else if(stc==1){stc=2;mt="DOWN";}
+			else if(stc==2){stc=3;mt="DOWN";}
+			moveA=0;
+			moveB=0;
+			moveC=0;
+			moveD=0;
+			ctr=0;
+			PlaySE(sel);
+		}
+		
+		if(tact!=2&&tact!=10&&ctr>10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+			if(stc==0){tdif="easy";change=true;}
+			else if(stc==1){tdif="normal";change=true;}//tdifで難易度を判定
+			else if(stc==2){tdif="hard";change=true;}
+			else if(stc==3){tdif="lunatic";change=true;}
+		}
+		
+		if(change==true){chcc++;}
+		if(chcc==1){
+			SetCommonDataEx("title","act",10);
+			SetCommonDataEx("title","Diffi",tdif);
+			StageMain();
+			CloudOut(50,50,50,120);
+		}
+		
+		if(move1<150){moveA+=5;}
+		move1=150*sin(moveA);
+		if(move2<150){moveB+=5;}
+		move2=150*sin(moveB);
+		if(move3<150){moveC+=5;}
+		move3=150*sin(moveC);
+		if(move4<150){moveD+=5;}
+		move4=150*sin(moveD);
+		
+		alternative(stc)
+		case(0){
+			Obj_SetPosition(id[0],(CenX+96),(CenY+25)-150+move1);
+			Obj_SetPosition(id[1],(CenX+96),(CenY+25)+move2);
+			Obj_SetPosition(id[2],(CenX+96),(CenY+25)+150+move3);
+			Obj_SetPosition(id[3],(CenX+96),(CenY+25)+300+move4);
+		}
+		case(1){
+			if(mt=="UP"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-300+move1);}
+			if(mt=="DOWN"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-move1);}
+			if(mt=="UP"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)-150+move2);}
+			if(mt=="DOWN"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)+150-move2);}
+			if(mt=="UP"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)+move3);}
+			if(mt=="DOWN"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)+300-move3);}
+			if(mt=="UP"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+150+move4);}
+			if(mt=="DOWN"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+450-move4);}
+		}
+		case(2){
+			if(mt=="UP"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-450+move1);}
+			if(mt=="DOWN"){Obj_SetPosition(id[0],(CenX+96),(CenY+25)-150-move1);}
+			if(mt=="UP"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)-300+move2);}
+			if(mt=="DOWN"){Obj_SetPosition(id[1],(CenX+96),(CenY+25)-move2);}
+			if(mt=="UP"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)-150+move3);}
+			if(mt=="DOWN"){Obj_SetPosition(id[2],(CenX+96),(CenY+25)+150-move3);}
+			if(mt=="UP"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+move4);}
+			if(mt=="DOWN"){Obj_SetPosition(id[3],(CenX+96),(CenY+25)+300-move4);}
+		}
+		case(3){
+			Obj_SetPosition(id[0],(CenX+96),(CenY+25)-300-move1);
+			Obj_SetPosition(id[1],(CenX+96),(CenY+25)-150-move2);
+			Obj_SetPosition(id[2],(CenX+96),(CenY+25)-move3);
+			Obj_SetPosition(id[3],(CenX+96),(CenY+25)+150-move4);
+		}
+		
+		ObjEffect_SetAngle(id2,0,0,-15+5*sin(cc*2));
+		
+		ObjEffect_SetVertexUV(id[0],0,rect1[stc],0);
+		ObjEffect_SetVertexUV(id[0],1,rect1[stc],117);
+		ObjEffect_SetVertexUV(id[0],2,rectA[stc],0);
+		ObjEffect_SetVertexUV(id[0],3,rectA[stc],117);
+		ObjEffect_SetVertexUV(id[1],0,rect2[stc],117);
+		ObjEffect_SetVertexUV(id[1],1,rect2[stc],234);
+		ObjEffect_SetVertexUV(id[1],2,rectB[stc],117);
+		ObjEffect_SetVertexUV(id[1],3,rectB[stc],234);
+		ObjEffect_SetVertexUV(id[2],0,rect3[stc],234);
+		ObjEffect_SetVertexUV(id[2],1,rect3[stc],351);
+		ObjEffect_SetVertexUV(id[2],2,rectC[stc],234);
+		ObjEffect_SetVertexUV(id[2],3,rectC[stc],351);
+		ObjEffect_SetVertexUV(id[3],0,rect4[stc],351);
+		ObjEffect_SetVertexUV(id[3],1,rect4[stc],468);
+		ObjEffect_SetVertexUV(id[3],2,rectD[stc],351);
+		ObjEffect_SetVertexUV(id[3],3,rectD[stc],468);
+		
+		if(tact==2||tact==10){
+			if(alpha1>0){alpha1-=10;}
+			if(spin1<90){spinA+=5;}
+			spin1=90.0*sin(spinA);
+			ObjEffect_SetAngle(id2,0,spin1,spin1);
+		}
+		if(spin1>=90&&alpha1<=0){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(id[2]);
+			Obj_Delete(id[3]);
+			Obj_Delete(id2);
+			break;
+		}
+		yield;
+	}
+}
+
+task DiffiSelect2(){
+	let id2		= Obj_Create(OBJ_EFFECT);
+	let id		= [Obj_Create(OBJ_EFFECT),
+				Obj_Create(OBJ_EFFECT)];
+	let alpha1	= 0;
+	let rgb		= [255,255,255];
+	let rgb2	= [0,0,0];
+	let i		= 0;
+	let frame	= 0;
+	let count	= 0;
+	let timer	= 0;
+	let ctr		= 0;
+	let spin1	= 0;
+	let spinA	= 0;
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let cc		= 0;
+	let stc		= 0;
+	let rect1	= [0,256];
+	let rectA	= [256,512];
+	let rect2	= [256,0];
+	let rectB	= [512,256];
+	let lal		= [255,150];
+	let mt		= "NoData";
+	
+	loop(2){
+		ObjEffect_SetTexture(id[i],imgt05);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],8);
+		ObjEffect_SetScale(id[i],0.85,0.85);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,256/-2,116/-2);
+		ObjEffect_SetVertexXY(id[i],1,256/-2,116/2);
+		ObjEffect_SetVertexXY(id[i],2,256/2,116/-2);
+		ObjEffect_SetVertexXY(id[i],3,256/2,116/2);
+		i++;
+	}
+	i=0;
+	
+	Obj_SetPosition(id2,CenX+96,CenY+25);
+	ObjEffect_SetTexture(id2,imgw);
+	ObjEffect_SetRenderState(id2,ALPHA);
+	ObjEffect_SetPrimitiveType(id2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id2,8);
+	ObjEffect_SetScale(id2,0.5,0.3);
+	ObjEffect_CreateVertex(id2,6);
+	ObjEffect_SetVertexXY(id2,0,640/-2,480/-2);
+	ObjEffect_SetVertexXY(id2,1,640/-2,480/2);
+	ObjEffect_SetVertexXY(id2,2,0,480/-2);
+	ObjEffect_SetVertexXY(id2,3,0,480/2);
+	ObjEffect_SetVertexXY(id2,4,640/2,480/-2);
+	ObjEffect_SetVertexXY(id2,5,640/2,480/2);
+	ObjEffect_SetVertexUV(id2,0,0,0);
+	ObjEffect_SetVertexUV(id2,1,0,480);
+	ObjEffect_SetVertexUV(id2,2,0,0);
+	ObjEffect_SetVertexUV(id2,3,0,480);
+	ObjEffect_SetVertexUV(id2,4,640,0);
+	ObjEffect_SetVertexUV(id2,5,640,480);
+
+	loop{
+		let tact = GetCommonDataEx("title","act");
+		let tdif = GetCommonDataEx("title","Diffi");
+		let tpha = GetCommonDataEx("title","ph");
+		
+		ObjEffect_SetAngle(id2,0,0,-15+5*sin(cc*2));
+		ObjEffect_SetVertexUV(id[0],0,rect1[stc],468);
+		ObjEffect_SetVertexUV(id[0],1,rect1[stc],585);
+		ObjEffect_SetVertexUV(id[0],2,rectA[stc],468);
+		ObjEffect_SetVertexUV(id[0],3,rectA[stc],585);
+		if(tpha==true){
+			ObjEffect_SetVertexUV(id[1],0,rect2[stc],585);
+			ObjEffect_SetVertexUV(id[1],1,rect2[stc],702);
+			ObjEffect_SetVertexUV(id[1],2,rectB[stc],585);
+			ObjEffect_SetVertexUV(id[1],3,rectB[stc],702);
+		}
+		cc++;
+		if(tact!=2&&tact!=10&&alpha1<255){alpha1+=15;}
+		ObjEffect_SetVertexColor(id[0],0,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],1,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],2,alpha1,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[0],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		if(tpha==true){
+			ObjEffect_SetVertexColor(id[1],0,alpha1,rgb[0],rgb[1],rgb[2]);
+			ObjEffect_SetVertexColor(id[1],1,alpha1,rgb[0],rgb[1],rgb[2]);
+			ObjEffect_SetVertexColor(id[1],2,alpha1,rgb[0],rgb[1],rgb[2]);
+			ObjEffect_SetVertexColor(id[1],3,alpha1,rgb[0],rgb[1],rgb[2]);
+		}
+		ObjEffect_SetVertexColor(id2,0,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,1,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,2,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,3,alpha1-55,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,4,0,rgb2[0],rgb2[1],rgb2[2]);
+		ObjEffect_SetVertexColor(id2,5,0,rgb2[0],rgb2[1],rgb2[2]);
+		ctr++;
+		if(tact!=2&&tact!=10&&tpha==true&&stc!=0&&ctr>10&&GetKeyState(VK_UP)==KEY_PUSH){
+			if(stc==1){stc=0;mt="UP";}
+			moveA=0;
+			moveB=0;
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(tact!=2&&tact!=10&&tpha==true&&stc!=1&&ctr>10&&GetKeyState(VK_DOWN)==KEY_PUSH){
+			if(stc==0){stc=1;mt="DOWN";}
+			moveA=0;
+			moveB=0;
+			ctr=0;
+			PlaySE(sel);
+		}
+		if(ctr>10&&tact!=10&&GetKeyState(VK_SHOT)==KEY_PUSH){
+			//extra実装時はコメントアウトを消す
+			if(stc==0){tdif="extra";}
+			else if(stc==1){tdif="phantasm";}
+			tact=10;
+			SetCommonDataEx("title","act",tact);
+			SetCommonDataEx("title","Diffi",tdif);
+			SetCommonDataEx("title","sp_stage",7);
+			CloudOut(50,50,50,120);
+			StageTask7ns();
+		}
+		if(move1<150){moveA+=5;}
+		move1=150*sin(moveA);
+		if(move2<150){moveB+=5;}
+		move2=150*sin(moveB);
+		alternative(stc)
+		case(0){
+			Obj_SetPosition(id[0],(CenX+96),(CenY+25)-150+move1);
+			Obj_SetPosition(id[1],(CenX+96),(CenY+25)+move2);
+		}
+		case(1){
+			Obj_SetPosition(id[0],(CenX+96),(CenY+25)+0-move1);
+			Obj_SetPosition(id[1],(CenX+96),(CenY+25)+150-move2);
+		}
+		if(tact==2||tact==10){
+			if(alpha1>0){alpha1-=10;}
+			if(spin1<90){spinA+=5;}
+			spin1=90.0*sin(spinA);
+			ObjEffect_SetAngle(id2,0,spin1,spin1);
+		}
+		if(spin1>=90&&alpha1<=0){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(id2);
+			break;
+		}
+		SetAllowedContinueCount(0);
+		if(GetPlayerLife>3){ExtendPlayer(-1);}
+		if(GetPlayerLife<3){ExtendPlayer(1);}
+		if(GetPlayerBomb>3){AddBomb(-1);}
+		if(GetPlayerBomb<3){AddBomb(1);}
+		yield;
+	}
+}
+
+task CloudOut(r,g,b,frame){
+	let angle	= 0;
+	let cc		= 0;
+	let boon	= GetCurrentScriptDirectory~".\se\boon.wav";
+	
+	DeleteMusic(bgmI[0]);
+	DeleteMusic(bgmL[0]);
+	PlaySE(boon);
+	
+loop{
+	let tsst = GetCommonDataEx("title","start_stage");
+	
+	DeleteMusic(bgmI[0]);
+	DeleteMusic(bgmL[0]);
+	
+	SetPlayerX(CenX);
+	SetPlayerY(CenY+170);
+	
+	cc++;
+	if(cc==1){
+		loop(7){
+			CloudOutSource(0+angle/2,MinX-600,CenY+20+angle,800-angle*5,5,r,g,b,"+",frame-angle);
+			CloudOutSource(10+angle/2,MaxX+600,CenY-20-angle,700-angle*5,5,r,g,b,"-",frame-angle);
+			CloudOutSource(20+angle/2,MinX-600,CenY+20+angle*5,800+angle*10,5,r,g,b,"+",frame-angle);
+			CloudOutSource(30+angle/2,MaxX+600,CenY-20-angle*5,700+angle*10,5,r,g,b,"-",frame-angle);
+			angle+=10;
+		}
+		CloudOutSource(0,MaxX+600,CenY+130,700,5,r,g,b,"-",frame+30);
+		Loading(MaxX+90,MaxY-50,frame);
+	}
+	
+	if(cc>=frame+40){
+		SetCommonDataEx("title","start_stage",true);
+		SetCommonDataEx("title","start_stage2",true);
+		FrontControl;
+		break;
+	}
+	yield;
+	}
+}
+
+task CloudOutSource(delay,x,y,h,h2,r,g,b,type,frame){
+	let id		= Obj_Create(OBJ_EFFECT);
+	let move1	= 0;
+	let moveA	= 0;
+	let move2	= 0;
+	let moveB	= 0;
+	let frame2	= 0;
+	
+	loop(delay){yield;}
+	
+	ObjEffect_SetTexture(id,imgco);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,8);
+	ObjEffect_SetScale(id,2,2);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,512/-2,512/-2);
+	ObjEffect_SetVertexXY(id,1,512/-2,512/2);
+	ObjEffect_SetVertexXY(id,2,512/2,512/-2);
+	ObjEffect_SetVertexXY(id,3,512/2,512/2);
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,512);
+	ObjEffect_SetVertexUV(id,2,512,0);
+	ObjEffect_SetVertexUV(id,3,512,512);
+	ObjEffect_SetVertexColor(id,0,255,r,g,b);
+	ObjEffect_SetVertexColor(id,1,255,r,g,b);
+	ObjEffect_SetVertexColor(id,2,255,r,g,b);
+	ObjEffect_SetVertexColor(id,3,255,r,g,b);
+	
+	loop{
+		frame2++;
+		if(frame2>frame){
+			if(move2<h){moveB+=h2;}
+			move2=h*sin(moveB);
+		}
+		if(move1<h){moveA+=h2;}
+		move1=h*sin(moveA);
+		if(type=="-"){
+			ObjEffect_SetAngle(id,0,0,0);
+			Obj_SetPosition(id,x-move1+move2*1.3,y);
+		}
+		else if(type=="+"){
+			ObjEffect_SetAngle(id,180,0,0);
+			Obj_SetPosition(id,x+move1-move2,y);
+		}
+		if(move2>=h){
+			Obj_Delete(id);
+			break;
+		}
+		yield;
+	}
+}

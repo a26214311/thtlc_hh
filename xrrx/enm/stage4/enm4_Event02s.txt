@@ -1,0 +1,159 @@
+
+#Title[enm4 after talk(咲夜)]
+#Text[甕星 無々夢　戦闘後会話(咲夜)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm4img\咲夜通常.png",
+					csd~".\enm4img\咲夜=3.png",
+					csd~".\enm4img\咲夜ニヤリ.png",
+					csd~".\enm4img\咲夜驚き.png",
+					csd~".\enm4img\咲夜嫌.png",
+					csd~".\enm4img\咲夜困り.png",
+					csd~".\enm4img\咲夜笑顔.png",
+					csd~".\enm4img\咲夜怒り.png",
+					csd~".\enm4img\咲夜得意.png"];
+	let enmimg	= [csd~".\enm4img\mmm10000.png",
+					csd~".\enm4img\mmm10001.png",
+					csd~".\enm4img\mmm10002.png",
+					csd~".\enm4img\mmm10003.png",
+					csd~".\enm4img\mmm10004.png",
+					csd~".\enm4img\mmm10005.png"];
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(6){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		SetChar(RIGHT,enmimg[3]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]先到此为止好了\n一不小心认真起来就糟了");
+		
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]「输了还逞强的样子真是不堪」，虽然想这么说\n可是看样子您的力量还绰绰有余");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]为什么本尊要抑制自己的力量，将真身隐藏起来\n作为到现在都不肯罢休的奖励就告诉你好了");
+TextOut("\c[RED]那是为了瞒过并非八百万神的\n那群家伙的眼睛");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]那群家伙？");
+
+		SetChar(RIGHT,enmimg[0]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]看样子他们不久就会追过来");
+TextOut("\c[RED]那落在森林里的星辰，看来似乎是\n本尊与那群家伙再度结缘的预言之星");
+
+		SetChar(LEFT,plaimg[6]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]看来这并非您的所为\n非常感谢，不必再麻烦您了");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm4eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm4eff\bossEfect.png";
+    let imgEffect2= GetCurrentScriptDirectory~".\enm4eff\wave.png";
+    let t5        = GetCurrentScriptDirectory~".\enm4se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm4se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm4se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm4se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm4se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm4se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm4se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm4se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm4se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm4se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm4se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(5,255,255,0);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture04(true);
+	CreateEventFromScript("Event01");
+	SetEffectForZeroLife(0,0,0);
+    }
+
+    @MainLoop {
+		yield;
+		if(OnEvent==false){
+			VanishEnemy;
+		}
+}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==14){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

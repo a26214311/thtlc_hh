@@ -1,0 +1,128 @@
+script_enemy_main
+{//三月精妖
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy=csd~"img\threefairys.png";
+	let imgAngle=0;
+	let shotAngle=0;
+	let ShotSE2= GetCurrentScriptDirectory~"se\shot1.wav";
+	let ShotSE= GetCurrentScriptDirectory~"se\shot2.wav";
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+
+	@Initialize
+	{
+		SetLife(40);
+		LoadSE(ShotSE);
+		LoadGraphic(imgEnemy);
+		SetTexture(imgEnemy);
+		SetGraphicRect(0,0,32,32);//描画元矩形を設定
+		SetLife(GetLife+100);
+		CML(rand(100,255),rand(100,255),rand(100,255));//敵爆発とか処理
+	}
+	
+	@MainLoop
+	{		
+		if(count==0){
+			alternative(GetArgument)
+			case(0){
+				SetMovePosition02(GetX,MaxY+150,360);
+			}
+			case(1){
+				SetMovePosition02(GetX,MaxY+150,300);
+			}
+			case(2){
+				SetMovePosition02(GetX,MaxY+150,300);
+			}
+		}
+		if(GetX<MinX-100){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100){
+		//VanishEnemy;
+		}
+		if(GetY>MaxY+100){
+		VanishEnemy;
+		}
+		SetCollisionA(GetX(),GetY(),16);//当たり判定(自弾)登録
+		count++;
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		alternative(GetArgument)
+		case(0){
+			if((GetSpeedX())==0){
+				SetGraphicRect(32,96,63,127);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()>0.0){
+				SetGraphicRect(64,96,95,127);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()<0.0){
+				SetGraphicRect(0,96,31,127);
+				SetGraphicAngle(0,0,0);
+			}
+		}
+		case(1){
+			if((GetSpeedX())==0){
+				SetGraphicRect(32,64,63,95);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()>0.0){
+				SetGraphicRect(64,64,95,95);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()<0.0){
+				SetGraphicRect(0,64,31,95);
+				SetGraphicAngle(0,0,0);
+			}
+		}
+		case(2){
+			if((GetSpeedX())==0){
+				SetGraphicRect(32,128,63,159);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()>0.0){
+				SetGraphicRect(64,128,95,159);
+				SetGraphicAngle(0,0,0);
+			}
+			else if(GetSpeedX()<0.0){
+				SetGraphicRect(0,128,31,159);
+				SetGraphicAngle(0,0,0);
+			}
+		}
+	        DrawGraphic(GetX, GetY);
+	}
+#include_function".\lib_anime_fairy.txt"
+}

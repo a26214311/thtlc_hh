@@ -1,0 +1,122 @@
+task BlackOut(long){
+	let id       = Obj_Create(OBJ_EFFECT);
+	let sca      = 0;
+	let alpha    = 150;
+	let rgb      = [0,0,0];
+	let die      = 0;
+	
+	ObjEffect_SetTexture(id,imgba);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,2);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,400/-2,400/-2);
+	ObjEffect_SetVertexXY(id,1,400/-2,400/2);
+	ObjEffect_SetVertexXY(id,2,400/2,400/-2);
+	ObjEffect_SetVertexXY(id,3,400/2,400/2);
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,400);
+	ObjEffect_SetVertexUV(id,2,400,0);
+	ObjEffect_SetVertexUV(id,3,400,400);
+	
+	loop{
+		die++;
+		if(sca<3){sca+=0.05;}
+		Obj_SetPosition(id,GetPlayerX,GetPlayerY);
+		ObjEffect_SetScale(id,sca,sca);
+		ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+		
+		if(die>long){
+			if(alpha>0){alpha-=15;}
+			if(alpha<=0){Obj_Delete(id);}
+		}
+		
+		yield;
+	}
+}
+
+
+task BombEffect{
+	let id		= [Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT),
+					Obj_Create(OBJ_EFFECT)];//4
+	let i		= 0;
+	let alpha1	= 0;
+	let alphaA	= 0;
+	let sca		= 4;
+	let sca1	= 0;
+	let scaA	= 0;
+	let rgb		= [0,50,100,150,200,255];
+	let r		= rgb[5];
+	let g		= rgb[5];
+	let b		= rgb[5];
+	let cc		= 0;
+	let img5	= GetCurrentScriptDirectory~".\eff\bh.png";
+	let img6	= GetCurrentScriptDirectory~".\eff\bh2.png";
+	
+	loop(4){
+		Obj_SetPosition(id[i],GetCenterX,GetCenterY);
+		ObjEffect_SetTexture(id[i],img5);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],2);
+		Obj_SetAutoDelete(id[i],false);
+		ObjEffect_SetScale(id[i],sca1,sca1);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexXY(id[i],0,128/-2,128/-2);
+		ObjEffect_SetVertexXY(id[i],1,128/-2,128/2);
+		ObjEffect_SetVertexXY(id[i],2,128/2,128/-2);
+		ObjEffect_SetVertexXY(id[i],3,128/2,128/2);
+		ObjEffect_SetVertexUV(id[i],0,0,0);
+		ObjEffect_SetVertexUV(id[i],1,0,128);
+		ObjEffect_SetVertexUV(id[i],2,128,0);
+		ObjEffect_SetVertexUV(id[i],3,128,128);
+		i++;
+	}i=0;
+		ObjEffect_SetTexture(id[2],img6);
+		ObjEffect_SetTexture(id[3],img6);
+	
+	loop{
+		SetIntersectionCircle(GetPlayerX,GetPlayerY,64,4,true);
+		SetIntersectionCircle(GetCenterX,GetCenterY,512,3,true);
+		if(sca1<sca){scaA+=1;}
+		sca1=sca*sin(scaA);
+		ObjEffect_SetScale(id[0],sca1,sca1);
+		ObjEffect_SetScale(id[1],sca1/2,sca1/2);
+		ObjEffect_SetScale(id[2],sca1/3,sca1/3);
+		ObjEffect_SetScale(id[3],sca1/4,sca1/4);
+		
+		Obj_SetPosition(id[2],GetPlayerX,GetPlayerY);
+		Obj_SetPosition(id[3],GetPlayerX,GetPlayerY);
+		
+		cc+=8;
+		ObjEffect_SetAngle(id[0],0,0,+sca1*180-alpha1*2);
+		ObjEffect_SetAngle(id[1],0,0,-sca1*180+alpha1*2);
+		ObjEffect_SetAngle(id[2],0,0,+cc);
+		ObjEffect_SetAngle(id[3],0,0,-cc);
+		
+		if(alpha1<255&&sca1>=sca){alphaA+=1;}
+		alpha1=255*sin(alphaA);
+		loop(4){
+			ObjEffect_SetVertexColor(id[i],0,255-alpha1,r,g,b);
+			ObjEffect_SetVertexColor(id[i],1,255-alpha1,r,g,b);
+			ObjEffect_SetVertexColor(id[i],2,255-alpha1,r,g,b);
+			ObjEffect_SetVertexColor(id[i],3,255-alpha1,r,g,b);
+			i++;
+		}i=0;
+		
+		if(alpha1>=255){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(id[2]);
+			Obj_Delete(id[3]);
+			break;
+		}
+		
+		yield;
+	}
+}

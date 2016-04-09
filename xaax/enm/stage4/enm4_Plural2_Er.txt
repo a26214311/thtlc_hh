@@ -1,0 +1,23 @@
+
+#Title[enm4_2 Plural ReimuE]
+#Text[邪星章4面ボス　甕星 無々夢　霊夢E]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm4_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack02_Easy.txt]
+ #ScriptPath[.\enm4_SpellCard02_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack03_Easy.txt]
+ #ScriptPath[.\enm4_SpellCard03_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_Attack04_Easy.txt]
+ #ScriptPath[.\enm4_SpellCard04_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm4_SpellCard05_Easy.txt]
+#ScriptNextStep
+
+#EndScriptPathData

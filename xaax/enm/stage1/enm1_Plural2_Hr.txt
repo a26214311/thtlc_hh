@@ -1,0 +1,16 @@
+
+#Title[enm1_2 Plural ReimuN]
+#Text[邪星章1面ボス　メリーシェパード　霊夢N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm1_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm1_Attack03_Hard.txt]
+ #ScriptPath[.\enm1_SpellCard01_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm1_Attack04_Hard.txt]
+ #ScriptPath[.\enm1_SpellCard02_Hard.txt]
+
+#EndScriptPathData

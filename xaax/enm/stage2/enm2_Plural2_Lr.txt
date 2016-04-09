@@ -1,0 +1,18 @@
+
+#Title[enm2_2 Plural ReimuN]
+#Text[邪星章2面ボス　霊夢N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm2_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack02_Lunatic.txt]
+ #ScriptPath[.\enm2_SpellCard02_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_Attack03_Lunatic.txt]
+ #ScriptPath[.\enm2_SpellCard03_Lunatic.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm2_SpellCard04_Lunatic.txt]
+
+#EndScriptPathData

@@ -1,0 +1,115 @@
+script_enemy Enemy00{
+    let imgEffect = GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+    let imgEffect2= GetCurrentScriptDirectory~".\enm3eff\wave.png";
+    let imgSPNB	  = GetCurrentScriptDirectory~".\enm3eff\spellEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+    let boon      = GetCurrentScriptDirectory~".\enm3se\boon.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 1;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let count2    = 0;
+    let count3    = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let move1     = 0;
+    let moveA     = 0;
+    let alpha     = 0;
+    let ang       = [-3,3];
+    let sc        = 0;
+
+    @Initialize {
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(400);
+
+	LoadUserShotData(shotdir);
+	alternative(GetArgument)
+	case(0){
+	Aura(8,255,150,0);
+	SetMovePosition03(CenX-130,CenY-150,10,5);}
+	case(1){
+	Aura(8,255,150,0);
+	SetMovePosition03(CenX+130,CenY-150,10,5);}
+	EnemyTexture03_typeB(true);
+	LoadGraphic(imgSPNB);
+        LoadGraphic(imgEffect);
+        LoadGraphic(imgEffect2);
+	}
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRateEx(0,0,30,0);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRateEx(0,0,30,0);}
+
+	if(S_count==100){
+	Concentration2(GetX,GetY,30,powerla);
+	}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	alternative(GetArgument)
+	case(0){
+	if(frame==100){
+	let shote = [kRED42,kORANGE42,kYELLOW42,kGREEN42,kAQUA42,kBLUE42,kPURPLE42];
+	/*（赤、橙、黄、緑、青、藍、紫）*/
+	loop(7){
+	CreateShotA(0,GetX,GetY,10);
+	SetShotDataA(0,0,rand(1,3),rand(0,360),0,0,5,shote[angle]);
+	FireShot(0);
+	}
+	angle++;
+	if(angle==7){angle=0;}
+	PlaySE(kira);
+	frame=90;
+	}
+	}
+	case(1){
+	if(frame==100){
+	loop(3){
+	CreateReflectShot01(GetX,GetY,2,GetAngle,1);
+	GetAngle+=360/3;
+	}
+	GetAngle+=rand(0,360);
+	PlaySE(tan);
+	frame=-50;
+	}
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

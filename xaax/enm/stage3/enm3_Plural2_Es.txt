@@ -1,0 +1,22 @@
+
+#Title[enm3_2 Plural SakuyaN]
+#Text[邪星章3面ボス　ピアシテ・パスカル 咲夜N]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm3_Event01s.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack01_Easy.txt]
+ #ScriptPath[.\enm3_SpellCard01_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack02_Easy.txt]
+ #ScriptPath[.\enm3_SpellCard02_Easy.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack04_Easy.txt]
+ #ScriptPath[.\enm3_SpellCard04_Easy.txt]
+#ScriptNextStep
+
+
+#EndScriptPathData

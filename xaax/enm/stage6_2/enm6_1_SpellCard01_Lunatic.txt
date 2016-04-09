@@ -1,0 +1,182 @@
+
+#Title[enm6_1 spell01 luna]
+#Text[東風谷 早苗
+虚神「偽装天則」]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_enemy_main {
+    let imgFog	  = GetCurrentScriptDirectory~".\enm6_2eff\fog2.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6_2eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6_2eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6_2se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6_2se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6_2se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6_2se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6_2se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6_2se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6_2se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6_2se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6_2se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6_2se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6_2se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+    let endc	  = 0;
+
+    @Initialize {
+        //SetX(MaxX+100);
+        //SetY(MinY-100);
+
+        SetLife(1000);
+	SetDamageRate(0,0);
+
+	SetInvincibility(120);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(10,10,10,10);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,CenY-100,10,5);
+	LoadGraphic(imgFog);
+	LoadGraphic(imgSPNB);
+	LoadGraphic(imgEffect);
+	Aura(8,50,255,50);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	hpb(1,0,0);
+	Timer(1,1);
+	EnemyTexture06a(true);
+	SetEffectForZeroLife(0,0,0);
+	VSname(0);
+	RedMagicCircle(1,0);
+	SpellPracticeSave("lunatic",23);
+    }
+
+    @MainLoop {
+	yield;
+        SetCollisionA(GetX, GetY, 30);
+        SetCollisionB(GetX, GetY, 16);
+
+	/*制限時間処理*/
+	if(GetTimer<=10 && GetTimer>=0){T_count++;}
+	alternative(T_count)
+	case(1,60,120,180,240){PlaySE(t10);}
+	case(300,360,420,480,540){PlaySE(t5);}
+
+	/*ボム中、使用後一定時間ダメージ無効処理*/
+	if(OnBomb==true){SetDamageRate(30,50);Damage=0;}
+	if(OnBomb==false){Damage++;}
+	if(Damage>=100){SetDamageRate(30,50);}
+
+	/*スペルカード延滞宣言*/
+	if(S_count==1){
+	CutinSP("TIREI",50,-50,4000000,60,GetCurrentScriptDirectory~".\enm6_2img\sanae00000.png",0,0,384,512);
+	CutinSP2(-275,-10,GetCurrentScriptDirectory~".\enm6_2spell\enm6_1_sn01_normal.png",0,0,384,32,255,255,255);
+	BackGroundEffect;
+	}
+	if(S_count==50){
+	Concentration(50,powerla);
+	}
+
+	a++;	
+	frame++;
+	count++;
+	S_count++;
+	timer++;
+	if(frame==120){
+	CompressionLaser(GetX,GetY,90+angle,0,500,15,255,255,0,60,100,false);
+	CompressionLaser(GetX,GetY,90-angle+45,0,500,15,255,0,0,60,100,false);
+	CreateShotA(0,CenX-100,CenY-100,10);
+	SetShotDataA(0,0,5,90+angle,0,-0.2,2,kRED02);
+	FireShot(0);
+	CreateShotA(1,CenX+100,CenY-100,10);
+	SetShotDataA(1,0,5,90+angle*-1,0,-0.2,2,kYELLOW02);
+	FireShot(1);
+	CreateShotA(0,CenX-100,CenY-100,10);
+	SetShotDataA(0,0,5,90+angle*-1,0,-0.2,1,kRED02);
+	FireShot(0);
+	CreateShotA(1,CenX+100,CenY-100,10);
+	SetShotDataA(1,0,5,90+angle,0,-0.2,1,kYELLOW02);
+	FireShot(1);
+	angle+=18;
+	PlaySE(kira);
+	frame=115;
+	}
+
+	if(timer==120){
+	//ScaleShot(GetPlayerX,MinY,90,2);
+	NuclearShot(1,GetPlayerX,MinY,90,2,0.5,0,0,"GREEN",300,true);
+	PlaySE(kaku);
+	timer=0;
+	}
+
+	alternative(count)
+	case(2000){
+	if(count==0){SetMovePositionRandom01(200,100,3,GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=CenX-100){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}
+        else if(GetX>=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX-40,CenY-160,GetX-41,CenY-90);}
+        else if(GetX<=GetPlayerX){SetMovePositionRandom01(200,100,rand(4,6),GetX+40,CenY-160,GetX+41,CenY-90);}}
+	if(count==200){
+	count=0;
+	}
+
+	
+	let tact = GetCommonDataEx("title","act");
+	let tsst = GetCommonDataEx("title","start_stage");
+	if(tact==11){
+	if(OnPlayerMissed==true){
+	SetCommonDataEx("title","start_stage",false);
+	VanishEnemy;
+	}
+	}
+	
+	if(GetEnemyLife<=10){
+	SetMovePosition03(CenX-30,CenY-120,10,5);
+	SetDamageRate(0,0);
+	endc++;
+	frame=0;
+	timer=0;
+	count=0;
+	}
+	if(endc==1){
+	DeleteAllEnemyWithoutBoss;
+	DefeatExplosion(GetEnemyX,GetEnemyY);
+	}
+
+}//MainLoopの")"です。
+
+    @DrawLoop {}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==11){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	if(tact!=11){
+	CreateItem(ITEM_BOMB,CenX,CenY);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

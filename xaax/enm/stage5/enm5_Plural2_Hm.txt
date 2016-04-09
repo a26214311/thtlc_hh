@@ -1,0 +1,24 @@
+
+#Title[enm5_2 Plural MarisaN]
+#Text[邪星章5面ボス　ミシェル・サンタンジェ　魔理沙N]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm5_Event01m.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack01_Hard.txt]
+ #ScriptPath[.\enm5_SpellCard01_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack02_Hard.txt]
+ #ScriptPath[.\enm5_SpellCard02_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack03_Hard.txt]
+ #ScriptPath[.\enm5_SpellCard03_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_Attack04_Hard.txt]
+ #ScriptPath[.\enm5_SpellCard04_Hard.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm5_SpellCard05_Hard.txt]
+
+#EndScriptPathData

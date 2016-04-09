@@ -1,0 +1,205 @@
+#東方弾幕風[Player]
+#ScriptVersion[2]
+#Menu[太陽の針巫女　博麗霊夢]
+#Text[邪な針巫女]
+#Image[.\img\霊夢_通常.png]
+#ReplayName[JA_ReimuHari]
+	
+script_player_main{
+    let img1       = GetCurrentScriptDirectory~".\img\reimu.png";
+    let img2       = GetCurrentScriptDirectory~".\img\PlayerShot.png";
+    let img3       = GetCurrentScriptDirectory~".\eff\Circle_Sqr_S.png";
+    let img4       = GetCurrentScriptDirectory~".\eff\Onmyoudama.png";
+    let img5       = GetCurrentScriptDirectory~".\eff\bh.png";
+    let img6       = GetCurrentScriptDirectory~".\eff\bh2.png";
+    let Anime      = 0;
+    let MoveAnimeL = 0;
+    let MoveAnimeR = 0;
+    let GetLR      = "NoData";
+    let imgChange  = false;
+    let shotf      = false;
+    let frame      = 0;
+    let count      = 0;
+    let timer      = 0;
+    let when       = 0;
+    let dista      = 0;
+    let sc         = 0;
+    let rgb        = [0,255];
+    let rgbp       = 0;
+    let se01       = ".\script\TheLastComer\player\se\shot.wav";
+    let se02       = ".\script\TheLastComer\player\se\shot2.wav";
+
+    @Initialize{
+	LoadGraphic(img1);
+	LoadGraphic(img2);
+	LoadGraphic(img3);
+	LoadGraphic(img4);
+	LoadGraphic(img5);
+	LoadGraphic(img6);
+	LoadPlayerShotData(GetCurrentScriptDirectory~".\ShotData.txt");
+	SlowEffect(255,150,150);
+	BitEffect;
+	BitEffect_SUBT;
+	SetSpeed(3.7,1.5);
+	SetAutoEffect(false);
+
+	SetRebirthFrame(40);
+	SetRebirthFrameReduction(3);
+
+	}
+		
+    @MainLoop{
+	yield;
+	let sgt		= GetCommonDataEx("sys","sys_trans");
+	if(sgt!=0){
+	SetPlayerInvincibility(120);
+	}
+
+	SetIntersectionCircle(GetPlayerX,GetPlayerY,0.7);
+	SetGrazeCircle(50);
+	
+	if(shotf==false){timer=0}
+	if(shotf==true){timer++}
+	if(GetKeyState(VK_SHOT)==KEY_PUSH){shotf=true}
+	if(timer>30&&GetKeyState(VK_SHOT)==KEY_FREE){shotf=false;count=0;frame=0;when=0;}
+
+	if(shotf==true&&GetKeyState(VK_SLOWMOVE)==KEY_FREE&&IsForbidBomb==false&&OnEvent==false){
+	frame++;
+	when++;
+	if(frame==1){
+	PlayerShot02(GetPlayerX-16,GetPlayerY+8,25,270,255,150,150,2.8);
+	PlayerShot02(GetPlayerX+16,GetPlayerY+8,25,270,255,150,150,2.8);
+	PlayerShot03(GetPlayerX-32,GetPlayerY-16,25,270,255,150,150,2);
+	PlayerShot03(GetPlayerX+32,GetPlayerY-16,25,270,255,150,150,2);
+	PlaySE(se01);
+	frame=-2;
+	}
+	if(when==1){
+	PlayerShot02(GetPlayerX-32,GetPlayerY-8,20,265,255,150,150,4);
+	PlayerShot02(GetPlayerX+32,GetPlayerY-8,20,275,255,150,150,4);
+	PlayerShot03(GetPlayerX-16,GetPlayerY+16,20,265,150,150,255,4);
+	PlayerShot03(GetPlayerX+16,GetPlayerY+16,20,275,150,150,255,4);
+	when=-3;
+	}
+	}
+
+	if(shotf==true&&GetKeyState(VK_SLOWMOVE)==KEY_HOLD&&IsForbidBomb==false&&OnEvent==false){
+	count++;
+	when++;
+	if(count==1){
+	PlayerShot04(GetPlayerX,GetPlayerY-0,30,270,255,255,255);
+	PlayerShot03(GetPlayerX-8,GetPlayerY-0,30,270,255,50,255,2);
+	PlayerShot03(GetPlayerX+8,GetPlayerY-0,30,270,255,50,255,2);
+	PlayerShot02(GetPlayerX-16,GetPlayerY-4,30,270,255,150,255,3.4);
+	PlayerShot02(GetPlayerX+16,GetPlayerY-4,30,270,255,150,255,3.4);
+	PlaySE(se02);
+	count=-2;
+	}
+	if(when==1){
+	PlayerShot03(GetPlayerX-16,GetPlayerY-0,35,265,255,0,255,4);
+	PlayerShot03(GetPlayerX+16,GetPlayerY-0,35,275,255,0,255,4);
+	PlayerShot02(GetPlayerX-8,GetPlayerY-4,35,265,100,100,255,3.8);
+	PlayerShot02(GetPlayerX+8,GetPlayerY-4,35,275,100,100,255,3.8);
+	when=-4;
+	}
+	}
+
+	}
+
+    @Missed{
+	yield;
+	//if(GetPlayerLife<9){ExtendPlayer(1)}
+			//自機撃墜時に"@MainLoop"の代わりに呼ばれます
+			//MainLoopと同じでよければ
+			//@Missed{MainLoop}
+			//とかけば、@MainLoopと同じになります。
+			//ただし、撃墜時に動けたり弾が撃てると変なので
+			//OnMissed関数で撃墜中かを判断してください
+	}
+
+
+    @SpellCard{
+	let sgt		= GetCommonDataEx("sys","sys_trans");
+	if(sgt==0){UseSpellCard("Bomb",0);}
+	else{AddBomb(1);}
+	//if(GetPlayerBomb<8){AddBomb(1)}
+			//スペルカードを発動した瞬間に呼ばれる部分です
+			//ここでGetKeyStateで移動状態を判断したりして
+			//呼び出すスペルを選びます
+	}
+		
+    @DrawLoop{
+	if(OnBomb==true){dista=3;sc++;}
+	if(OnBomb==false){dista=0}
+	Anime++;
+	if(Anime==25){Anime=0}
+	imgChange=false;
+	if(GetKeyState(VK_USER)==KEY_HOLD){imgChange=true}
+	if(GetKeyState(VK_LEFT)==KEY_HOLD){MoveAnimeL++}
+	if(GetKeyState(VK_RIGHT)==KEY_HOLD){MoveAnimeR++}
+	if(GetKeyState(VK_LEFT)==KEY_PUSH){GetLR="LEFT"}
+	if(GetKeyState(VK_RIGHT)==KEY_PUSH){GetLR="RIGHT"}
+	if(MoveAnimeL==3){MoveAnimeL=2}
+	if(MoveAnimeR==3){MoveAnimeR=2}
+	if(GetKeyState(VK_LEFT)==KEY_FREE){
+	if(MoveAnimeL>0){MoveAnimeL--}
+	}
+	if(GetKeyState(VK_RIGHT)==KEY_FREE){
+	if(MoveAnimeR>0){MoveAnimeR--}
+	}
+	if(imgChange==false){SetTexture(img1)}
+	if(imgChange==true){SetTexture(img1)}
+	if(GetLR=="LEFT"&&MoveAnimeL>0){
+	if(MoveAnimeL>=0&&MoveAnimeL<=1){SetGraphicRect(12,52,37,93);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeL>=1&&MoveAnimeL<=2){SetGraphicRect(60,52,80,93);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeL>=2&&MoveAnimeL<=3){SetGraphicRect(106,52,128,91);SetGraphicAngle(180,0,0);}
+	}
+	if(GetLR=="RIGHT"&&MoveAnimeR>0){
+	if(MoveAnimeR>=0&&MoveAnimeR<=1){SetGraphicRect(15,100,47,141);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeR>=1&&MoveAnimeR<=2){SetGraphicRect(64,100,95,141);SetGraphicAngle(180,0,0);}
+	if(MoveAnimeR>=2&&MoveAnimeR<=3){SetGraphicRect(112,100,143,139);SetGraphicAngle(180,0,0);}
+	}
+	if(GetKeyState(VK_LEFT)==KEY_FREE&&GetKeyState(VK_RIGHT)==KEY_FREE&&MoveAnimeR<=0&&MoveAnimeL<=0){
+	if(Anime>=0&&Anime<=5){SetGraphicRect(12,3,45,45);SetGraphicAngle(180,0,0);}
+	if(Anime>=5&&Anime<=10){SetGraphicRect(60,4,93,45);SetGraphicAngle(180,0,0);}
+	if(Anime>=10&&Anime<=15){SetGraphicRect(108,3,143,45);SetGraphicAngle(180,0,0);}
+	if(Anime>=15&&Anime<=20){SetGraphicRect(156,4,191,45);SetGraphicAngle(180,0,0);}
+	if(Anime>=20&&Anime<=25){SetGraphicRect(204,3,238,45);SetGraphicAngle(180,0,0);}
+	}
+	if(GetTimeOfPlayerInvincibility<=0){SetColor(255,255,255)}
+	if(GetTimeOfPlayerInvincibility>0){SetColor(rgb[rgbp],rgb[rgbp],rgb[rgbp]);rgbp++;if(rgbp==2){rgbp=0}}
+	DrawGraphic((GetPlayerX-4)+dista*sin(sc*100),GetPlayerY+dista*sin(sc*100));
+
+	}
+		
+    @Finalize{}
+#include_function".\Obj_Shot.txt"
+#include_function".\Eff_Player.txt"
+	}
+
+script_spell Bomb{
+	let imgb1      = GetCurrentScriptDirectory~".\eff\bh.png";
+	let imgba      = GetCurrentScriptDirectory~".\eff\Theworld.png";
+	let sebb       = ".\script\TheLastComer\player\se\power.wav";
+	let sebb2      = ".\script\TheLastComer\player\se\tan.wav";
+    @Initialize{
+	LoadGraphic(imgb1);
+	LoadGraphic(imgba);
+	SetPlayerInvincibility(180);
+	run;
+	}
+    @MainLoop{
+	yield;
+	}
+    @Finalize{
+	}
+
+	task run{
+	BlackOut(150);
+	BombEffect;
+	PlaySE(sebb);
+	loop(180){yield}
+	End;
+	}
+#include_function".\Eff_Bomb.txt"
+	}

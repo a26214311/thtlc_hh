@@ -1,0 +1,45 @@
+#東方弾幕風[Stage]
+#Title[東方邪星章　〜 TheLastComer (EXフラグ初期化スクリプト)]
+#Text[EXクリアフラグを初期化します。]
+#Image[.\title\pack.png]
+#Player[.\player\Reimu\Reimu.txt,.\player\Marisa\Marisa.txt,.\player\Sakuya\Sakuya.txt,.\player\ReimuHari\Reimu.txt]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_stage_main {
+    let frame     = 0;
+
+    @Initialize {
+	SetClearFrameEffectEnable(false);
+
+	CreateCommonDataArea("sys");
+	SetCommonDataEx("sys","sys_gauge",0);
+	SetCommonDataEx("sys","sys_trans",0);
+
+	CreateCommonDataArea("title");
+	LoadCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+	SetCommonDataEx("title","act",0);
+	SetCommonDataEx("title","stc",0);
+	SetCommonDataEx("title","clear_stageEX_R",0);//本編の進み具合extra 霊夢
+	SetCommonDataEx("title","clear_stageEX_M",0);//本編の進み具合extra 魔理沙
+	SetCommonDataEx("title","clear_stageEX_S",0);//本編の進み具合extra 咲夜
+	SetCommonDataEx("title","start_stage",false);
+	SetCommonDataEx("title","start_stage2",false);
+	SaveCommonDataEx("title",GetCurrentScriptDirectory~".\Title.dat");
+	}
+    @MainLoop {
+	yield;
+	frame++;
+
+	if(frame==1){
+		RaiseError("´･_･`！EXフラグが消えました！´･_･`","´･_･`");
+		ClearStage();
+	}
+
+}//MainLoopの")"です。
+
+    @Finalize {}
+
+    @BackGround {}
+
+}

@@ -1,0 +1,22 @@
+
+#Title[enm3_2 Plural ReimuN]
+#Text[邪星章3面ボス　ピアシテ・パスカル 霊夢N]
+#Player[FREE]
+#BackGround[User]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm3_Event01r.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack01_Normal.txt]
+ #ScriptPath[.\enm3_SpellCard01_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack02_Normal.txt]
+ #ScriptPath[.\enm3_SpellCard02_Normal.txt]
+#ScriptNextStep
+ #ScriptPath[.\enm3_Attack04_Normal.txt]
+ #ScriptPath[.\enm3_SpellCard04_Normal.txt]
+#ScriptNextStep
+
+
+#EndScriptPathData

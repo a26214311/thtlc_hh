@@ -1,0 +1,155 @@
+script_enemy_main
+{//ランダム全方位弾の中妖精
+	let count=0;
+	let cx=GetCenterX();//STGシーンの中心x座標を取得
+	let csd=GetCurrentScriptDirectory;
+	let imgEnemy;
+	if(GetArgument==0){imgEnemy = csd~".\img\fairy_yellow.png";}
+	if(GetArgument==1){imgEnemy = csd~".\img\fairy_yellow.png";}
+	let imgCircle = csd~".\img\Circle_Hex_S.png";
+	let imgAngle=0;
+	let shotAngle=0;
+	let kira = csd ~".\se\shot2.wav";
+	let ex = 0;
+	let ey = 0;
+	let frame = 0;
+
+	let MinX = GetClipMinX;
+	let MaxX = GetClipMaxX;
+	let MinY = GetClipMinY;
+	let MaxY = GetClipMaxY;
+
+	// アイテムを落とす数
+	let ItemNam_1up=0;
+	let ItemNam_Bomb=0;
+	let ItemNam_Item=0;
+	let lp=0;
+	
+	let alpha = 0;
+	let scale = 5;
+
+	@Initialize
+	{
+		SetLife(300);
+		LoadGraphic(imgEnemy);
+		LoadGraphic(imgCircle);
+		SetTexture(imgEnemy);
+		Initialize_Fairy(5,255,100,100);
+		Shot_Main;
+		DrawMagicCircle;
+	}
+	
+	@MainLoop{
+		let tdif = GetCommonDataEx("title","Diffi");//本編の難易度判定("easy"〜"lunatic")
+		
+		alternative(tdif)
+		case("easy"){lp=20;}
+		case("normal"){lp=30;}
+		case("hard"){lp=40;}
+		case("lunatic"){lp=60;}
+		
+		if(GetX<MinX-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetX>MaxX+100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY<MinY-100&&!enmfin){
+		VanishEnemy;
+		}
+		if(GetY>MaxY+100&&!enmfin){
+		VanishEnemy;
+		}
+		if(!enmfin){
+			SetCollisionA(GetX(),GetY(),16);//当たり判定(自弾)登録
+			SetCollisionB(GetX(),GetY(),16);//当たり判定(体当たり)登録
+			}
+		if(GetCommonData("BossFlag")&&!enmfin) {
+			TrashEnemy(255,255,64);
+			enmfin=true;
+			}
+		frame++;
+		if(frame<20){scale-=0.2;alpha+=255/20;}
+		yield;
+	}
+	
+	@Finalize
+	{//読みこんだファイルを削除
+
+		loop(ItemNam_1up) {
+			CreateItem(ITEM_1UP,GetX(),GetY());
+		}
+		loop(ItemNam_Bomb) {
+			CreateItem(ITEM_BOMB,GetX(),GetY());
+		}
+		if (GetLife()<=0) {
+			ascent (i in 0..ItemNam_Item) {
+				CreateItem(ITEM_SCORE,GetX()+rand(-i*10,i*10),GetY()+rand(-i*10,i*10));
+			}
+		}
+	}
+	
+	@DrawLoop
+	{//描画
+		SetTexture(imgEnemy);
+		SetAlpha(alpha);
+		SetGraphicScale(scale,1);
+		DrawFairy(imgEnemy);
+	}
+	
+	task Shot_Main {
+		loop(30){yield;}
+		let angle2 = rand(0,360);
+		loop {
+			angle2 = rand(0,360);
+			if(!enmfin){
+				ascent(let angle in 0..lp) {
+					CreateShot02(GetX,GetY,4,angle*(360/lp)+angle2,-0.1,2.3,99,15);
+					}
+				PlaySE(kira);
+				}
+			loop(60){yield;}
+			}
+		}
+		
+task DrawMagicCircle {
+	let cef    = Obj_Create(OBJ_EFFECT);
+	let sca    = 3;
+	let cangle = 0;
+	let calpha = 0;
+	
+
+	Obj_SetPosition(cef,GetX,GetY);
+	ObjEffect_SetTexture(cef,imgCircle);
+	Obj_SetSpeed(cef,0);
+	Obj_SetAngle(cef,0);
+	ObjEffect_SetScale(cef,sca,sca);
+	ObjEffect_SetRenderState(cef,ALPHA);
+	ObjEffect_SetPrimitiveType(cef,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(cef,1);
+	ObjEffect_CreateVertex(cef,4);
+	ObjEffect_SetAngle(cef,0,0,cangle);
+	ObjEffect_SetVertexXY(cef,0,64/-2,64/-2);
+	ObjEffect_SetVertexXY(cef,1,64/-2,64/2);
+	ObjEffect_SetVertexXY(cef,2,64/2,64/-2);
+	ObjEffect_SetVertexXY(cef,3,64/2,64/2);
+	ObjEffect_SetVertexUV(cef,0, 0, 0);
+	ObjEffect_SetVertexUV(cef,1, 0,64);
+	ObjEffect_SetVertexUV(cef,2,64, 0);
+	ObjEffect_SetVertexUV(cef,3,64,64);
+	while(!enmfin){
+		ObjEffect_SetAngle(cef,0,0,cangle);
+		ObjEffect_SetScale(cef,sca,sca);
+		ObjEffect_SetVertexColor(cef,0,calpha,255,255,255);
+		ObjEffect_SetVertexColor(cef,1,calpha,255,255,255);
+		ObjEffect_SetVertexColor(cef,2,calpha,255,255,255);
+		ObjEffect_SetVertexColor(cef,3,calpha,255,255,255);
+		cangle+=4;
+		if(sca>1){sca-=0.1;}
+		if(calpha<=200){calpha+=200/20;}
+		yield;
+		}
+	Obj_Delete(cef);
+	}
+#include_function".\lib_anime_fairy.txt"
+}

@@ -1,0 +1,1468 @@
+task CutinSP(type,x,y,score,timer,texture,rect1,rect2,rect3,rect4){
+	/*
+	type引数 
+	"KOUMA"; 紅魔郷風　　　　　　　画面左から来て停止。その後拡大フェードアウト。
+	"YOUMU": 妖々夢風(永)　　　　　上から下へフェードアウト。
+	"HUJIN": 風神録風　　　　　　　永夜の逆。しかし動きがもっさりしている。
+	"TIREI": 地霊殿風(星三ＤＳ神)　右上から左下へ。動きが難しい。
+	"ORIGI1":オリジナル　　　　　　魅魔様の時かっこいいと評判だったが、調子に乗ってはいけない。
+	*/
+	let Ceff1		= Obj_Create(OBJ_EFFECT);
+	let Ceff		= Obj_Create(OBJ_EFFECT);
+	let Ceff2		= Obj_Create(OBJ_EFFECT);
+	let alpha		= 0;
+	let alpha1		= 0;
+	let alpha2		= 0;
+	let delete		= false;
+	let cc			= 0;
+	let movea		= 0;
+	let move1		= 0;
+	let moveb		= 0;
+	let move2		= 0;
+	let movec		= 0;
+	let move3		= 0;
+	let scax		= 2;
+	let scay		= 2;
+	let scax1		= 2;
+	let scay1		= 2;
+	let scax2		= 2;
+	let scay2		= 2;
+	
+	SetScore(score);
+	SetTimer(timer);
+	LoadGraphic(texture);
+	
+	ObjEffect_SetTexture(Ceff,texture);
+	ObjEffect_SetRenderState(Ceff,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff,scax,scay);
+	ObjEffect_SetLayer(Ceff,6);
+	ObjEffect_CreateVertex(Ceff,4);
+	ObjEffect_SetVertexXY(Ceff,0,rect1/-2,rect2/-2);//２の累乗でなきゃダメ
+	ObjEffect_SetVertexXY(Ceff,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff,3,rect3,rect4);
+	
+	ObjEffect_SetTexture(Ceff1,texture);
+	ObjEffect_SetRenderState(Ceff1,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff1,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff1,scax1,scay1);
+	ObjEffect_SetLayer(Ceff1,6);
+	ObjEffect_CreateVertex(Ceff1,4);
+	ObjEffect_SetVertexXY(Ceff1,0,rect1/-2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff1,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff1,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff1,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff1,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff1,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff1,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff1,3,rect3,rect4);
+	ObjEffect_SetTexture(Ceff2,texture);
+	ObjEffect_SetRenderState(Ceff2,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff2,scax2,scay2);
+	ObjEffect_SetLayer(Ceff2,6);
+	ObjEffect_CreateVertex(Ceff2,4);
+	ObjEffect_SetVertexXY(Ceff2,0,rect1/-2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff2,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff2,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff2,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff2,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff2,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff2,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff2,3,rect3,rect4);
+	
+	loop{
+		cc++;
+		alternative(type)
+		case("KOUMA"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-230)+y)}
+		case("YOUMU"){Obj_SetPosition(Ceff,(CenX-230)+x,(CenY-330+move1)+y)}
+		case("HUJIN"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-130-move2)+y)}
+		case("TIREI"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-310+move2/2)+y)}
+		case("ORIGI1"){Obj_SetPosition(Ceff,(CenX-230)+x,(CenY-230)+y)}
+		
+		//紅魔郷風の処理
+		if(type=="KOUMA"){
+			if(move1<230){movea+=1.5;}
+			move1=230.1*sin(movea);
+			if(cc==100){delete=true;}
+			if(delete==true){
+				scax+=0.05;
+				scay+=0.05;
+				ObjEffect_SetScale(Ceff,scax,scay);
+			}
+		}
+		//妖々夢風の処理
+		if(type=="YOUMU"){
+			move1+=1.5;
+			if(cc==100){delete=true;}
+		}
+		//風神録風の処理
+		if(type=="HUJIN"){
+			if(move1<230){movea+=3;}
+			move1=230.1*sin(movea);
+			if(move1>=230){moveb+=0.1;}
+			if(cc>90&&move2<200){moveb+=1.5;}
+			move2=200.1*sin(moveb);
+			if(cc==100){delete=true;}
+		}
+		//地霊殿風の処理
+		if(type=="TIREI"){
+			if(move1<230&&move2<200&&cc<100){
+				if(move1<200){movea+=3;}
+				move1=200.1*sin(movea);
+				if(move2<200){moveb+=3;}
+				move2=200.1*sin(moveb);
+			}
+			if(move1>=200&&cc<100){move1+=0.5;}
+			if(move2>=200&&cc<100){move2+=0.5;}
+			if(move1>=200&&cc>100){move1+=10;}
+			if(move2>=200&&cc>100){move2+=10;}
+			if(cc==100){delete=true;}
+		}
+		//オリジナル１の処理
+		if(type=="ORIGI1"){
+			if(cc<50&&alpha1<255&&alpha2<255){
+				alpha1+=5;
+				alpha2+=5;
+			}
+			scax1-=0.01;scax2+=0.01;
+			scay1-=0.01;scay2+=0.01;
+			ObjEffect_SetScale(Ceff1,scax1,scay1);
+			ObjEffect_SetScale(Ceff2,scax2,scay2);
+			if(cc>50&&alpha1>0){alpha1-=15;}
+			if(cc>50&&alpha2>0){alpha2-=15;}
+			if(cc==100){delete=true;}
+		}
+		if(alpha<255&&delete==false){
+			alternative(type)
+			case("KOUMA"){alpha+=15;}
+			case("YOUMU"){alpha+=15;}
+			case("HUJIN"){alpha+=15;}
+			case("TIREI"){alpha+=15;}
+			case("ORIGI1"){alpha+=5;}
+		}
+		if(alpha>0&&delete==true){
+			alternative(type)
+			case("KOUMA"){alpha-=5}
+			case("YOUMU"){alpha-=5}
+			case("HUJIN"){alpha-=5}
+			case("TIREI"){alpha-=5}
+			case("ORIGI1"){alpha-=5}
+		}
+		ObjEffect_SetVertexColor(Ceff,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,0,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,1,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,2,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,3,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,0,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,1,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,2,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,3,alpha2,255,255,255);
+		if(alpha<=0&&delete==true){
+			Obj_Delete(Ceff);
+			Obj_Delete(Ceff1);
+			Obj_Delete(Ceff2);
+			break;
+		}
+		yield;
+	}
+}
+
+task CutinSP_type2(type,x,y,texture,rect1,rect2,rect3,rect4){
+	/*
+	type引数 
+	"KOUMA"; 紅魔郷風　　　　　　　画面左から来て停止。その後拡大フェードアウト。
+	"YOUMU": 妖々夢風(永)　　　　　上から下へフェードアウト。
+	"HUJIN": 風神録風　　　　　　　永夜の逆。しかし動きがもっさりしている。
+	"TIREI": 地霊殿風(星三ＤＳ神)　右上から左下へ。動きが難しい。
+	"ORIGI1":オリジナル　　　　　　魅魔様の時かっこいいと評判だったが、調子に乗ってはいけない。
+	*/
+	let Ceff1  = Obj_Create(OBJ_EFFECT);
+	let Ceff   = Obj_Create(OBJ_EFFECT);
+	let Ceff2  = Obj_Create(OBJ_EFFECT);
+	let alpha  = 0;
+	let alpha1 = 0;
+	let alpha2 = 0;
+	let delete = false;
+	let cc     = 0;
+	let movea  = 0;
+	let move1  = 0;
+	let moveb  = 0;
+	let move2  = 0;
+	let movec  = 0;
+	let move3  = 0;
+	let scax   = 2;
+	let scay   = 2;
+	let scax1  = 2;
+	let scay1  = 2;
+	let scax2  = 2;
+	let scay2  = 2;
+	
+	LoadGraphic(texture);
+	
+	ObjEffect_SetTexture(Ceff,texture);
+	ObjEffect_SetRenderState(Ceff,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff,scax,scay);
+	ObjEffect_SetLayer(Ceff,6);
+	ObjEffect_CreateVertex(Ceff,4);
+	ObjEffect_SetVertexXY(Ceff,0,rect1/-2,rect2/-2);//２の累乗でなきゃダメ
+	ObjEffect_SetVertexXY(Ceff,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff,3,rect3,rect4);
+	
+	ObjEffect_SetTexture(Ceff1,texture);
+	ObjEffect_SetRenderState(Ceff1,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff1,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff1,scax1,scay1);
+	ObjEffect_SetLayer(Ceff1,6);
+	ObjEffect_CreateVertex(Ceff1,4);
+	ObjEffect_SetVertexXY(Ceff1,0,rect1/-2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff1,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff1,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff1,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff1,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff1,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff1,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff1,3,rect3,rect4);
+	ObjEffect_SetTexture(Ceff2,texture);
+	ObjEffect_SetRenderState(Ceff2,ALPHA);
+	ObjEffect_SetPrimitiveType(Ceff2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(Ceff2,scax2,scay2);
+	ObjEffect_SetLayer(Ceff2,6);
+	ObjEffect_CreateVertex(Ceff2,4);
+	ObjEffect_SetVertexXY(Ceff2,0,rect1/-2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff2,1,rect1/-2,rect4/2);
+	ObjEffect_SetVertexXY(Ceff2,2,rect3/2,rect2/-2);
+	ObjEffect_SetVertexXY(Ceff2,3,rect3/2,rect4/2);
+	ObjEffect_SetVertexUV(Ceff2,0,rect1,rect2);
+	ObjEffect_SetVertexUV(Ceff2,1,rect1,rect4);
+	ObjEffect_SetVertexUV(Ceff2,2,rect3,rect2);
+	ObjEffect_SetVertexUV(Ceff2,3,rect3,rect4);
+	
+	loop{
+		cc++;
+		alternative(type)
+		case("KOUMA"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-230)+y)}
+		case("YOUMU"){Obj_SetPosition(Ceff,(CenX-230)+x,(CenY-330+move1)+y)}
+		case("HUJIN"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-130-move2)+y)}
+		case("TIREI"){Obj_SetPosition(Ceff,(CenX-move1)+x,(CenY-430+move2)+y)}
+		case("ORIGI1"){Obj_SetPosition(Ceff,(CenX-230)+x,(CenY-230)+y)}
+		
+		//紅魔郷風の処理
+		if(type=="KOUMA"){
+			if(move1<230){movea+=1.5}
+			move1=230.1*sin(movea);
+			if(cc==100){delete=true}
+			if(delete==true){
+				scax+=0.05;
+				scay+=0.05;
+				ObjEffect_SetScale(Ceff,scax,scay);
+			}
+		}
+		//妖々夢風の処理
+		if(type=="YOUMU"){
+			move1+=1.5;
+			if(cc==100){delete=true}
+			if(delete==true){}
+		}
+		//風神録風の処理
+		if(type=="HUJIN"){
+			if(move1<230){movea+=3}
+			move1=230.1*sin(movea);
+			if(move1>=230){moveb+=0.1}
+			if(cc>90&&move2<200){moveb+=1.5}
+			move2=200.1*sin(moveb);
+			if(cc==100){delete=true}
+			if(delete==true){}
+		}
+		//地霊殿風の処理
+		if(type=="TIREI"){
+			if(move1<230&&move2<200&&cc<100){
+			if(move1<200){movea+=3}
+			move1=200.1*sin(movea);
+			if(move2<200){moveb+=3}
+			move2=200.1*sin(moveb);}
+			if(move1>=200&&cc<100){move1+=0.5}
+			if(move2>=200&&cc<100){move2+=0.5}
+			if(move1>=200&&cc>100){move1+=8}
+			if(move2>=200&&cc>100){move2+=8}
+			if(cc==100){delete=true}
+			if(delete==true){}
+		}
+		//オリジナル１の処理
+		if(type=="ORIGI1"){
+			if(cc<50&&alpha1<255&&alpha2<255){alpha1+=5;alpha2+=5}
+			scax1-=0.01;scax2+=0.01;
+			scay1-=0.01;scay2+=0.01;
+			ObjEffect_SetScale(Ceff1,scax1,scay1);
+			ObjEffect_SetScale(Ceff2,scax2,scay2);
+			if(cc>50&&alpha1>0){alpha1-=15}
+			if(cc>50&&alpha2>0){alpha2-=15}
+			if(cc==100){delete=true}
+			if(delete==true){}
+		}
+		
+		if(alpha<255&&delete==false){
+			alternative(type)
+			case("KOUMA"){alpha+=15}
+			case("YOUMU"){alpha+=15}
+			case("HUJIN"){alpha+=15}
+			case("TIREI"){alpha+=15}
+			case("ORIGI1"){alpha+=5}
+		}
+		if(alpha>0&&delete==true){
+			alternative(type)
+			case("KOUMA"){alpha-=5}
+			case("YOUMU"){alpha-=5}
+			case("HUJIN"){alpha-=5}
+			case("TIREI"){alpha-=5}
+			case("ORIGI1"){alpha-=5}
+		}
+		ObjEffect_SetVertexColor(Ceff,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,0,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,1,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,2,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff1,3,alpha1,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,0,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,1,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,2,alpha2,255,255,255);
+		ObjEffect_SetVertexColor(Ceff2,3,alpha2,255,255,255);
+		
+		if(alpha<=0&&delete==true){
+			Obj_Delete(Ceff);
+			Obj_Delete(Ceff1);
+			Obj_Delete(Ceff2);
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task CutinSP2(x,y,texture,rectn1,rectn2,rectn3,rectn4,r,g,b){
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let se			= GetCurrentScriptDirectory~".\enm6se\spellcard.wav";
+	let spnb		= Obj_Create(OBJ_EFFECT);
+	let spn			= Obj_Create(OBJ_EFFECT);
+	let alpha		= 0;
+	let movea		= 0;
+	let move1		= 0;
+	let moveb		= 0;
+	let move2		= 0;
+	let movec		= 0;
+	let move3		= 0;
+	let sca1		= 2;
+	let scaA		= 2;
+	let sca2		= 2;
+	let scaB		= 2;
+	let cc			= 0;
+	
+	PlaySE(se);
+	
+	LoadGraphic(texture);
+	Obj_SetPosition(spn,x,y);
+	Obj_SetSpeed(spn,0);
+	Obj_SetAngle(spn,270);
+	ObjEffect_SetTexture(spn,texture);
+	ObjEffect_SetRenderState(spn,ALPHA);
+	ObjEffect_SetPrimitiveType(spn,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn,sca1,sca1);
+	ObjEffect_SetLayer(spn,7);
+	ObjEffect_CreateVertex(spn,4);
+	ObjEffect_SetVertexXY(spn,0,rectn1/-1,rectn2/-1);
+	ObjEffect_SetVertexXY(spn,1,rectn1/-1,rectn4/1);
+	ObjEffect_SetVertexXY(spn,2,rectn3/1,rectn2/-1);
+	ObjEffect_SetVertexXY(spn,3,rectn3/1,rectn4/1);
+	
+	ObjEffect_SetVertexUV(spn,0,rectn1,rectn2);
+	ObjEffect_SetVertexUV(spn,1,rectn1,rectn4);
+	ObjEffect_SetVertexUV(spn,2,rectn3,rectn2);
+	ObjEffect_SetVertexUV(spn,3,rectn3,rectn4);
+	ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+	
+	LoadGraphic(imgSPNB);
+	Obj_SetPosition(spnb,CenX,CenY);
+	Obj_SetSpeed(spnb,0);
+	Obj_SetAngle(spnb,270);
+	ObjEffect_SetTexture(spnb,imgSPNB);
+	ObjEffect_SetRenderState(spnb,ALPHA);
+	ObjEffect_SetPrimitiveType(spnb,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spnb,sca1,sca1);
+	ObjEffect_SetLayer(spnb,7);
+	ObjEffect_CreateVertex(spnb,4);
+	ObjEffect_SetVertexXY(spnb,0,256/-2,50/-2);
+	ObjEffect_SetVertexXY(spnb,1,256/-2,50/2);
+	ObjEffect_SetVertexXY(spnb,2,256/2,50/-2);
+	ObjEffect_SetVertexXY(spnb,3,256/2,50/2);
+	ObjEffect_SetVertexUV(spnb,0,0,0);
+	ObjEffect_SetVertexUV(spnb,1,0,50);
+	ObjEffect_SetVertexUV(spnb,2,256,0);
+	ObjEffect_SetVertexUV(spnb,3,256,50);//256,50
+	ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+	
+	CutinSP3;
+	CutinSP4;
+	MagicTimer;
+	loop{
+		if(Obj_GetX(spnb)-80<=GetPlayerX&&Obj_GetX(spnb)+150>=GetPlayerX&&
+		   Obj_GetY(spnb)-50<=GetPlayerY&&Obj_GetY(spnb)+50>=GetPlayerY&&move2>=320){alpha=100;}
+		if(Obj_GetX(spnb)-80<=GetEnemyX&&Obj_GetX(spnb)+150>=GetEnemyX&&
+		   Obj_GetY(spnb)-50<=GetEnemyY&&Obj_GetY(spnb)+50>=GetEnemyY&&move2>=320){alpha=100;}
+		
+		if(move1<270){movea+=2;}
+		move1=270*sin(movea);
+		if(move1>=270){cc++;}
+		if(cc>10&&move2>-190){moveb+=4;}
+		move2=190*sin(moveb+90);
+		if(move3<270){movec+=5;}
+		move3=270*sin(movec);
+		
+		Obj_SetPosition(spnb,MinX+move1,MinY+195+move2);
+		Obj_SetPosition(spn,x+MinX+move3,y+MinY+195+move2);
+		if(sca1<2){scaA+=2;}
+		sca1=2*sin(scaA);
+		if(sca2<3){scaB+=4;}
+		sca2=3*sin(scaB);
+		ObjEffect_SetScale(spnb,3-sca1,3-sca1);
+		ObjEffect_SetScale(spn,4-sca2,4-sca2);
+		
+		if(alpha<255){alpha+=15;}
+		ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+		
+		yield;
+	}
+}
+
+task CutinSP2A(x,y,dis,texture,rectn1,rectn2,rectn3,rectn4,r,g,b){
+	let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let se        = GetCurrentScriptDirectory~".\enm6se\spellcard.wav";
+	let spnb      = Obj_Create(OBJ_EFFECT);
+	let spn       = Obj_Create(OBJ_EFFECT);
+	let alpha     = 0;
+	let movea     = 0;
+	let move1     = 0;
+	let moveb     = 0;
+	let move2     = 0;
+	let movec     = 0;
+	let move3     = 0;
+	let moved     = 0;
+	let move4     = 0;
+	let scale     = 2;
+	let cc        = 0;
+	
+	PlaySE(se);
+	
+	LoadGraphic(texture);
+	Obj_SetPosition(spn,x,y);
+	Obj_SetSpeed(spn,0);
+	Obj_SetAngle(spn,270);
+	ObjEffect_SetTexture(spn,texture);
+	ObjEffect_SetRenderState(spn,ALPHA);
+	ObjEffect_SetPrimitiveType(spn,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn,2,2);
+	ObjEffect_SetLayer(spn,7);
+	ObjEffect_CreateVertex(spn,4);
+	ObjEffect_SetVertexXY(spn,0,rectn1/-2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,1,rectn1/-2,rectn4/2);
+	ObjEffect_SetVertexXY(spn,2,rectn3/2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,3,rectn3/2,rectn4/2);
+	
+	ObjEffect_SetVertexUV(spn,0,rectn1,rectn2);
+	ObjEffect_SetVertexUV(spn,1,rectn1,rectn4);
+	ObjEffect_SetVertexUV(spn,2,rectn3,rectn2);
+	ObjEffect_SetVertexUV(spn,3,rectn3,rectn4);
+	ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+	
+	LoadGraphic(imgSPNB);
+	Obj_SetPosition(spnb,CenX,CenY);
+	Obj_SetSpeed(spnb,0);
+	Obj_SetAngle(spnb,270);
+	ObjEffect_SetTexture(spnb,imgSPNB);
+	ObjEffect_SetRenderState(spnb,ALPHA);
+	ObjEffect_SetPrimitiveType(spnb,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spnb,scale,scale);
+	ObjEffect_SetLayer(spnb,7);
+	ObjEffect_CreateVertex(spnb,4);
+	ObjEffect_SetVertexXY(spnb,0,256/-2,50/-2);
+	ObjEffect_SetVertexXY(spnb,1,256/-2,50/2);
+	ObjEffect_SetVertexXY(spnb,2,256/2,50/-2);
+	ObjEffect_SetVertexXY(spnb,3,256/2,50/2);
+	ObjEffect_SetVertexUV(spnb,0,0,0);
+	ObjEffect_SetVertexUV(spnb,1,0,50);
+	ObjEffect_SetVertexUV(spnb,2,256,0);
+	ObjEffect_SetVertexUV(spnb,3,256,50);//256,50
+	ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+	
+	CutinSP4;
+	
+	loop{
+		let gbx = Obj_GetX(spn);
+		let gby = Obj_GetY(spn);
+		let mulf = GetCommonDataEx("ls","Mumumu_Life");
+		let jalf = GetCommonDataEx("ls","Janet_Life");
+		let milf = GetCommonDataEx("ls","Michel_Life");
+		
+		if(Obj_GetX(spnb)-80<=GetPlayerX&&Obj_GetX(spnb)+150>=GetPlayerX&&
+		   Obj_GetY(spnb)-50<=GetPlayerY&&Obj_GetY(spnb)+50>=GetPlayerY&&move2>=dis){alpha=100}
+		if(Obj_GetX(spnb)-80<=GetEnemyX&&Obj_GetX(spnb)+150>=GetEnemyX&&
+		   Obj_GetY(spnb)-50<=GetEnemyY&&Obj_GetY(spnb)+50>=GetEnemyY&&move2>=dis){alpha=100}
+		
+		if(move1<270){movea+=1.5}
+		move1=271*sin(movea);
+		if(move1>=260){cc++}
+		
+		if(cc>30&&move2<dis){moveb+=2;CutinSP2V(gbx,gby,texture,rectn1,rectn2,rectn3,rectn4,2.01);}
+		move2=dis*sin(moveb);
+		
+		if(cc>38&&move3<dis){movec+=2}
+		move3=dis*sin(movec);
+		
+		if(GetLife<=10){
+			if(move4<300){move4+=10}
+		}
+		
+		Obj_SetPosition(spnb,MinX+move1+move4,MaxY-70-move3);
+		Obj_SetPosition(spn,x+MinX+move1+move4,y+MaxY-70-move2);
+		if(scale>1){
+			scale-=3.33/180;
+			CutinSP2V(gbx,gby,texture,rectn1,rectn2,rectn3,rectn4,2.01);
+		}
+		ObjEffect_SetScale(spnb,scale,scale);
+		
+		if(alpha<255){alpha+=15}
+		ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+		
+		
+		yield;
+	}
+}
+
+task CutinSP2B(x,y,texture,rectn1,rectn2,rectn3,rectn4,r,g,b){
+	let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let se        = GetCurrentScriptDirectory~".\enm6se\spellcard.wav";
+	let spnb      = Obj_Create(OBJ_EFFECT);
+	let spn       = Obj_Create(OBJ_EFFECT);
+	let alpha     = 0;
+	let movea     = 0;
+	let move1     = 0;
+	let moveb     = 0;
+	let move2     = 0;
+	let movec     = 0;
+	let move3     = 0;
+	let moved     = 0;
+	let move4     = 0;
+	let scale     = 2;
+	let cc        = 0;
+	
+	PlaySE(se);
+	
+	LoadGraphic(texture);
+	Obj_SetPosition(spn,x,y);
+	Obj_SetSpeed(spn,0);
+	Obj_SetAngle(spn,270);
+	ObjEffect_SetTexture(spn,texture);
+	ObjEffect_SetRenderState(spn,ALPHA);
+	ObjEffect_SetPrimitiveType(spn,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn,2,2);
+	ObjEffect_SetLayer(spn,7);
+	ObjEffect_CreateVertex(spn,4);
+	ObjEffect_SetVertexXY(spn,0,rectn1/-2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,1,rectn1/-2,rectn4/2);
+	ObjEffect_SetVertexXY(spn,2,rectn3/2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,3,rectn3/2,rectn4/2);
+	
+	ObjEffect_SetVertexUV(spn,0,rectn1,rectn2);
+	ObjEffect_SetVertexUV(spn,1,rectn1,rectn4);
+	ObjEffect_SetVertexUV(spn,2,rectn3,rectn2);
+	ObjEffect_SetVertexUV(spn,3,rectn3,rectn4);
+	ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+	
+	LoadGraphic(imgSPNB);
+	Obj_SetPosition(spnb,CenX,CenY);
+	Obj_SetSpeed(spnb,0);
+	Obj_SetAngle(spnb,270);
+	ObjEffect_SetTexture(spnb,imgSPNB);
+	ObjEffect_SetRenderState(spnb,ALPHA);
+	ObjEffect_SetPrimitiveType(spnb,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spnb,scale,scale);
+	ObjEffect_SetLayer(spnb,7);
+	ObjEffect_CreateVertex(spnb,4);
+	ObjEffect_SetVertexXY(spnb,0,256/-2,50/-2);
+	ObjEffect_SetVertexXY(spnb,1,256/-2,50/2);
+	ObjEffect_SetVertexXY(spnb,2,256/2,50/-2);
+	ObjEffect_SetVertexXY(spnb,3,256/2,50/2);
+	ObjEffect_SetVertexUV(spnb,0,0,0);
+	ObjEffect_SetVertexUV(spnb,1,0,50);
+	ObjEffect_SetVertexUV(spnb,2,256,0);
+	ObjEffect_SetVertexUV(spnb,3,256,50);//256,50
+	ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+	ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+	
+	CutinSP3;
+	CutinSP4;
+	
+	loop{
+		let gbx = Obj_GetX(spn);
+		let gby = Obj_GetY(spn);
+		
+		if(Obj_GetX(spnb)-80<=GetPlayerX&&Obj_GetX(spnb)+150>=GetPlayerX&&
+		   Obj_GetY(spnb)-50<=GetPlayerY&&Obj_GetY(spnb)+50>=GetPlayerY&&move2>=320){alpha=100}
+		if(Obj_GetX(spnb)-80<=GetEnemyX&&Obj_GetX(spnb)+150>=GetEnemyX&&
+		   Obj_GetY(spnb)-50<=GetEnemyY&&Obj_GetY(spnb)+50>=GetEnemyY&&move2>=320){alpha=100}
+		
+		if(move1<270){movea+=1.5}
+		move1=271*sin(movea);
+		if(move1>=260){cc++}
+		
+		if(cc>30&&move2<370){moveb+=2;CutinSP2V(gbx,gby,texture,rectn1,rectn2,rectn3,rectn4,2.01);}
+		move2=370.0*sin(moveb);
+		
+		if(cc>38&&move3<370){movec+=2}
+		move3=371*sin(movec);
+		
+		Obj_SetPosition(spnb,MinX+move1,MaxY-70-move3);
+		Obj_SetPosition(spn,x+MinX+move1,y+MaxY-70-move2);
+		if(scale>1){
+			scale-=3.33/180;
+			CutinSP2V(gbx,gby,texture,rectn1,rectn2,rectn3,rectn4,2.01);
+		}
+		ObjEffect_SetScale(spnb,scale,scale);
+		
+		if(alpha<255){alpha+=15}
+		ObjEffect_SetVertexColor(spnb,0,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,1,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,2,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spnb,3,alpha,r,g,b);
+		ObjEffect_SetVertexColor(spn,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn,3,alpha,255,255,255);
+		
+		yield;
+	}
+}
+
+task CutinSP2V(x,y,texture,rectn1,rectn2,rectn3,rectn4,scale){
+	let spn       = Obj_Create(OBJ_EFFECT);
+	let alpha     = 255;
+	let cc        = 0;
+	
+	LoadGraphic(texture);
+	Obj_SetPosition(spn,x,y);
+	Obj_SetSpeed(spn,0);
+	Obj_SetAngle(spn,270);
+	ObjEffect_SetTexture(spn,texture);
+	ObjEffect_SetRenderState(spn,ADD);
+	ObjEffect_SetPrimitiveType(spn,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn,scale,scale);
+	ObjEffect_SetLayer(spn,7);
+	ObjEffect_CreateVertex(spn,4);
+	ObjEffect_SetVertexXY(spn,0,rectn1/-2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,1,rectn1/-2,rectn4/2);
+	ObjEffect_SetVertexXY(spn,2,rectn3/2,rectn2/-2);
+	ObjEffect_SetVertexXY(spn,3,rectn3/2,rectn4/2);
+	ObjEffect_SetVertexUV(spn,0,rectn1,rectn2);
+	ObjEffect_SetVertexUV(spn,1,rectn1,rectn4);
+	ObjEffect_SetVertexUV(spn,2,rectn3,rectn2);
+	ObjEffect_SetVertexUV(spn,3,rectn3,rectn4);
+	
+	loop{
+		if(alpha>0){alpha-=15}
+		ObjEffect_SetVertexColor(spn,0,alpha,100,100,100);
+		ObjEffect_SetVertexColor(spn,1,alpha,100,100,100);
+		ObjEffect_SetVertexColor(spn,2,alpha,100,100,100);
+		ObjEffect_SetVertexColor(spn,3,alpha,100,100,100);
+		
+		if(alpha<=0){
+			Obj_Delete(spn);
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task CutinSP3{
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let spn0		= Obj_Create(OBJ_EFFECT);//Bonus
+	let spn			= [Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT)];
+	let alpha		= 0;
+	let movea		= 0;
+	let move1		= 0;
+	let moveb		= 0;
+	let move2		= 0;
+	let cc			= 0;
+	let i			= 0;
+	let rect1		= [10,18,26,34,42,50,58,66,74,82];//90,98
+	let rect3		= [17,25,33,41,49,57,65,73,81,89];//97,105
+	
+	LoadGraphic(imgSPNB);
+	
+	Obj_SetPosition(spn0,CenX,CenY);
+	Obj_SetSpeed(spn0,0);
+	Obj_SetAngle(spn0,270);
+	ObjEffect_SetTexture(spn0,imgSPNB);
+	ObjEffect_SetRenderState(spn0,ALPHA);
+	ObjEffect_SetPrimitiveType(spn0,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn0,1,1);
+	ObjEffect_SetLayer(spn0,7);
+	ObjEffect_CreateVertex(spn0,4);
+	ObjEffect_SetVertexXY(spn0,0,-16,-5);
+	ObjEffect_SetVertexXY(spn0,1,-16,5);
+	ObjEffect_SetVertexXY(spn0,2,16,-5);
+	ObjEffect_SetVertexXY(spn0,3,16,5);
+	ObjEffect_SetVertexUV(spn0,0,10,80);
+	ObjEffect_SetVertexUV(spn0,1,10,89);
+	ObjEffect_SetVertexUV(spn0,2,41,80);
+	ObjEffect_SetVertexUV(spn0,3,41,89);
+	ObjEffect_SetVertexColor(spn0,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn0,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn0,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(spn0,3,alpha,255,255,255);
+
+	loop(8){
+		Obj_SetPosition(spn[i],CenX,CenY);
+		ObjEffect_SetTexture(spn[i],imgSPNB);
+		ObjEffect_SetRenderState(spn[i],ALPHA);
+		ObjEffect_SetPrimitiveType(spn[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(spn[i],1,1);
+		ObjEffect_SetLayer(spn[i],7);
+		ObjEffect_CreateVertex(spn[i],4);
+		ObjEffect_SetVertexXY(spn[i],0,-4,-5);
+		ObjEffect_SetVertexXY(spn[i],1,-4,5);
+		ObjEffect_SetVertexXY(spn[i],2,4,-5);
+		ObjEffect_SetVertexXY(spn[i],3,4,5);
+		i++;
+	}
+	i=0;
+
+	loop{
+		if(Obj_GetX(spn[4])-50<=GetPlayerX&&Obj_GetX(spn[4])+50>=GetPlayerX&&
+		   Obj_GetY(spn[4])-50<=GetPlayerY&&Obj_GetY(spn[4])+50>=GetPlayerY){alpha=100;}
+		if(Obj_GetX(spn[4])-50<=GetEnemyX&&Obj_GetX(spn[4])+50>=GetEnemyX&&
+		   Obj_GetY(spn[4])-50<=GetEnemyY&&Obj_GetY(spn[4])+50>=GetEnemyY){alpha=100;}
+		
+		let score1  = truncate(GetSpellCardBonusScore%10);
+		let score2  = truncate((GetSpellCardBonusScore%100)/10);
+		let score3  = truncate((GetSpellCardBonusScore%1000)/100);
+		let score4  = truncate((GetSpellCardBonusScore%10000)/1000);
+		let score5  = truncate((GetSpellCardBonusScore%100000)/10000);
+		let score6  = truncate((GetSpellCardBonusScore%1000000)/100000);
+		let score7  = truncate((GetSpellCardBonusScore%10000000)/1000000);
+		let score8  = truncate((GetSpellCardBonusScore%100000000)/10000000);
+		
+		let gx = Obj_GetX(spn[7]);
+		let gy = Obj_GetY(spn[7]);
+		
+		cc++;
+		Obj_SetPosition(spn0,MinX+160,MaxY-415);
+		Obj_SetPosition(spn[7],Obj_GetX(spn0)+25,Obj_GetY(spn0));
+		Obj_SetPosition(spn[6],gx+10,gy);
+		Obj_SetPosition(spn[5],gx+20,gy);
+		Obj_SetPosition(spn[4],MinX+215,MaxY-415);
+		Obj_SetPosition(spn[3],gx+40,gy);
+		Obj_SetPosition(spn[2],gx+50,gy);
+		Obj_SetPosition(spn[1],gx+60,gy);
+		Obj_SetPosition(spn[0],gx+70,gy);
+		
+		if(cc>120&&alpha<255){alpha+=15}
+		ObjEffect_SetVertexColor(spn0,0,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn0,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn0,2,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn0,3,alpha,255,255,255);
+		loop(8){
+			ObjEffect_SetVertexColor(spn[i],0,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],1,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],2,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],3,alpha,255,255,255);
+			i++;
+		}
+		i=0;
+
+		
+		if(GetBombCountInThisSpell==0&&GetMissCountInThisSpell==0){
+			ObjEffect_SetVertexUV(spn[0],0,rect1[score1],104);
+			ObjEffect_SetVertexUV(spn[0],1,rect1[score1],113);
+			ObjEffect_SetVertexUV(spn[0],2,rect3[score1],104);
+			ObjEffect_SetVertexUV(spn[0],3,rect3[score1],113);
+			ObjEffect_SetVertexUV(spn[1],0,rect1[score2],104);
+			ObjEffect_SetVertexUV(spn[1],1,rect1[score2],113);
+			ObjEffect_SetVertexUV(spn[1],2,rect3[score2],104);
+			ObjEffect_SetVertexUV(spn[1],3,rect3[score2],113);
+			ObjEffect_SetVertexUV(spn[2],0,rect1[score3],104);
+			ObjEffect_SetVertexUV(spn[2],1,rect1[score3],113);
+			ObjEffect_SetVertexUV(spn[2],2,rect3[score3],104);
+			ObjEffect_SetVertexUV(spn[2],3,rect3[score3],113);
+			ObjEffect_SetVertexUV(spn[3],0,rect1[score4],104);
+			ObjEffect_SetVertexUV(spn[3],1,rect1[score4],113);
+			ObjEffect_SetVertexUV(spn[3],2,rect3[score4],104);
+			ObjEffect_SetVertexUV(spn[3],3,rect3[score4],113);
+			ObjEffect_SetVertexUV(spn[4],0,rect1[score5],104);
+			ObjEffect_SetVertexUV(spn[4],1,rect1[score5],113);
+			ObjEffect_SetVertexUV(spn[4],2,rect3[score5],104);
+			ObjEffect_SetVertexUV(spn[4],3,rect3[score5],113);
+			ObjEffect_SetVertexUV(spn[5],0,rect1[score6],104);
+			ObjEffect_SetVertexUV(spn[5],1,rect1[score6],113);
+			ObjEffect_SetVertexUV(spn[5],2,rect3[score6],104);
+			ObjEffect_SetVertexUV(spn[5],3,rect3[score6],113);
+			ObjEffect_SetVertexUV(spn[6],0,rect1[score7],104);
+			ObjEffect_SetVertexUV(spn[6],1,rect1[score7],113);
+			ObjEffect_SetVertexUV(spn[6],2,rect3[score7],104);
+			ObjEffect_SetVertexUV(spn[6],3,rect3[score7],113);
+			ObjEffect_SetVertexUV(spn[7],0,rect1[score8],104);
+			ObjEffect_SetVertexUV(spn[7],1,rect1[score8],113);
+			ObjEffect_SetVertexUV(spn[7],2,rect3[score8],104);
+			ObjEffect_SetVertexUV(spn[7],3,rect3[score8],113);
+		}
+		
+		if(GetBombCountInThisSpell>0||GetMissCountInThisSpell>0){
+			Obj_Delete(spn[0]);
+			Obj_Delete(spn[1]);
+			Obj_Delete(spn[2]);
+			Obj_Delete(spn[3]);
+			Obj_Delete(spn[5]);
+			Obj_Delete(spn[6]);
+			Obj_Delete(spn[7]);
+			
+			ObjEffect_SetVertexXY(spn[4],0,-15,-5);
+			ObjEffect_SetVertexXY(spn[4],1,-15,5);
+			ObjEffect_SetVertexXY(spn[4],2,15,-5);
+			ObjEffect_SetVertexXY(spn[4],3,15,5);
+			ObjEffect_SetVertexUV(spn[4],0,10,92);
+			ObjEffect_SetVertexUV(spn[4],1,10,101);
+			ObjEffect_SetVertexUV(spn[4],2,40,92);
+			ObjEffect_SetVertexUV(spn[4],3,40,101);
+		}
+		yield;
+	}
+}
+
+task CutinSP4{
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let spn7		= Obj_Create(OBJ_EFFECT);
+	let spn8		= Obj_Create(OBJ_EFFECT);
+	let spn9		= Obj_Create(OBJ_EFFECT);
+	let spn10		= Obj_Create(OBJ_EFFECT);
+	let spn			= [Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT)];
+	let alpha		= 0;
+	let mc			= 0;
+	let cc			= 0;
+	let frag		= false;
+	let pc			= 0;
+	let pc2			= 1;
+	let pc3			= 0;
+	let pc4			= 1;
+	let pc5			= 0;
+	let pc6			= 1;
+	let pc7			= 0;
+	let pc8			= 1;
+	let i			= 0;
+	let i2			= 1;
+	let i3			= 0;
+	let i4			= 1;
+	let i5			= 0;
+	let i6			= 1;
+	let i7			= 0;
+	let i8			= 1;
+
+	LoadGraphic(imgSPNB);
+	
+	loop(11){
+		ObjEffect_SetTexture(spn[i],imgSPNB);
+		ObjEffect_SetRenderState(spn[i],ALPHA);
+		ObjEffect_SetPrimitiveType(spn[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetScale(spn[i],1,1);
+		ObjEffect_SetAngle(spn[i],0,0,-35);
+		ObjEffect_SetLayer(spn[i],3);
+		ObjEffect_CreateVertex(spn[i],4);
+		ObjEffect_SetVertexXY(spn[i],0,600/-2,16/-2);
+		ObjEffect_SetVertexXY(spn[i],1,600/-2,16/2);
+		ObjEffect_SetVertexXY(spn[i],2,600/2,16/-2);
+		ObjEffect_SetVertexXY(spn[i],3,600/2,16/2);
+		i++;
+	}
+	i=0;
+	Obj_SetPosition(spn[0],CenX,CenY);
+	Obj_SetPosition(spn[1],CenX,CenY-35);
+	Obj_SetPosition(spn[2],CenX,CenY+35);
+	Obj_SetPosition(spn[3],CenX,CenY-70);
+	Obj_SetPosition(spn[4],CenX,CenY+70);
+	Obj_SetPosition(spn[5],CenX,CenY-105);
+	Obj_SetPosition(spn[6],CenX,CenY+105);
+	Obj_SetPosition(spn[7],CenX,CenY-140);
+	Obj_SetPosition(spn[8],CenX,CenY+140);
+	Obj_SetPosition(spn[9],CenX,CenY-175);
+	Obj_SetPosition(spn[10],CenX,CenY+175);
+	
+	Obj_SetPosition(spn7,CenX+120,CenY+160);
+	ObjEffect_SetTexture(spn7,imgSPNB);
+	ObjEffect_SetRenderState(spn7,ALPHA);
+	ObjEffect_SetPrimitiveType(spn7,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn7,1,1);
+	ObjEffect_SetAngle(spn7,0,0,0);
+	ObjEffect_SetLayer(spn7,3);
+	ObjEffect_CreateVertex(spn7,18);//Ｎ角形＋１＊２を入力
+	loop(18){
+		ObjEffect_SetVertexXY(spn7,i,120*sin(pc),120*cos(pc));
+		ObjEffect_SetVertexXY(spn7,i2,100*sin(pc2),100*cos(pc2));
+		pc+=45;
+		pc2+=45;
+		i+=2;
+		i2+=2;
+	}
+	ObjEffect_SetVertexUV(spn7,0,0,58);  ObjEffect_SetVertexUV(spn7,7,256,74); ObjEffect_SetVertexUV(spn7,14,256,58);
+	ObjEffect_SetVertexUV(spn7,1,0,74);  ObjEffect_SetVertexUV(spn7,8,0,58);   ObjEffect_SetVertexUV(spn7,15,256,74);
+	ObjEffect_SetVertexUV(spn7,2,256,58);ObjEffect_SetVertexUV(spn7,9,0,74);   ObjEffect_SetVertexUV(spn7,16,0,58);
+	ObjEffect_SetVertexUV(spn7,3,256,74);ObjEffect_SetVertexUV(spn7,10,256,58);ObjEffect_SetVertexUV(spn7,17,0,74);
+	ObjEffect_SetVertexUV(spn7,4,0,58);  ObjEffect_SetVertexUV(spn7,11,256,74);ObjEffect_SetVertexUV(spn7,18,256,58);
+	ObjEffect_SetVertexUV(spn7,5,0,74);  ObjEffect_SetVertexUV(spn7,12,0,58);
+	ObjEffect_SetVertexUV(spn7,6,256,58);ObjEffect_SetVertexUV(spn7,13,0,74);
+	
+	Obj_SetPosition(spn8,CenX-120,CenY-160);
+	ObjEffect_SetTexture(spn8,imgSPNB);
+	ObjEffect_SetRenderState(spn8,ALPHA);
+	ObjEffect_SetPrimitiveType(spn8,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn8,1,1);
+	ObjEffect_SetAngle(spn8,0,0,0);
+	ObjEffect_SetLayer(spn8,3);
+	ObjEffect_CreateVertex(spn8,18);
+	loop(18){
+		ObjEffect_SetVertexXY(spn8,i3,120*sin(pc3),120*cos(pc3));
+		ObjEffect_SetVertexXY(spn8,i4,100*sin(pc4),100*cos(pc4));
+		pc3+=45;
+		pc4+=45;
+		i3+=2;
+		i4+=2;
+	}
+	ObjEffect_SetVertexUV(spn8,0,0,58);  ObjEffect_SetVertexUV(spn8,7,256,74); ObjEffect_SetVertexUV(spn8,14,256,58);
+	ObjEffect_SetVertexUV(spn8,1,0,74);  ObjEffect_SetVertexUV(spn8,8,0,58);   ObjEffect_SetVertexUV(spn8,15,256,74);
+	ObjEffect_SetVertexUV(spn8,2,256,58);ObjEffect_SetVertexUV(spn8,9,0,74);   ObjEffect_SetVertexUV(spn8,16,0,58);
+	ObjEffect_SetVertexUV(spn8,3,256,74);ObjEffect_SetVertexUV(spn8,10,256,58);ObjEffect_SetVertexUV(spn8,17,0,74);
+	ObjEffect_SetVertexUV(spn8,4,0,58);  ObjEffect_SetVertexUV(spn8,11,256,74);ObjEffect_SetVertexUV(spn8,18,256,58);
+	ObjEffect_SetVertexUV(spn8,5,0,74);  ObjEffect_SetVertexUV(spn8,12,0,58);
+	ObjEffect_SetVertexUV(spn8,6,256,58);ObjEffect_SetVertexUV(spn8,13,0,74);
+	
+	//奇数回(pc2)が内円、偶数回(pc)が外円  
+	
+	Obj_SetPosition(spn9,CenX+120,CenY+160);
+	ObjEffect_SetTexture(spn9,imgSPNB);
+	ObjEffect_SetRenderState(spn9,ALPHA);
+	ObjEffect_SetPrimitiveType(spn9,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn9,1,1);
+	ObjEffect_SetAngle(spn9,0,0,0);
+	ObjEffect_SetLayer(spn9,3);
+	ObjEffect_CreateVertex(spn9,18);
+	loop(18){
+		ObjEffect_SetVertexXY(spn9,i5,140*sin(pc5),140*cos(pc5));
+		ObjEffect_SetVertexXY(spn9,i6,120*sin(pc6),120*cos(pc6));
+		pc5+=45;
+		pc6+=45;
+		i5+=2;
+		i6+=2;
+	}
+	ObjEffect_SetVertexUV(spn9,0,0,58);  ObjEffect_SetVertexUV(spn9,7,256,74); ObjEffect_SetVertexUV(spn9,14,256,58);
+	ObjEffect_SetVertexUV(spn9,1,0,74);  ObjEffect_SetVertexUV(spn9,8,0,58);   ObjEffect_SetVertexUV(spn9,15,256,74);
+	ObjEffect_SetVertexUV(spn9,2,256,58);ObjEffect_SetVertexUV(spn9,9,0,74);   ObjEffect_SetVertexUV(spn9,16,0,58);
+	ObjEffect_SetVertexUV(spn9,3,256,74);ObjEffect_SetVertexUV(spn9,10,256,58);ObjEffect_SetVertexUV(spn9,17,0,74);
+	ObjEffect_SetVertexUV(spn9,4,0,58);  ObjEffect_SetVertexUV(spn9,11,256,74);ObjEffect_SetVertexUV(spn9,18,256,58);
+	ObjEffect_SetVertexUV(spn9,5,0,74);  ObjEffect_SetVertexUV(spn9,12,0,58);
+	ObjEffect_SetVertexUV(spn9,6,256,58);ObjEffect_SetVertexUV(spn9,13,0,74);
+	
+	Obj_SetPosition(spn10,CenX+120,CenY+160);
+	ObjEffect_SetTexture(spn10,imgSPNB);
+	ObjEffect_SetRenderState(spn10,ALPHA);
+	ObjEffect_SetPrimitiveType(spn10,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn10,1,1);
+	ObjEffect_SetAngle(spn10,0,0,0);
+	ObjEffect_SetLayer(spn10,3);
+	ObjEffect_CreateVertex(spn10,18);
+	loop(18){
+		ObjEffect_SetVertexXY(spn10,i7,160*sin(pc7),160*cos(pc7));
+		ObjEffect_SetVertexXY(spn10,i8,140*sin(pc8),140*cos(pc8));
+		pc7+=45;
+		pc8+=45;
+		i7+=2;
+		i8+=2;
+	}
+	ObjEffect_SetVertexUV(spn10,0,0,58);  ObjEffect_SetVertexUV(spn10,7,256,74); ObjEffect_SetVertexUV(spn10,14,256,58);
+	ObjEffect_SetVertexUV(spn10,1,0,74);  ObjEffect_SetVertexUV(spn10,8,0,58);   ObjEffect_SetVertexUV(spn10,15,256,74);
+	ObjEffect_SetVertexUV(spn10,2,256,58);ObjEffect_SetVertexUV(spn10,9,0,74);   ObjEffect_SetVertexUV(spn10,16,0,58);
+	ObjEffect_SetVertexUV(spn10,3,256,74);ObjEffect_SetVertexUV(spn10,10,256,58);ObjEffect_SetVertexUV(spn10,17,0,74);
+	ObjEffect_SetVertexUV(spn10,4,0,58);  ObjEffect_SetVertexUV(spn10,11,256,74);ObjEffect_SetVertexUV(spn10,18,256,58);
+	ObjEffect_SetVertexUV(spn10,5,0,74);  ObjEffect_SetVertexUV(spn10,12,0,58);
+	ObjEffect_SetVertexUV(spn10,6,256,58);ObjEffect_SetVertexUV(spn10,13,0,74);
+	
+	i=0;
+	
+	loop{
+		cc++;
+		if(cc>120){frag=true}
+		ObjEffect_SetAngle(spn7,0,0,cc*-1);
+		ObjEffect_SetAngle(spn8,0,0,cc);
+		ObjEffect_SetAngle(spn9,0,0,cc*1);
+		ObjEffect_SetAngle(spn10,0,0,cc*1);
+		
+		mc+=2;
+		if(frag==false&&alpha<200){alpha+=15}
+		if(frag==true&&alpha>0){alpha-=15}
+		
+		ObjEffect_SetVertexUV(spn[0],0,0+mc,58);
+		ObjEffect_SetVertexUV(spn[0],1,0+mc,74);
+		ObjEffect_SetVertexUV(spn[0],2,600+mc,58);
+		ObjEffect_SetVertexUV(spn[0],3,600+mc,74);
+		ObjEffect_SetVertexUV(spn[1],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[1],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[1],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[1],3,600-mc,74);
+		ObjEffect_SetVertexUV(spn[2],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[2],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[2],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[2],3,600-mc,74);
+		ObjEffect_SetVertexUV(spn[3],0,0+mc,58);
+		ObjEffect_SetVertexUV(spn[3],1,0+mc,74);
+		ObjEffect_SetVertexUV(spn[3],2,600+mc,58);
+		ObjEffect_SetVertexUV(spn[3],3,600+mc,74);
+		ObjEffect_SetVertexUV(spn[4],0,0+mc,58);
+		ObjEffect_SetVertexUV(spn[4],1,0+mc,74);
+		ObjEffect_SetVertexUV(spn[4],2,600+mc,58);
+		ObjEffect_SetVertexUV(spn[4],3,600+mc,74);
+		ObjEffect_SetVertexUV(spn[5],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[5],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[5],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[5],3,600-mc,74);
+		ObjEffect_SetVertexUV(spn[6],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[6],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[6],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[6],3,600-mc,74);
+		ObjEffect_SetVertexUV(spn[7],0,0+mc,58);
+		ObjEffect_SetVertexUV(spn[7],1,0+mc,74);
+		ObjEffect_SetVertexUV(spn[7],2,600+mc,58);
+		ObjEffect_SetVertexUV(spn[7],3,600+mc,74);
+		ObjEffect_SetVertexUV(spn[8],0,0+mc,58);
+		ObjEffect_SetVertexUV(spn[8],1,0+mc,74);
+		ObjEffect_SetVertexUV(spn[8],2,600+mc,58);
+		ObjEffect_SetVertexUV(spn[8],3,600+mc,74);
+		ObjEffect_SetVertexUV(spn[9],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[9],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[9],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[9],3,600-mc,74);
+		ObjEffect_SetVertexUV(spn[10],0,0-mc,58);
+		ObjEffect_SetVertexUV(spn[10],1,0-mc,74);
+		ObjEffect_SetVertexUV(spn[10],2,600-mc,58);
+		ObjEffect_SetVertexUV(spn[10],3,600-mc,74);
+		
+		loop(11){
+			ObjEffect_SetVertexColor(spn[i],0,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],1,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],2,alpha,255,255,255);
+			ObjEffect_SetVertexColor(spn[i],3,alpha,255,255,255);
+			i++;
+		}
+		i=0;
+	
+		
+		ObjEffect_SetVertexColor(spn7,0,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,2,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,4,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,5,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,6,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,7,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,8,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,9,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,10,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,11,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,12,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,13,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,14,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,15,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,16,alpha,255,255,255);ObjEffect_SetVertexColor(spn7,17,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn7,18,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,0,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,2,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,4,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,5,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,6,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,7,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,8,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,9,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,10,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,11,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,12,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,13,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,14,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,15,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,16,alpha,255,255,255);ObjEffect_SetVertexColor(spn8,17,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn8,18,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,0,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,2,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,4,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,5,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,6,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,7,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,8,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,9,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,10,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,11,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,12,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,13,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,14,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,15,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,16,alpha,255,255,255);ObjEffect_SetVertexColor(spn9,17,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn9,18,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,0,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,1,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,2,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,3,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,4,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,5,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,6,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,7,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,8,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,9,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,10,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,11,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,12,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,13,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,14,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,15,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,16,alpha,255,255,255);ObjEffect_SetVertexColor(spn10,17,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn10,18,alpha,255,255,255);
+	
+		if(frag==true&&alpha<=0){
+			loop(11){
+				Obj_Delete(spn[i]);
+				i++;
+			}
+			i=0;
+			
+			Obj_Delete(spn7);
+			Obj_Delete(spn8);
+			Obj_Delete(spn9);
+			Obj_Delete(spn10);
+			break;
+		}
+		
+		yield;
+	}
+}
+
+task Timer(type,delay){
+	let img5		= GetCurrentScriptDirectory~".\enm6eff\score.png";
+	let id			= [Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT)];
+	let alpha		= 255;
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let moveA		= 0;
+	let move1		= 0;
+	let rect1		= [43,84,123,162,201,242,284,322,361,402,474];
+	let rect2		= [41,40,40,40,40,40,40,41,40,40,45];
+	let rect3		= [77,116,157,196,238,274,315,354,394,433,508];
+	let rect4		= [94,94,95,95,94,94,95,95,95,95,100];
+	let tf			= GetTimer*60;
+	let dc			= 0;
+	let rgb			= [255,255,255];
+	let i			= 0;
+	
+	LoadGraphic(img5);
+	
+	loop(4){
+		Obj_SetPosition(id[i],CenX,MinY);
+		Obj_SetAutoDelete(id[i],false);
+		ObjEffect_SetTexture(id[i],img5);
+		ObjEffect_SetAngle(id[i],0,0,0);
+		ObjEffect_SetLayer(id[i],5);
+		ObjEffect_SetRenderState(id[i],ALPHA);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_CreateVertex(id[i],4);
+		ObjEffect_SetVertexColor(id[i],0,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[i],1,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[i],2,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id[i],3,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexXY(id[i],0,-4,-5);
+		ObjEffect_SetVertexXY(id[i],1,-4,5);
+		ObjEffect_SetVertexXY(id[i],2,4,-5);
+		ObjEffect_SetVertexXY(id[i],3,4,5);
+		i++;
+	}
+	i=0;
+	
+	ObjEffect_SetScale(id[0],1.7,1.7);
+	ObjEffect_SetScale(id[1],1.7,1.7);
+	ObjEffect_SetScale(id[2],1,1);
+	ObjEffect_SetScale(id[3],1,1);
+	
+	loop{
+		if(Obj_GetX(id[0])-50<=GetPlayerX&&Obj_GetX(id[0])+50>=GetPlayerX&&
+		   Obj_GetY(id[0])-50<=GetPlayerY&&Obj_GetY(id[0])+20>=GetPlayerY){alpha=100;}
+		
+		if(alpha<255){alpha+=15;}
+		loop(4){
+			ObjEffect_SetVertexColor(id[i],0,alpha,rgb[0],rgb[1],rgb[2]);
+			i++;
+		}
+		i=0;
+		
+		if(GetTimer<=10){rgb=[255,50,50];}
+		
+		if(type==0){//定位置固定 スペカ〜通常へ
+			if(move1<40){moveA+=2}
+			move1=40.0*sin(moveA);
+			Obj_SetPosition(id[0],CenX,MinY+50-move1);
+			Obj_SetPosition(id[1],CenX-13,MinY+50-move1);
+			Obj_SetPosition(id[2],CenX+20,MinY+53-move1);
+			Obj_SetPosition(id[3],CenX+12,MinY+53-move1);
+		}
+		if(type==1){//定位置固定　通常〜スペカへ
+			if(move1<40&&delay<dc){moveA+=2}
+			move1=40.0*sin(moveA);
+			Obj_SetPosition(id[0],CenX,MinY+move1+10);
+			Obj_SetPosition(id[1],CenX-13,MinY+move1+10);
+			Obj_SetPosition(id[2],CenX+20,MinY+move1+13);
+			Obj_SetPosition(id[3],CenX+12,MinY+move1+13);
+		}
+		if(type==2){//戦闘開幕時のタイマー
+			Obj_SetPosition(id[0],CenX,MinY+move1+10);
+			Obj_SetPosition(id[1],CenX-13,MinY+move1+10);
+			Obj_SetPosition(id[2],CenX+20,MinY+move1+13);
+			Obj_SetPosition(id[3],CenX+12,MinY+move1+13);
+		}
+		
+		dc++;
+		if(delay>dc){
+			ObjEffect_SetVertexUV(id[0],0,rect1[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[0],1,rect1[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[0],2,rect3[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[0],3,rect3[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[1],0,rect1[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[1],1,rect1[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[1],2,rect3[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[1],3,rect3[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[2],0,rect1[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[2],1,rect1[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[2],2,rect3[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[2],3,rect3[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[3],0,rect1[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[3],1,rect1[0],rect4[0]);
+			ObjEffect_SetVertexUV(id[3],2,rect3[0],rect2[0]);
+			ObjEffect_SetVertexUV(id[3],3,rect3[0],rect4[0]);
+		}
+		if(tf>0&&delay<dc){tf--;}
+		
+		let timer1  = truncate(GetTimer%10);
+		let timer2  = truncate((GetTimer%100)/10);
+		let timer3  = truncate(tf%10);
+		let timer4  = truncate((tf%100)/10);
+		if(delay<dc){
+			ObjEffect_SetVertexUV(id[0],0,rect1[timer1],rect2[timer1]);
+			ObjEffect_SetVertexUV(id[0],1,rect1[timer1],rect4[timer1]);
+			ObjEffect_SetVertexUV(id[0],2,rect3[timer1],rect2[timer1]);
+			ObjEffect_SetVertexUV(id[0],3,rect3[timer1],rect4[timer1]);
+			ObjEffect_SetVertexUV(id[1],0,rect1[timer2],rect2[timer2]);
+			ObjEffect_SetVertexUV(id[1],1,rect1[timer2],rect4[timer2]);
+			ObjEffect_SetVertexUV(id[1],2,rect3[timer2],rect2[timer2]);
+			ObjEffect_SetVertexUV(id[1],3,rect3[timer2],rect4[timer2]);
+			ObjEffect_SetVertexUV(id[2],0,rect1[timer3],rect2[timer3]);
+			ObjEffect_SetVertexUV(id[2],1,rect1[timer3],rect4[timer3]);
+			ObjEffect_SetVertexUV(id[2],2,rect3[timer3],rect2[timer3]);
+			ObjEffect_SetVertexUV(id[2],3,rect3[timer3],rect4[timer3]);
+			ObjEffect_SetVertexUV(id[3],0,rect1[timer4],rect2[timer4]);
+			ObjEffect_SetVertexUV(id[3],1,rect1[timer4],rect4[timer4]);
+			ObjEffect_SetVertexUV(id[3],2,rect3[timer4],rect2[timer4]);
+			ObjEffect_SetVertexUV(id[3],3,rect3[timer4],rect4[timer4]);
+		}
+		yield;
+	}
+}
+
+task MagicTimer{
+	let imgS		= GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+	let spn1		= Obj_Create(OBJ_EFFECT);
+	let spn2		= Obj_Create(OBJ_EFFECT);
+	let pc			= 0;
+	let pc2			= 1;
+	let i			= 0;
+	let i2			= 1;
+	let spin		= 0;
+	let sca1		= 0;
+	let scaA		= 0;
+	let sca2		= 0;
+	let scaB		= 0;
+	let alpha		= 100;
+	let delete		= false;
+	let delete2		= false;
+	let delete3		= false;
+	let gtsca		= GetTimer*60/2500;
+	let cc			= 0;
+	
+	Obj_SetPosition(spn1,GetEnemyX,GetEnemyY);
+	ObjEffect_SetTexture(spn1,imgS);
+	ObjEffect_SetRenderState(spn1,ADD);
+	ObjEffect_SetPrimitiveType(spn1,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn1,sca1,sca1);
+	ObjEffect_SetLayer(spn1,3);
+	ObjEffect_CreateVertex(spn1,722);//Ｎ角形＋１＊２を入力
+	Obj_SetPosition(spn2,GetEnemyX,GetEnemyY);
+	ObjEffect_SetTexture(spn2,imgS);
+	ObjEffect_SetRenderState(spn2,ADD);
+	ObjEffect_SetPrimitiveType(spn2,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetScale(spn2,sca2,sca2);
+	ObjEffect_SetLayer(spn2,3);
+	ObjEffect_CreateVertex(spn2,722);//Ｎ角形＋１＊２を入力
+	loop(722){
+		ObjEffect_SetVertexXY(spn1,i,115*sin(pc),115*cos(pc));
+		ObjEffect_SetVertexXY(spn1,i2,100*sin(pc2),100*cos(pc2));
+		ObjEffect_SetVertexUV(spn1,i,0+pc,144);
+		ObjEffect_SetVertexUV(spn1,i2,0+pc2,159);
+		ObjEffect_SetVertexColor(spn1,i,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn1,i2,alpha,255,255,255);
+		ObjEffect_SetVertexXY(spn2,i,130*sin(pc),130*cos(pc));
+		ObjEffect_SetVertexXY(spn2,i2,115*sin(pc2),115*cos(pc2));
+		ObjEffect_SetVertexUV(spn2,i,0+pc,129);
+		ObjEffect_SetVertexUV(spn2,i2,0+pc2,144);
+		ObjEffect_SetVertexColor(spn2,i,alpha,255,255,255);
+		ObjEffect_SetVertexColor(spn2,i2,alpha,255,255,255);
+		pc+=1;
+		pc2+=1;
+		i+=2;
+		i2+=2;
+	}
+	
+	loop{
+		spin+=6;
+		ObjEffect_SetAngle(spn1,0,0,spin*-1);
+		ObjEffect_SetAngle(spn2,0,0,spin);
+		cc++;
+		Obj_SetPosition(spn1,GetEnemyX,GetEnemyY);
+		Obj_SetPosition(spn2,GetEnemyX,GetEnemyY);
+		
+		if(delete==false&&sca1<gtsca){scaA+=1;}
+		if(delete==false){sca1=(gtsca+0.01)*sin(scaA);}
+		if(delete==false&&sca1>=(gtsca-0.1)){delete=true;}
+		if(delete==true&&sca1>0){sca1-=1/2500;}
+		
+		if(delete2==false&&delete3==false){scaB+=1;}
+		if(sca2>=3){delete2=true;}
+		if(delete2==true&&delete3==false&&sca2>sca1){scaB+=2;}
+		if(delete2==true&&sca2<=sca1){delete3=true;}
+		if(delete2==true&&delete3==true&&sca2>0){sca2-=1/2500;}
+		if(delete3==false){sca2=3.0*sin(scaB);}
+
+		ObjEffect_SetScale(spn1,0.5+sca1,0.5+sca1);
+		ObjEffect_SetScale(spn2,0.5+sca2,0.5+sca2);
+		
+		yield;
+	}
+}
+
+task RedMagicCircle(type,delay){
+	let def     = Obj_Create(OBJ_EFFECT);
+	let img1    = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+	let delay2  = 0;
+	let alpha   = 128;
+	let act     = 0;
+	let move1   = 0;
+	let moveA   = 0;
+	let sca1    = 0;
+	let scaA    = 0;
+	let spin    = 0;
+	let scp     = 0;
+	
+	LoadGraphic(img1);
+	
+	ObjEffect_SetTexture(def,img1);
+	ObjEffect_SetRenderState(def,ADD);
+	ObjEffect_SetPrimitiveType(def,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(def,3);
+	ObjEffect_SetScale(def,sca1,sca1);
+	ObjEffect_CreateVertex(def,4);
+	ObjEffect_SetVertexXY(def,0,124/-2,124/-2);
+	ObjEffect_SetVertexXY(def,1,124/-2,124/2);
+	ObjEffect_SetVertexXY(def,2,124/2,124/-2);
+	ObjEffect_SetVertexXY(def,3,124/2,124/2);
+	ObjEffect_SetVertexUV(def,0,2,2);
+	ObjEffect_SetVertexUV(def,1,2,125);
+	ObjEffect_SetVertexUV(def,2,125,2);
+	ObjEffect_SetVertexUV(def,3,125,125);
+	ObjEffect_SetVertexColor(def,0,alpha,255,255,255);
+	ObjEffect_SetVertexColor(def,1,alpha,255,255,255);
+	ObjEffect_SetVertexColor(def,2,alpha,255,255,255);
+	ObjEffect_SetVertexColor(def,3,alpha,255,255,255);
+	
+	alternative(type)
+	case(0){act=0;}
+	case(1){
+		act=1;
+		sca1=2;
+	}
+	loop(delay){
+		Obj_SetPosition(def,GetEnemyX,GetEnemyY);
+		yield;
+	}
+	
+	loop{
+		let gx = Obj_GetX(def);
+		let gy = Obj_GetY(def);
+		
+		Obj_SetPosition(def,GetEnemyX,GetEnemyY);
+		ObjEffect_SetAngle(def,0,0,180-move1-spin);
+		ObjEffect_SetScale(def,sca1+scp*sin(spin/2),sca1+scp*sin(spin/2));
+		if(act==0){
+			if(move1<180){moveA+=2;}
+			move1=180.0*sin(moveA);
+			if(sca1<2){scaA+=2;}
+			sca1=2*sin(scaA);
+			if(moveA==2){PlaySE(powerl);}
+		}
+		if(sca1>=1.8&&move1>=180){act=1;}
+		if(act==1){
+			spin+=6;
+			scp=0.3;
+		}
+		yield;
+	}
+}

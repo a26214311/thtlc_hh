@@ -1,0 +1,13 @@
+
+#Title[enm1_1 Plural Normal]
+#Text[邪星章1面中ボス　メリーシェパード]
+#Player[FREE]
+#ScriptVersion[2]
+
+#ScriptPathData
+ #ScriptPath[.\enm1_entry.txt]
+ #ScriptPath[.\enm1_Attack01_Normal.txt]
+ #ScriptPath[.\enm1_Attack02_Normal.txt]
+ #ScriptPath[.\enm1_leave.txt]
+
+#EndScriptPathData

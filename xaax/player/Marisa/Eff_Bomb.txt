@@ -1,0 +1,122 @@
+task BlackOut(long){
+	let id			= Obj_Create(OBJ_EFFECT);
+	let sca			= 0;
+	let alpha		= 150;
+	let rgb			= [0,0,0];
+	let die			= 0;
+	
+	ObjEffect_SetTexture(id,imgba);
+	ObjEffect_SetRenderState(id,ALPHA);
+	ObjEffect_SetPrimitiveType(id,PRIMITIVE_TRIANGLESTRIP);
+	ObjEffect_SetLayer(id,2);
+	ObjEffect_CreateVertex(id,4);
+	ObjEffect_SetVertexXY(id,0,400/-2,400/-2);
+	ObjEffect_SetVertexXY(id,1,400/-2,400/2);
+	ObjEffect_SetVertexXY(id,2,400/2,400/-2);
+	ObjEffect_SetVertexXY(id,3,400/2,400/2);
+	ObjEffect_SetVertexUV(id,0,0,0);
+	ObjEffect_SetVertexUV(id,1,0,400);
+	ObjEffect_SetVertexUV(id,2,400,0);
+	ObjEffect_SetVertexUV(id,3,400,400);
+	
+	loop{
+		die++;
+		if(sca<3){sca+=0.05;}
+		Obj_SetPosition(id,GetPlayerX,GetPlayerY);
+		ObjEffect_SetScale(id,sca,sca);
+		ObjEffect_SetVertexColor(id,0,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,1,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,2,alpha,rgb[0],rgb[1],rgb[2]);
+		ObjEffect_SetVertexColor(id,3,alpha,rgb[0],rgb[1],rgb[2]);
+		
+		if(die>long){
+			if(alpha>0){alpha-=15;}
+			if(alpha<=0){Obj_Delete(id);}
+		}
+		yield;
+	}
+}
+
+task BombEffect{
+	let id			= [Obj_Create(OBJ_EFFECT),
+						Obj_Create(OBJ_EFFECT)];
+	let obj			= Obj_Create(OBJ_LASER);
+	let frame		= 0;
+	let length		= 500;
+	let damage		= 7;
+	let angle		= 270;
+	let sca1		= 0;
+	let scaA		= 0;
+	let length1		= 0;
+	let lengthA		= 0;
+	let sca2		= 0;
+	let scaB		= 0;
+	let length2		= 0;
+	let lengthB		= 0;
+	let rect1		= [0,256];
+	let rect2		= [256,512];
+	let rtc0		= 0;
+	let rtc			= 0;
+	let i			= 0;
+	
+	loop(2){
+		ObjEffect_SetTexture(id[i],imgb1);
+		ObjEffect_SetRenderState(id[i],ADD);
+		ObjEffect_SetPrimitiveType(id[i],PRIMITIVE_TRIANGLESTRIP);
+		ObjEffect_SetLayer(id[i],3);
+		ObjEffect_CreateVertex(id[i],4);
+		i++;
+	}i=0;
+	
+	Obj_SetAngle(obj,angle);
+	Obj_SetAlpha(obj,255);
+	ObjShot_SetBombResist(obj,true);
+	ObjShot_SetGraphic(obj,2);
+	ObjShot_SetDamage(obj,damage);
+	ObjLaser_SetWidth(obj,200);
+	ObjLaser_SetSource(obj,false);
+	
+	loop{
+		frame++;
+		Obj_SetPosition(id[0],GetPlayerX+3*sin(frame*100),GetPlayerY+30);
+		Obj_SetPosition(id[1],GetPlayerX+3*sin(frame*100),GetPlayerY+30);
+		Obj_SetPosition(obj,GetPlayerX,GetPlayerY);
+		
+		if(frame<283){
+			if(length1<512){lengthA+=3;}
+			length1=512.0*sin(lengthA);
+			if(length1>=512&&sca1<1){scaA+=2;}
+			sca1=1.0*sin(scaA);
+		}
+		
+		if(frame>=283){
+			if(sca2>=1&&length2<512){lengthB+=3;}
+			length2=512.0*sin(lengthB);
+			if(sca2<1){scaB+=2;}
+			sca2=1.0*sin(scaB);
+		}
+		
+		ObjLaser_SetLength(obj,length1-length2);
+		loop(2){
+			ObjEffect_SetVertexXY(id[i],0,256/-2,0-length1);
+			ObjEffect_SetVertexXY(id[i],1,256/-2,0-length2);
+			ObjEffect_SetVertexXY(id[i],2,256/2,0-length1);
+			ObjEffect_SetVertexXY(id[i],3,256/2,0-length2);
+			ObjEffect_SetVertexUV(id[i],0,rect1[rtc+i],512-length1);
+			ObjEffect_SetVertexUV(id[i],1,rect1[rtc+i],512-length2);
+			ObjEffect_SetVertexUV(id[i],2,rect2[rtc+i],512-length1);
+			ObjEffect_SetVertexUV(id[i],3,rect2[rtc+i],512-length2);
+			i++;
+		}i=0;
+		ObjEffect_SetScale(id[0],0.03+sca1-sca2-0.1*sin(frame*128),1);
+		ObjEffect_SetScale(id[1],0.03+sca1-sca2+0.1*sin(frame*128),1);
+		
+		if(length2>=512){
+			Obj_Delete(id[0]);
+			Obj_Delete(id[1]);
+			Obj_Delete(obj);
+			break;
+		}
+		yield;
+	}
+}

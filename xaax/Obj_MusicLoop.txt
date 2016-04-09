@@ -1,0 +1,309 @@
+task PlayMusicSP(mn){
+	//mn	曲のナンバー
+	/*
+	0	ﾀｲﾄﾙ
+	1	1道中
+	2	1ボス
+	3	2道中
+	4	2ボス
+	5	3道中
+	6	3ボス
+	7	4道中
+	8	4ボス
+	9	5道中
+	10	5ボス
+	11	6道中
+	12	6ボス
+	13	ｴﾝﾃﾞｨﾝｸﾞ
+	14	ｽﾀｯﾌﾛｰﾙ
+	15	ex道中
+	16	exボス
+	17	ph道中
+	18	phボス
+	*/
+	let frame	= 0;
+	let i		= 0;
+	
+	CreateCommonDataArea("StopMusic");
+	SetCommonDataEx("StopMusic","flag",false);
+	
+	PlayMusic(bgmI[mn]);
+	
+	loop{
+		let tact	= GetCommonDataEx("title","act");
+		let gmsf	= GetCommonDataEx("StopMusic","flag");
+		
+		if(mn!=0&&tact==2){
+			DeleteMusic(bgmI[mn]);
+			DeleteMusic(bgmL[mn]);
+			break;
+		}
+		
+		frame++;
+		alternative(mn)
+		case(0){
+			if(tact==11||tact==14){
+				DeleteMusic(bgmI[mn]);
+				DeleteMusic(bgmL[mn]);
+				break;
+			}
+			if(frame==440){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(1){
+			if(frame==424){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(2){
+			if(frame==530){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(3){
+			if(frame==155){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(4){
+			if(frame==648){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(5){
+			if(frame==997){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(6){
+			if(frame==205){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(7){
+			if(frame==1775){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(8){
+			if(frame==219){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(9){
+			if(frame==911){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(10){
+			if(frame==408){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(11){
+			if(frame==448){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(12){
+			if(frame==1277){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(13){//ex道
+			if(frame==444){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(14){//ex
+			if(frame==220){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(15){
+			if(frame==537){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(16){
+			if(frame==274){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}
+		
+		if(gmsf==true){
+			SetCommonDataEx("StopMusic","flag",false);
+			DeleteMusic(bgmI[mn]);
+			DeleteMusic(bgmL[mn]);
+			break;
+		}
+		yield;
+	}
+
+}
+
+task PlayMusicSP2(mn,dl){
+//mn	曲のナンバー
+	let frame	= 0;
+	let i		= 0;
+	
+	CreateCommonDataArea("StopMusic");
+	SetCommonDataEx("StopMusic","flag",true);
+
+	PlayMusic(bgmI[mn]);
+	
+	loop{
+		let mstc2	= GetCommonDataEx("musicr","stc2");
+		let tact	= GetCommonDataEx("title","act");
+		
+		frame++;
+		alternative(mn)
+		case(0){
+			if(frame==440){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(1){
+			if(frame==424){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(2){
+			if(frame==530){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(3){
+			if(frame==155){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(4){
+			if(frame==648){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(5){
+			if(frame==997){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(6){
+			if(frame==205){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(7){
+			if(frame==1775){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(8){
+			if(frame==219){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+			}
+		}case(9){
+			if(frame==911){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(10){
+			if(frame==408){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(11){
+			if(frame==448){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(12){
+			if(frame==1277){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(13){//ex道
+			if(frame==444){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(14){//ex
+			if(frame==220){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(15){
+			if(frame==537){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}case(16){
+			if(frame==274){
+				DeleteMusic(bgmI[mn]);
+				PlayMusic(bgmL[mn]);
+				break;
+				SetCommonDataEx("StopMusic","flag",false);
+			}
+		}
+
+		if(mstc2!=dl||tact!=8){
+			SetCommonDataEx("StopMusic","flag",false);
+			DeleteMusic(bgmI[mn]);
+			DeleteMusic(bgmL[mn]);
+			break;
+		}
+		
+		yield;
+	}
+
+}
