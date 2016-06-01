@@ -1,0 +1,156 @@
+
+#Title[enm3 after talk(霊夢)]
+#Text[ピアシテ?パスカル　戦闘後会話(霊夢)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm3img\霊夢通常.png",
+					csd~".\enm3img\霊夢=3.png",
+					csd~".\enm3img\霊夢ニヤリ.png",
+					csd~".\enm3img\霊夢驚き.png",
+					csd~".\enm3img\霊夢嫌.png",
+					csd~".\enm3img\霊夢困り.png",
+					csd~".\enm3img\霊夢笑顔.png",
+					csd~".\enm3img\霊夢怒り.png",
+					csd~".\enm3img\霊夢得意.png"];
+	let enmimg	= [csd~".\enm3img\face301ct.png",
+					csd~".\enm3img\pascar10001.png",
+					csd~".\enm3img\pascar10002.png",
+					csd~".\enm3img\pascar10003.png",
+					csd~".\enm3img\pascar10004.png"];
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(5){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);
+		SetGraphicRect(LEFT,150,1,384,512/1.5);
+		SetChar(RIGHT,enmimg[4]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]不愧是巫女啊\n这结果也在小生的预测之中");
+		
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]那，掉下来的星星是怎么回事？");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]一位伟人即将现身了哦\n与之相比博丽巫女不过是呱呱坠地的小儿");
+
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]这样啊，好的干掉吧");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]就这样朝着山顶出发吧\n哦对了，别忘了为那一位带去礼物啊");
+
+		SetChar(LEFT,plaimg[6]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我会送那家伙山一般多的珍贵御札的");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+	let imgEffect	= GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+	let imgEffect2	= GetCurrentScriptDirectory~".\enm3eff\wave.png";
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm3eff\spellEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgSPNB);
+	LoadGraphic(imgEffect);
+	LoadGraphic(imgEffect2);
+	Aura(8,255,255,0);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture03(true);
+	CreateEventFromScript("Event01");
+	SetEffectForZeroLife(0,0,0);
+    }
+
+    @MainLoop {
+		yield;
+		if(OnEvent==false){
+			VanishEnemy;
+		}
+}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==14){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

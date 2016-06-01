@@ -1,0 +1,199 @@
+
+#Title[enm3 before talk(咲夜)]
+#Text[ピアシテ?パスカル　戦闘前会話(咲夜)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm3img\咲夜通常.png",
+					csd~".\enm3img\咲夜=3.png",
+					csd~".\enm3img\咲夜ニヤリ.png",
+					csd~".\enm3img\咲夜驚き.png",
+					csd~".\enm3img\咲夜嫌.png",
+					csd~".\enm3img\咲夜困り.png",
+					csd~".\enm3img\咲夜笑顔.png",
+					csd~".\enm3img\咲夜怒り.png",
+					csd~".\enm3img\咲夜得意.png"];
+	let enmimg	= [csd~".\enm3img\face301ct.png",
+					csd~".\enm3img\pascar10001.png",
+					csd~".\enm3img\pascar10002.png",
+					csd~".\enm3img\pascar10003.png",
+					csd~".\enm3img\pascar10004.png"];
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(5){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[5]);//左側キャラクタの画像を設定
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]本来应该已经回到森林了\n不知不觉间又在向山上出发了");
+		SetChar(LEFT,plaimg[0]);
+TextOut("\c[BLUE]除了我以外，还有使用\n空间操纵术的人在吗");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]看哪，那装点着夜空的繁星");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[1]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]你是被星辰引导至此的");
+TextOut("\c[RED]真に霊性を宿す星は、それを感じ取るだけの力を持つ者を引き付ける");
+TextOut("\c[RED]没错，小生也曾有过那种经历");
+
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]为什么幻想乡的人\n总是爱说这种没法让人理解的台词呢");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]小生可自认为\n没说什么难懂的事");
+TextOut("\c[RED]真是，希望你稍微\n学点拉丁语啊");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我们好像语言相通吧");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]嗯，不过话语不通啊");
+
+		SetChar(LEFT,plaimg[5]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]没办法，稍微教训你一下\n让你明白语言的重要性好了");
+
+		SetChar(RIGHT,enmimg[3]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]これは酷い。これ程の自己矛盾に満ちた台詞未だかつて聞いた事が無い");
+		SetChar(RIGHT,enmimg[0]);
+TextOut("\c[RED]だが良かろう、星を読み未来を知る力を持つ小生に、生半可な弾幕など当たらんぞ！");
+
+		SetChar(LEFT,plaimg[8]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]走着瞧吧。即便是那种预知未来的能力\n在静止的时间中应该也不起作用吧");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]那么，如果连你停止时间的行动\n都预知到了的话？");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+	let imgEffect	= GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+	let imgEffect2	= GetCurrentScriptDirectory~".\enm3eff\wave.png";
+	let imgSPNB		= GetCurrentScriptDirectory~".\enm3eff\spellEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+	@Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgSPNB);
+	LoadGraphic(imgEffect);
+	LoadGraphic(imgEffect2);
+	Aura(8,255,255,0);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture03(true);
+	VSname(1);
+	VSname2(0,1);
+	VSname2(10,1);
+	VSname2(20,1);
+	CreateEventFromScript("Event01");
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+}
+
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,171 @@
+
+#Title[enm1 before talk(咲夜)]
+#Text[メリーシェパード　戦闘前会話(咲夜)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm1img\咲夜通常.png",
+					csd~".\enm1img\咲夜=3.png",
+					csd~".\enm1img\咲夜ニヤリ.png",
+					csd~".\enm1img\咲夜驚き.png",
+					csd~".\enm1img\咲夜嫌.png",
+					csd~".\enm1img\咲夜困り.png",
+					csd~".\enm1img\咲夜笑顔.png",
+					csd~".\enm1img\咲夜怒り.png",
+					csd~".\enm1img\咲夜得意.png"];
+	let enmimg	= [csd~".\enm1img\face101ct.png",//普通
+					csd~".\enm1img\mery00001.png",//笑顔
+					csd~".\enm1img\mery00002.png",//口開
+					csd~".\enm1img\mery00003.png",//困惑
+					csd~".\enm1img\mery00004.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(5){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[4]);
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]奇怪，真臭啊。幻想乡的森林里\n有这么骚臭的动物吗");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]恶魔宅在家里的时候，时代也在不断进步哦");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[1]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]在这里，我玛莉雪佛德\n建起羊毛牧场了！");
+
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]啊啊玛莉小姐也进入幻想了吗\n虽然听说您最近在日本的横滨");
+
+		SetChar(RIGHT,enmimg[3]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]你跟别的玛莉小姐搞混了吧？");
+		SetChar(RIGHT,enmimg[2]);
+TextOut("\c[RED]话说回来，把那星星弄下来的是你？\n好不容易要建成的牧场全给毁了！");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]或许吧，至少说是我们……");
+TextOut("\c[BLUE]是说我们确实因为路西法将力量增强了\n而感到高兴就是了");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]这样啊，为这种事感到高兴的话你也是个坏家伙！");
+TextOut("\c[RED]知ってるかい、羊の血は魔除けの力を宿す！悪魔の手先が私の羊達に適うもんか！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~"..\..\se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~"..\..\se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~"..\..\se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~"..\..\se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~"..\..\se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~"..\..\se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~"..\..\se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~"..\..\se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~"..\..\se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+	@Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(8,255,100,32);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	VSname(0);
+	VSname2(0,0);
+	VSname2(10,0);
+	EnemyTexture(true);
+	CreateEventFromScript("Event01");
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+}
+
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

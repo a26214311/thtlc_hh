@@ -1,0 +1,226 @@
+
+#Title[enm3 before talk(魔理沙)]
+#Text[イシュア?ナザレヌス　戦闘前会話(魔理沙)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm6img\魔理沙通常.png",
+					csd~".\enm6img\魔理沙=3.png",
+					csd~".\enm6img\魔理沙ニヤリ.png",
+					csd~".\enm6img\魔理沙驚き.png",
+					csd~".\enm6img\魔理沙嫌.png",
+					csd~".\enm6img\魔理沙困り.png",
+					csd~".\enm6img\魔理沙笑顔.png",
+					csd~".\enm6img\魔理沙怒り.png",
+					csd~".\enm6img\魔理沙得意.png"];
+	let enmimg	= [csd~".\enm6img\iesua00000.png",//普通0
+					csd~".\enm6img\iesua00001.png",//閉目1
+					csd~".\enm6img\iesua00002.png",//半目2
+					csd~".\enm6img\iesua00003.png",//口開閉目3
+					csd~".\enm6img\iesua00004.png",//口開普通4
+					csd~".\enm6img\iesua00005.png"];//口開半目5
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(6){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[3]);//左側キャラクタの画像を設定
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]破晓明星放出如此明亮的光辉还真是刺眼得受不了\n哎呀真是不祥，感觉身上都要烧着了");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]悔改吧，事情都成了<ref name=Q216>启示录21:6</ref>");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[0]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]我要将生命泉的水白白赐给那口渴的人喝<ref name=Q216></ref>");
+
+		SetChar(LEFT,plaimg[6]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]哇哦，最终boss是水属性的吗\n不错啊这不同寻常的凉爽感");
+
+		SetChar(RIGHT,enmimg[3]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]确实，我得人如得鱼一样");
+TextOut("\c[RED]不以网与渔具\n而以宽恕得人");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]閻魔も天使も匙を投げた罪深?い人間もか\n那我也能被原谅啦");
+
+		SetChar(RIGHT,enmimg[5]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]自亚当与夏娃始，及至将来\n在全地上繁衍的万民");
+TextOut("\c[RED]为宽恕他们\n我曾流了自己的血");
+TextOut("\c[RED]你不记得这姿势了吗……\n『圣人被钉在十字架上』<ref name="th06">[[游戏对话:东方红魔乡/雾雨魔理沙|红魔乡魔理沙线]]与露米娅的对话</ref>");
+
+		SetChar(LEFT,plaimg[6]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]『人類は十進法を採用しました』に見えるがそれも赦されるよな");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]我宽恕你\n为被宽恕的你仍不知悔改之事");
+
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]什么啊，恶人也可以得到拯救的话\n就算不断做坏事不是都没有关系了吗");
+
+		SetChar(RIGHT,enmimg[5]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]啊啊，看人们是怎样践踏我父的美意\n使我心中悲痛欲裂");
+TextOut("\c[RED]父啊，求你不要让他们\n背负这罪");
+
+		SetChar(LEFT,plaimg[5]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]不明白为什么伟人总是\n想得太多，自寻烦恼");
+		SetChar(LEFT,plaimg[1]);
+TextOut("\c[BLUE]神子曰过\n对人来说拥有十欲是正常的事");
+TextOut("\c[BLUE]所以忠实于欲望而生活不是也挺好的吗");
+TextOut("\c[BLUE]而我的欲望就是……见识一下\n你应该会用出的未知法术！");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]……这女子的罪，乃是『贪婪』");
+TextOut("\c[RED]啊啊，人之子终于被卖在罪人手里了\n愚妄哪");
+TextOut("\c[RED]凡动刀的，必死在刀下");
+
+		SetChar(LEFT,plaimg[8]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]一点都不可怕，我们幻想乡可是有\n宇宙第一的医生！");
+
+		SetChar(RIGHT,enmimg[4]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]健康的人用不着医生");
+TextOut("\c[RED]我来本不是召义人\n乃是召罪人！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let gcsd      = GetCurrentScriptDirectory;
+    let effimg    = gcsd ~ ".\enm6eff\bulletbreak.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+	@Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(8,255,255,255);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture06(true);
+	VSname(1);
+	VSname2(0,1);
+	VSname2(10,1);
+	VSname2(20,1);
+	VSname2(30,1);
+	VSname2(40,1);
+	VSname2(50,1);
+	CreateEventFromScript("Event01");
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+}
+
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

@@ -1,0 +1,219 @@
+
+#Title[enm7 before talk(m)]
+#Text[ex会話m]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm7img\魔理沙通常.png",
+					csd~".\enm7img\魔理沙=3.png",
+					csd~".\enm7img\魔理沙ニヤリ.png",
+					csd~".\enm7img\魔理沙驚き.png",
+					csd~".\enm7img\魔理沙嫌.png",
+					csd~".\enm7img\魔理沙困り.png",
+					csd~".\enm7img\魔理沙笑顔.png",
+					csd~".\enm7img\魔理沙怒り.png",
+					csd~".\enm7img\魔理沙得意.png"];
+	let enmimg	= [csd~".\enm7img\mint00000.png",//普通
+					csd~".\enm7img\mint00001.png",//御機嫌
+					csd~".\enm7img\mint00002.png",//得意
+					csd~".\enm7img\mint00003.png",//笑い
+					csd~".\enm7img\mint00004.png",//怒り
+					csd~".\enm7img\mint00005.png",//怒り2
+					csd~".\enm7img\mint00006.png",//驚き
+					csd~".\enm7img\mint00007.png",//嫌
+					csd~".\enm7img\mint00008.png",//困惑
+					csd~".\enm7img\mint00009.png",//困惑2
+					csd~".\enm7img\mint00010.png",//困惑3
+					csd~".\enm7img\mint00011.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(12){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[2]);
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]哼哼哼，说到陨石就是稀有金属\n说到稀有金属就是高级魔法的触媒");
+TextOut("\c[BLUE]那么，在灵梦来之前\n赶快把活干完……");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]暂时别打扰他");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[0]);
+		SetGraphicRect(RIGHT,1,1,384/1.3,512/1.4);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]因为他是一位真正热爱绿意的好人");
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]现在他总算从黑暗冰冷的冥府中解放出来\n来到这个水、绿意与太阳的世界之中了");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]啥？ 我是在做梦吗？\n杂鱼突然就说了感觉好厉害的事情啊");
+		SetChar(LEFT,plaimg[1]);
+TextOut("\c[BLUE]不管了\n赶快干掉回收稀有金属啦");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]好了好了，你就闻闻药草镇定下来吧");
+TextOut("\c[RED]我的力量已经在这一带铺起\n怒放的薄荷绒毯。不会让你逃掉的");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]怎么……突然就感觉\n超级冷静了……");
+TextOut("\c[BLUE]呜哇——要栽啦——\n这算哪门子弹幕啊——");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]人们将这一位称作冥王而敬畏\n称作第九行星而追捧");
+TextOut("\c[RED]不过，那些都是过去的故事");
+TextOut("\c[RED]终究被人们所遗忘的他\n能够在幻想乡静静地生活");
+		SetChar(RIGHT,enmimg[8]);
+TextOut("\c[RED]然后，我也终于能够陪伴在他身边\n所以不许打扰……我说你有在听吗？");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]……嗯？ 啊啊抱歉刚才没听到你说什么\n你的力量好像都搞得我精神恍惚了");
+TextOut("\c[BLUE]こんな事もあろうかと用意しといた魔法薬で意識を落として再起動させたのさ");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]……你还真专业\n不过真是不巧");
+TextOut("\c[RED]你正想干掉的眼前的对手\n可不仅仅是普通的杂鱼妖精哦");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]哎呀我已经领教了刚刚那招的厉害");
+TextOut("\c[BLUE]こうなったら当たっても痛くないレーザーで手を抜いたりはしないぜ！");
+
+		SetChar(RIGHT,enmimg[5]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]欲望深重的人类啊\n别再多管我们的闲事！");
+		SetChar(RIGHT,enmimg[0]);
+TextOut("\c[RED]这烧尽的森林也好，魔法蘑菇也罢\n一切都将被薄荷完全遮蔽！");
+TextOut("\c[RED]然后这里就将成为，我们最终的栖息之所！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+	let t10			= GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+	let tan			= GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+	let kira		= GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+	let Gspel		= GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+	let laser		= GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+	let power		= GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+	let powerl		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+	let powerla		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let kaku		= GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= GetCurrentScriptDirectory ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let b			= 0;
+	let S_count		= 0;
+	let w			= 0;
+	let i			= 0;
+
+	@Initialize {
+		SetX(MaxX+100);
+		SetY(MinY-100);
+	
+		SetLife(5000);
+		SetDamageRate(0,0);
+		
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+	
+		/*弾幕削除制限　(初期値64)*/
+		SetShotAutoDeleteClip(30,30,30,30);
+	
+		LoadUserShotData(shotdir);
+		LoadGraphic(imgEffect);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		EnemyTexture07(true);
+		VSname(1);
+		while(i<10){
+			VSname2(0+i*10,1);
+			i++;
+		}i=0;
+		CreateEventFromScript("Event01");
+		
+		CreateEnemyFromFile(csd~"enm7_Family00_Extra.txt",0,0,0,0,0);
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+	}
+	
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

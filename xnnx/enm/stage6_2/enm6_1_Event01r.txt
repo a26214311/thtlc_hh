@@ -1,0 +1,113 @@
+
+#Title[enm6_2 before talk(霊夢)]
+#Text[ピーマン　戦闘前会話(霊夢)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let csd		= GetCurrentScriptDirectory;
+	let enmimg	= csd~".\enm6_2img\sanae00000.png";
+	
+	@Initialize {
+		LoadGraphic(enmimg);
+
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetCommonDataEx("in","snd",true);
+		SetChar(RIGHT,enmimg);
+		SetGraphicRect(RIGHT,1,1,384,512/1.5);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]这究竟是怎么回事，灵梦小姐！");
+		Wait(10);
+TextOut("\c[RED]降下星神这种事\n应该只有你这种程度才……");
+		Wait(10);
+TextOut("\c[RED]居然对我们的山做这种事……\n绝对无法原谅！");
+		Wait(10);
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgFog	  = GetCurrentScriptDirectory~".\enm6_2eff\fog2.png";
+    let imgSPNB   = GetCurrentScriptDirectory~".\enm6_2eff\spellEfect.png";
+    let imgEffect = GetCurrentScriptDirectory~".\enm6_2eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm6_2se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm6_2se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm6_2se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm6_2se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm6_2se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm6_2se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm6_2se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm6_2se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm6_2se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm6_2se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm6_2se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	SetMovePosition03(CenX,CenY-120,10,5);
+	LoadGraphic(imgEffect);
+	Aura(8,50,255,50);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	VSname(1);
+	VSname2(0,1);
+	EnemyTexture06a(true);
+	CreateEventFromScript("Event01");
+    }
+
+    @MainLoop {
+		yield;
+		if(OnEvent==false){
+			SetLife(0);
+		}
+	}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

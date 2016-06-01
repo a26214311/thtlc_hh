@@ -1,0 +1,143 @@
+
+#Title[enm1 after talk(魔理沙)]
+#Text[メリーシェパード　戦闘後会話(魔理沙)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm1img\魔理沙通常.png",
+					csd~".\enm1img\魔理沙=3.png",
+					csd~".\enm1img\魔理沙ニヤリ.png",
+					csd~".\enm1img\魔理沙驚き.png",
+					csd~".\enm1img\魔理沙嫌.png",
+					csd~".\enm1img\魔理沙困り.png",
+					csd~".\enm1img\魔理沙笑顔.png",
+					csd~".\enm1img\魔理沙怒り.png",
+					csd~".\enm1img\魔理沙得意.png"];
+	let enmimg	= [csd~".\enm1img\face101ct.png",//普通
+					csd~".\enm1img\mery00001.png",//笑顔
+					csd~".\enm1img\mery00002.png",//口開
+					csd~".\enm1img\mery00003.png",//困惑
+					csd~".\enm1img\mery00004.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(5){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);
+		SetGraphicRect(LEFT,120,1,384,512/1.5);
+		SetChar(RIGHT,enmimg[4]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]呜——\n怎么会有看到羊都不会睡着的人类啊");
+		
+		SetChar(LEFT,plaimg[6]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]多谢提醒\n不用数它们就好可是你说的");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]啊，血流出来了\n悲哀的羔羊的鲜血");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]喂喂\n湖川里的水真的变红了呀");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~"..\..\se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~"..\..\se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~"..\..\se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~"..\..\se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~"..\..\se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~"..\..\se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~"..\..\se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~"..\..\se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~"..\..\se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~"..\..\se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(8,255,100,32);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture(true);
+	CreateEventFromScript("Event01");
+	SetEffectForZeroLife(0,0,0);
+    }
+
+    @MainLoop {
+		yield;
+		if(OnEvent==false){
+			VanishEnemy;
+		}
+}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==14){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

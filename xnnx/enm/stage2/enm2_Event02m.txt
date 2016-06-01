@@ -1,0 +1,144 @@
+
+#Title[enm2 after talk(魔理沙)]
+#Text[コリン?シャーリット　戦闘後会話(魔理沙)]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm2img\魔理沙通常.png",
+					csd~".\enm2img\魔理沙=3.png",
+					csd~".\enm2img\魔理沙ニヤリ.png",
+					csd~".\enm2img\魔理沙驚き.png",
+					csd~".\enm2img\魔理沙嫌.png",
+					csd~".\enm2img\魔理沙困り.png",
+					csd~".\enm2img\魔理沙笑顔.png",
+					csd~".\enm2img\魔理沙怒り.png",
+					csd~".\enm2img\魔理沙得意.png"];
+	let enmimg	= [csd~".\enm2img\corin00000.png",//普通
+					csd~".\enm2img\corin00001.png",//怒り
+					csd~".\enm2img\corin00002.png",//普通
+					csd~".\enm2img\corin00003.png",//困惑
+					csd~".\enm2img\corin00004.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(5){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);
+		SetGraphicRect(LEFT,150,1,384,512/1.5);
+		SetChar(RIGHT,enmimg[4]);
+		SetGraphicRect(RIGHT,1,1,384/1.5,512/1.5);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]吸血鬼居然会输给人类……\n我想这可一点都不正常");
+		
+		SetChar(LEFT,plaimg[5]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]不吸血的吸血鬼也和正常的一样强的话\n就会引发能源革命啦");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]总之，天上的星星啦红色的水啦\n都跟我们没关系所以……");
+TextOut("\c[RED]星星的事情还是去找星星专家问问吧？");
+
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]「那就是我」，这样的话说不出口啊\n唉，同是新手的痛哪");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+    let imgEffect = GetCurrentScriptDirectory~".\enm3eff\bossEfect.png";
+    let t5        = GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+    let t10       = GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+    let tan       = GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+    let kira      = GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+    let Gspel     = GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+    let laser     = GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+    let power     = GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+    let powerl    = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let gekiha    = GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+    let powerla   = GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+    let kaku      = GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+    let frame     = 0;
+    let GetAngle  = 0;
+    let angle     = 0;
+    let angle2    = 0;
+    let angleBase = 0;
+    let count     = 0;
+    let timer     = 0;
+    let shotdir   = GetCurrentScriptDirectory ~ "kshotData.txt";
+    let MinX	  = GetClipMinX;
+    let MaxX	  = GetClipMaxX;
+    let CenX	  = GetCenterX;
+    let MinY	  = GetClipMinY;
+    let MaxY	  = GetClipMaxY;
+    let CenY	  = GetCenterY;
+    let T_count   = 0;
+    let Damage    = 0;
+    let a         = 0;
+    let b         = 0;
+    let S_count   = 0;
+    let w         = 0;
+    let lp        = 0;
+
+    @Initialize {
+	SetX(MaxX+100);
+	SetY(MinY-100);
+
+	SetLife(5000);
+	SetDamageRate(0,0);
+
+	/*弾幕削除制限　(初期値64)*/
+	SetShotAutoDeleteClip(30,30,30,30);
+
+	LoadUserShotData(shotdir);
+	LoadGraphic(imgEffect);
+	Aura(8,255,32,32);
+	MagicCircle(false);
+	SetRateScoreSystemEnable(false);
+	EnemyTexture(true);
+	CreateEventFromScript("Event01");
+	SetEffectForZeroLife(0,0,0);
+    }
+
+    @MainLoop {
+		yield;
+		if(OnEvent==false){
+			VanishEnemy;
+		}
+}
+
+    @DrawLoop {
+	}
+
+    @Finalize {
+	let tact = GetCommonDataEx("title","act");
+	if(tact==14){
+	SetCommonDataEx("title","start_stage",false);
+	}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

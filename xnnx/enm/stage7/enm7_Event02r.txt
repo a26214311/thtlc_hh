@@ -1,0 +1,208 @@
+
+#Title[enm7 before talk(r)]
+#Text[ex会話2r]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm7img\霊夢通常.png",
+					csd~".\enm7img\霊夢=3.png",
+					csd~".\enm7img\霊夢ニヤリ.png",
+					csd~".\enm7img\霊夢驚き.png",
+					csd~".\enm7img\霊夢嫌.png",
+					csd~".\enm7img\霊夢困り.png",
+					csd~".\enm7img\霊夢笑顔.png",
+					csd~".\enm7img\霊夢怒り.png",
+					csd~".\enm7img\霊夢得意.png"];
+	let enmimg	= [csd~".\enm7img\mint00000.png",//普通
+					csd~".\enm7img\mint00001.png",//御機嫌
+					csd~".\enm7img\mint00002.png",//得意
+					csd~".\enm7img\mint00003.png",//笑い
+					csd~".\enm7img\mint00004.png",//怒り
+					csd~".\enm7img\mint00005.png",//怒り2
+					csd~".\enm7img\mint00006.png",//驚き
+					csd~".\enm7img\mint00007.png",//嫌
+					csd~".\enm7img\mint00008.png",//困惑
+					csd~".\enm7img\mint00009.png",//困惑2
+					csd~".\enm7img\mint00010.png",//困惑3
+					csd~".\enm7img\mint00011.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(12){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[0]);
+		SetGraphicRect(LEFT,150,1,384,512/1.5);
+		SetChar(RIGHT,enmimg[11]);
+		SetGraphicRect(RIGHT,1,1,384/1.3,512/1.4);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]伊书亚和你们没关系吗？");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]这个国家的人总是会搞错");
+TextOut("\c[RED]那些人的上司是上帝\n我们的上司是宙斯");
+		
+		SetChar(LEFT,plaimg[4]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]虽然都会和天使打就是了");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]奥林匹斯的天使会弯弓搭箭\n这样你又学到了点新知识");
+
+		SetChar(LEFT,plaimg[5]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]那，你到底是谁啊");
+
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]是妖精啊");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]怎么可能嘛，这妖精强得都成精了");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]这笑话还真是够冷的");
+		
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]像薄荷草一样不是很好嘛");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]妖精——私達の土地では\n叫做仙子");
+TextOut("\c[RED]和这边那些小年轻不同\n我可是活了几千年的古老妖精");
+		
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]妖精老婆婆\n是来寻求安静的老年生活吧？");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]这陨石就将成为我最终的栖息之所");
+
+		SetChar(LEFT,plaimg[1]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]好吧，只要是在神社目之所及的地方\n我就不会让你动什么歪脑筋的");
+TextOut("\c[BLUE]尽管为我的存在惴惴不安\n老实地生活吧");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]（反正都要让神社被薄荷完全覆盖\n让你迷失在其中的）");
+		
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[GREEN]祝贺你通关EX！");
+TextOut("\c[GREEN]初期残機2以下?ボム3以下、\n残留3个以上残机通关的话，");
+TextOut("\c[GREEN]可以看到和平常不同的结局哦\n（不续关&Normal以上难度限定）");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+	let t10			= GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+	let tan			= GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+	let kira		= GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+	let Gspel		= GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+	let laser		= GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+	let power		= GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+	let powerl		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+	let powerla		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let kaku		= GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= GetCurrentScriptDirectory ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let b			= 0;
+	let S_count		= 0;
+	let w			= 0;
+	let i			= 0;
+
+	@Initialize {
+		SetX(MaxX+100);
+		SetY(MinY-100);
+	
+		SetLife(5000);
+		SetDamageRate(0,0);
+	
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+	
+		/*弾幕削除制限　(初期値64)*/
+		SetShotAutoDeleteClip(30,30,30,30);
+	
+		LoadUserShotData(shotdir);
+		LoadGraphic(imgEffect);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		EnemyTexture07(true);
+		CreateEventFromScript("Event01");
+		SetEffectForZeroLife(0,0,0);
+	}
+
+	@MainLoop {
+		yield;
+		if(OnEvent==false){
+			VanishEnemy;
+		}
+	}
+
+	@DrawLoop {
+	}
+
+	@Finalize {
+		let tact = GetCommonDataEx("title","act");
+		if(tact==14){
+			SetCommonDataEx("title","start_stage",false);
+		}
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}

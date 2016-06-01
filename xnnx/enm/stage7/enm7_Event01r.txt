@@ -1,0 +1,211 @@
+
+#Title[enm7 before talk(r)]
+#Text[ex会話r]
+#Player[FREE]
+#BackGround[Default]
+#ScriptVersion[2]
+
+script_event Event01{
+	let i		= 0;
+	let csd		= GetCurrentScriptDirectory;
+	let plaimg	= [csd~".\enm7img\霊夢通常.png",
+					csd~".\enm7img\霊夢=3.png",
+					csd~".\enm7img\霊夢ニヤリ.png",
+					csd~".\enm7img\霊夢驚き.png",
+					csd~".\enm7img\霊夢嫌.png",
+					csd~".\enm7img\霊夢困り.png",
+					csd~".\enm7img\霊夢笑顔.png",
+					csd~".\enm7img\霊夢怒り.png",
+					csd~".\enm7img\霊夢得意.png"];
+	let enmimg	= [csd~".\enm7img\mint00000.png",//普通
+					csd~".\enm7img\mint00001.png",//御機嫌
+					csd~".\enm7img\mint00002.png",//得意
+					csd~".\enm7img\mint00003.png",//笑い
+					csd~".\enm7img\mint00004.png",//怒り
+					csd~".\enm7img\mint00005.png",//怒り2
+					csd~".\enm7img\mint00006.png",//驚き
+					csd~".\enm7img\mint00007.png",//嫌
+					csd~".\enm7img\mint00008.png",//困惑
+					csd~".\enm7img\mint00009.png",//困惑2
+					csd~".\enm7img\mint00010.png",//困惑3
+					csd~".\enm7img\mint00011.png"];//ボロ
+	
+	@Initialize {
+		loop(9){
+			LoadGraphic(plaimg[i]);
+			i++;
+		}
+		i=0;
+		loop(12){
+			LoadGraphic(enmimg[i]);
+			i++;
+		}
+		i=0;
+		CreateCommonDataArea("in");
+		SetCommonDataEx("in","move",false);
+		SetCommonDataEx("in","music",false);
+		SetCommonDataEx("in","snd",false);
+	}
+	
+	@MainLoop {
+		SetChar(LEFT,plaimg[4]);
+		SetGraphicRect(LEFT,150,1,384,512/1.5);
+		MoveChar(LEFT,FRONT);
+TextOut("\c[BLUE]あの隕石は、イシュアとは別に関係無かったのだとしたら一体何だったのかしら");
+TextOut("\c[BLUE]真是头疼，竟然特意把那种太空垃圾丢进幻想乡来");
+		
+		MoveChar(LEFT,BACK);
+TextOut("\c[RED]正因为是幻想乡，才会特意过来的啊");
+		SetCommonDataEx("in","move",true);
+
+		SetChar(RIGHT,enmimg[0]);
+		SetGraphicRect(RIGHT,1,1,384/1.3,512/1.4);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]没错，这里是被忘却者最后的土地");
+
+		SetChar(LEFT,plaimg[7]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]啊？ 区区妖精有何贵干？");
+
+		SetChar(RIGHT,enmimg[9]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","snd",true);
+TextOut("\c[RED]生在现代却是血气方刚的巫女啊\n好了先闻闻盈满森林的药草芳香镇定下来吧");
+
+		SetChar(LEFT,plaimg[3]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]感觉自己变得超级冷静了\n明明只是妖精却挺厉害的嘛");
+
+		SetChar(RIGHT,enmimg[1]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]这陨石是被人们遗忘的冥府之星\n我却忘不掉这颗星，因此来到了这里");
+
+		SetChar(LEFT,plaimg[2]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]你跟那麻烦的星星有关系啊，那么\n不把你揍到满身疮痍不行呢");
+
+		SetChar(RIGHT,enmimg[6]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+TextOut("\c[RED]……！？");
+TextOut("\c[RED]怎么回事？");
+TextOut("\c[RED]被薄荷之力镇定住精神的话\n应该半日都不会起战意的……！");
+
+		SetChar(LEFT,plaimg[7]);
+		MoveChar(LEFT,FRONT);
+		MoveChar(RIGHT,BACK);
+TextOut("\c[BLUE]我平日靠昼寝入定可不是白费功夫");
+TextOut("\c[BLUE]使充满纷扰的脑袋和精神沉眠\n陷入无念无想的境界");
+TextOut("\c[BLUE]在幻想乡可至少有两个人\n能够在那种无意识状态下战斗！");
+
+		SetChar(RIGHT,enmimg[2]);
+		MoveChar(LEFT,BACK);
+		MoveChar(RIGHT,FRONT);
+		SetCommonDataEx("in","music",true);
+TextOut("\c[RED]无念无想……世间许多人都挑战过\n却未能到达极致的究极奥义");
+		SetChar(RIGHT,enmimg[0]);
+TextOut("\c[RED]その勝負乗った、ミントの始祖たる私の力がどこまで通じるかを見たい！");
+TextOut("\c[RED]そして何者にも、想い人にも過去の記憶にも心を乱されない、無念無想に私も至りたい！");
+
+		End();
+	}
+		
+	@Finalize {
+	}
+}
+
+script_enemy_main {
+	let csd			= GetCurrentScriptDirectory;
+	let imgEffect	= csd~".\enm7eff\bossEfect.png";
+	let imgSPNB		= csd~".\enm7eff\spellEfect.png";
+	let t5			= GetCurrentScriptDirectory~".\enm3se\timer1.wav";
+	let t10			= GetCurrentScriptDirectory~".\enm3se\timer2.wav";
+	let tan			= GetCurrentScriptDirectory~".\enm3se\shot1.wav";
+	let kira		= GetCurrentScriptDirectory~".\enm3se\shot2.wav";
+	let Gspel		= GetCurrentScriptDirectory~".\enm3se\echo5.wav";
+	let laser		= GetCurrentScriptDirectory~".\enm3se\Laser2.wav";
+	let power		= GetCurrentScriptDirectory~".\enm3se\enemy_powereffect.wav";
+	let powerl		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let gekiha		= GetCurrentScriptDirectory~".\enm3se\BossEnd.wav";
+	let powerla		= GetCurrentScriptDirectory~".\enm3se\power_logo.wav";
+	let kaku		= GetCurrentScriptDirectory~".\enm3se\核爆.wav";
+	let frame		= 0;
+	let GetAngle	= 0;
+	let angle		= 0;
+	let angle2		= 0;
+	let angleBase	= 0;
+	let count		= 0;
+	let timer		= 0;
+	let shotdir		= GetCurrentScriptDirectory ~ "kshotData.txt";
+	let MinX		= GetClipMinX;
+	let MaxX		= GetClipMaxX;
+	let CenX		= GetCenterX;
+	let MinY		= GetClipMinY;
+	let MaxY		= GetClipMaxY;
+	let CenY		= GetCenterY;
+	let T_count		= 0;
+	let Damage		= 0;
+	let a			= 0;
+	let b			= 0;
+	let S_count		= 0;
+	let w			= 0;
+	let i			= 0;
+
+	@Initialize {
+		SetX(MaxX+100);
+		SetY(MinY-100);
+	
+		SetLife(5000);
+		SetDamageRate(0,0);
+		
+		CreateCommonDataArea("anime");
+		SetCommonDataEx("anime","anime_flag",false);
+	
+		/*弾幕削除制限　(初期値64)*/
+		SetShotAutoDeleteClip(30,30,30,30);
+	
+		LoadUserShotData(shotdir);
+		LoadGraphic(imgEffect);
+		Aura(8,180,255,210);
+		MagicCircle(false);
+		SetRateScoreSystemEnable(false);
+		EnemyTexture07(true);
+		VSname(1);
+		while(i<10){
+			VSname2(0+i*10,1);
+			i++;
+		}i=0;
+		CreateEventFromScript("Event01");
+		
+		CreateEnemyFromFile(csd~"enm7_Family00_Extra.txt",0,0,0,0,0);
+    }
+
+	@MainLoop {
+		yield;
+		
+		let gm	= GetCommonDataEx("in","move");
+		if(gm==true){
+			SetMovePosition03(CenX,CenY-120,10,5);
+		}
+		if(OnEvent==false){
+			SetLife(0);
+		}
+	}
+	
+	@DrawLoop {
+	}
+
+	@Finalize {
+		DeleteCommonDataEx("in","move");
+		DeleteCommonDataEx("in","music");
+		DeleteCommonDataEx("in","snd");
+	}
+
+	#include_function".\Obj_Control.txt"
+	#include_function".\lib_kshot.txt"
+}
